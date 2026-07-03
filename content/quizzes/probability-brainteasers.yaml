@@ -1,0 +1,81 @@
+title: Probability Brainteasers
+description: The classics — asked in some form at nearly every quant shop. Reason them out before peeking.
+xpPerCorrect: 10
+questions:
+  - prompt: "You roll two fair dice. Given that at least one die shows a 6, what is the probability the sum is 7?"
+    choices:
+      - "1/6"
+      - "2/11"
+      - "1/11"
+      - "1/3"
+    answer: 1
+    explanation: >
+      Condition on the event: 11 outcomes contain at least one 6. Of those, (1,6) and
+      (6,1) sum to 7 — so 2/11. The trap is answering 1/6 by ignoring how conditioning
+      reshapes the sample space.
+  - prompt: "Expected number of fair-coin flips to see two heads in a row (HH)?"
+    choices:
+      - "4"
+      - "6"
+      - "8"
+      - "5"
+    answer: 1
+    explanation: >
+      Let $E$ be the answer. First flip T (prob ½): wasted one flip, start over. H then T
+      (prob ¼): wasted two. H then H (prob ¼): done in 2.
+      $E = \tfrac12(E+1) + \tfrac14(E+2) + \tfrac14 \cdot 2 \Rightarrow E = 6$.
+      (For HT the answer is 4 — the asymmetry is a great follow-up to know.)
+  - prompt: "Monty Hall: you pick one of three doors; the host, who knows where the car is, opens another door revealing a goat and offers a switch. Switching wins with probability:"
+    choices:
+      - "1/2 — two doors remain"
+      - "2/3"
+      - "1/3"
+      - "Depends on the host's mood"
+    answer: 1
+    explanation: >
+      Your initial pick holds the car with prob 1/3; the host's reveal is forced and
+      transfers the remaining 2/3 mass onto the other closed door. The key assumption —
+      the host always opens a goat door — is what interviewers check you've noticed.
+  - prompt: "Three ants sit at the corners of a triangle. Each simultaneously picks a direction (clockwise or counterclockwise) uniformly at random and walks along an edge. Probability of no collision?"
+    choices:
+      - "1/2"
+      - "1/4"
+      - "1/8"
+      - "3/8"
+    answer: 1
+    explanation: >
+      No collision iff all three walk the same way: all clockwise or all counterclockwise
+      — $2/2^3 = 1/4$. Generalizes to $2/2^n$ for an $n$-gon; instant answer earns style
+      points.
+  - prompt: "You have a biased coin with unknown P(heads). How do you simulate a fair coin flip?"
+    choices:
+      - "Flip once and invert every second result"
+      - "Flip twice: HT → heads, TH → tails, otherwise discard and repeat (von Neumann)"
+      - "Flip 100 times and take the majority"
+      - "Impossible without knowing the bias"
+    answer: 1
+    explanation: >
+      P(HT) = P(TH) = p(1−p) regardless of the bias, so conditioning on the pair being
+      mixed yields exactly ½ each. Discarding HH/TT costs time but never fairness.
+  - prompt: "Cards are dealt one at a time from a shuffled 52-card deck. What is the probability the 13th card dealt is an ace?"
+    choices:
+      - "1/13"
+      - "It depends on the first 12 cards"
+      - "4/52 × 12/51"
+      - "1/4"
+    answer: 0
+    explanation: >
+      By symmetry, every position in a random shuffle is equally likely to hold an ace:
+      4/52 = 1/13. Unconditional position probabilities don't change because you haven't
+      looked at the earlier cards — exchangeability in one line.
+  - prompt: "A stick is broken at two points chosen uniformly at random. Probability the three pieces form a triangle?"
+    choices:
+      - "1/2"
+      - "1/3"
+      - "1/4"
+      - "1/6"
+    answer: 2
+    explanation: >
+      A triangle forms iff no piece exceeds half the stick. Mapping the two cut points
+      into the unit square, the feasible region is a quarter of it — probability 1/4.
+      Draw the square in the interview; the picture is the proof.

@@ -31,7 +31,14 @@ public class ContentSeeder implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(ContentSeeder.class);
 
-    private final ObjectMapper yaml = new ObjectMapper(new YAMLFactory());
+    // Raise SnakeYAML's default 3MB document cap — large hidden-test files exceed it.
+    private final ObjectMapper yaml = createYamlMapper();
+
+    private static ObjectMapper createYamlMapper() {
+        var loaderOptions = new org.yaml.snakeyaml.LoaderOptions();
+        loaderOptions.setCodePointLimit(64 * 1024 * 1024);
+        return new ObjectMapper(YAMLFactory.builder().loaderOptions(loaderOptions).build());
+    }
     private final Path contentDir;
     private final TrackRepository tracks;
     private final LessonRepository lessons;

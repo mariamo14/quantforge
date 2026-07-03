@@ -1,0 +1,71 @@
+title: Expected-Value & Market-Maker Games
+description: Price the game, quote the market — the trading-flavored math round.
+xpPerCorrect: 10
+questions:
+  - prompt: "You roll a fair die once and are paid its face value in dollars. Fair price to play?"
+    choices:
+      - "$3.00"
+      - "$3.50"
+      - "$4.00"
+      - "$2.50"
+    answer: 1
+    explanation: >
+      $E = (1+2+\cdots+6)/6 = 3.5$. The warm-up — the follow-ups build on it, so nail it
+      instantly.
+  - prompt: "Same die game, but after the first roll you may either keep it or roll exactly once more (you must keep the second). Fair price now?"
+    choices:
+      - "$3.50"
+      - "$4.00"
+      - "$4.25"
+      - "$4.50"
+    answer: 2
+    explanation: >
+      Optimal strategy: keep 4, 5, 6; reroll 1, 2, 3 (worth 3.5 in expectation).
+      $E = \tfrac12 \cdot \tfrac{4+5+6}{3} + \tfrac12 \cdot 3.5 = \tfrac12(5) +
+      \tfrac12(3.5) = 4.25$. Optional-stopping games are a market-maker interview staple.
+  - prompt: "A market maker quotes a market on the number of heads in 100 fair coin flips. A rational two-sided market centers on 50. Roughly how wide should a 1-standard-deviation band be?"
+    choices:
+      - "±1"
+      - "±5"
+      - "±10"
+      - "±25"
+    answer: 1
+    explanation: >
+      $\sigma = \sqrt{npq} = \sqrt{100 \times 0.25} = 5$. Quoting roughly 45–55 covers
+      ±1σ (~68%). Knowing $\sqrt{npq}$ cold and quoting sensible confidence bands is
+      exactly what "make me a market" questions test.
+  - prompt: "You draw cards one at a time from a shuffled deck of 26 red and 26 black. You win $1 per red card drawn and may stop at any time. A good first observation about this game's value is:"
+    choices:
+      - "It's worth exactly $13 — half the cards are red"
+      - "It's worth more than $13 — you hold an option to stop when ahead, and optionality on a symmetric walk has positive value"
+      - "It's worth less than $13 because black cards punish you"
+      - "The stopping rule doesn't matter"
+    answer: 1
+    explanation: >
+      With no stopping choice you'd earn exactly 13. The right to stop when the running
+      count is favorable is an option on a random walk — options on symmetric processes
+      have non-negative value, strictly positive here. Recognizing "this is optionality"
+      is the insight being tested.
+  - prompt: "A game pays $2^k$ where $k$ is the number of flips until the first head (St. Petersburg). Why does no one pay the \"expected value\" to play?"
+    choices:
+      - "The expectation is actually zero"
+      - "The expectation diverges, but real bankrolls, caps, and risk aversion make the practical value finite and small"
+      - "The game is rigged because heads is more likely"
+      - "Casinos ban martingale strategies"
+    answer: 1
+    explanation: >
+      $E = \sum \tfrac{1}{2^k} 2^k = \infty$, yet certainty-equivalent value under any
+      bounded bankroll or log utility is modest (a cap at $2^{30}$ makes EV ≈ $30... i.e.
+      ~$15 with realistic caps). The lesson interviewers want: expectation isn't price
+      when tails are unbounded.
+  - prompt: "You have a 60/40 edge on a repeated even-money bet. The Kelly fraction of bankroll to stake each round is:"
+    choices:
+      - "60%"
+      - "40%"
+      - "20%"
+      - "10%"
+    answer: 2
+    explanation: >
+      Kelly for even money: $f^* = p - q = 0.6 - 0.4 = 0.2$. Betting more than Kelly
+      raises variance and lowers long-run growth; many desks size at half-Kelly. The
+      formula-in-one-breath answer, plus "half-Kelly in practice," reads as fluent.

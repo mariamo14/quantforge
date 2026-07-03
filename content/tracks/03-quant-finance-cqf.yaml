@@ -1,0 +1,55 @@
+slug: quant-finance-cqf
+title: Quant Finance — CQF Core
+icon: "📈"
+accent: "#a78bfa"
+order: 3
+description: >
+  The quantitative-finance core, modeled on the CQF syllabus — stochastic calculus,
+  Black-Scholes, the Greeks, portfolio theory, fixed income, risk, and ML in finance.
+modules:
+  - slug: stochastic-calculus
+    title: Probability & Stochastic Calculus
+    description: From coin flips to Brownian motion and Itô's lemma — the math beneath every model.
+    items:
+      - kind: lesson
+        ref: probability-essentials
+      - kind: lesson
+        ref: random-walks-brownian-motion
+      - kind: lesson
+        ref: ito-calculus
+      - kind: quiz
+        ref: stochastic-calculus-quiz
+  - slug: options-black-scholes
+    title: Options & Black-Scholes
+    description: Pricing, hedging, and the Greeks — then build the pricer yourself in C++.
+    items:
+      - kind: lesson
+        ref: black-scholes
+      - kind: lesson
+        ref: the-greeks
+      - kind: quiz
+        ref: options-quiz
+      - kind: problem
+        ref: black-scholes-pricer
+      - kind: problem
+        ref: monte-carlo-option
+  - slug: portfolio-risk
+    title: Portfolio Theory & Risk
+    description: Markowitz, CAPM, bonds and duration, VaR and Expected Shortfall.
+    items:
+      - kind: lesson
+        ref: portfolio-theory
+      - kind: lesson
+        ref: fixed-income-duration
+      - kind: lesson
+        ref: var-expected-shortfall
+      - kind: quiz
+        ref: risk-quiz
+      - kind: problem
+        ref: portfolio-var
+  - slug: ml-finance
+    title: Machine Learning in Finance
+    description: Why finance breaks textbook ML, and the validation discipline that survives it.
+    items:
+      - kind: lesson
+        ref: ml-in-finance

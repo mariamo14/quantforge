@@ -1,0 +1,27 @@
+slug: brainteasers
+title: Brainteasers & Mental Math
+icon: "🧠"
+accent: "#fb7185"
+order: 5
+description: >
+  The probability puzzles and expected-value games quant interviewers love —
+  plus a field guide to the interview loop itself.
+modules:
+  - slug: interview-prep
+    title: The Interview Game
+    description: Know the loop before you play it.
+    items:
+      - kind: lesson
+        ref: quant-interview-guide
+  - slug: probability-puzzles
+    title: Probability Puzzles
+    description: Classic interview brainteasers — dice, coins, and counterintuitive conditioning.
+    items:
+      - kind: quiz
+        ref: probability-brainteasers
+  - slug: market-maker-games
+    title: Market-Maker Games
+    description: Price the game, quote a market, manage your edge.
+    items:
+      - kind: quiz
+        ref: expected-value-games

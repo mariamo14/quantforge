@@ -1,0 +1,31 @@
+slug: systems-microstructure
+title: Systems & Market Microstructure
+icon: "🛰️"
+accent: "#34d399"
+order: 4
+description: >
+  How the trading stack really works — networking and kernel bypass, the FIX protocol,
+  exchange mechanics, and limit order book dynamics.
+modules:
+  - slug: trading-stack
+    title: The Trading Stack
+    description: Packets, protocols, and the hardware between you and the exchange.
+    items:
+      - kind: lesson
+        ref: networking-for-trading
+      - kind: lesson
+        ref: fix-protocol
+      - kind: problem
+        ref: fix-checksum
+      - kind: lesson
+        ref: kernel-bypass-hardware
+  - slug: how-exchanges-work
+    title: How Exchanges Work
+    description: Microstructure, priority rules, and what actually moves prices.
+    items:
+      - kind: lesson
+        ref: market-microstructure
+      - kind: lesson
+        ref: limit-order-book-dynamics
+      - kind: quiz
+        ref: microstructure-quiz

@@ -1,0 +1,70 @@
+title: Portfolio Theory & Risk
+description: Markowitz, CAPM, duration, and the VaR/ES distinctions risk interviews hinge on.
+questions:
+  - prompt: "\"1-day 95% VaR of $2M\" means:"
+    choices:
+      - "The desk loses exactly $2M once every 20 days"
+      - "On 95% of days the loss will not exceed $2M; it says nothing about how bad the other 5% get"
+      - "The maximum possible one-day loss is $2M"
+      - "Expected daily loss is 5% of $2M"
+    answer: 1
+    explanation: >
+      VaR is a quantile of the loss distribution — a threshold exceeded with 5%
+      probability. Its most-examined flaw: it is silent about the size of losses beyond
+      the threshold, which is exactly what Expected Shortfall fixes.
+  - prompt: "Why is Expected Shortfall considered a \"coherent\" risk measure while VaR is not?"
+    choices:
+      - "ES is always larger than VaR"
+      - "VaR can violate subadditivity — merging two portfolios can appear to increase risk — while ES never does"
+      - "ES uses the full distribution while VaR uses only the mean"
+      - "VaR cannot be backtested"
+    answer: 1
+    explanation: >
+      Subadditivity says diversification shouldn't be penalized:
+      $\rho(A+B) \le \rho(A) + \rho(B)$. With fat-tailed or concentrated positions VaR
+      can violate it; ES (mean loss beyond VaR) satisfies all coherence axioms — a key
+      reason Basel moved to ES.
+  - prompt: "A bond has modified duration 6.2 and price 101.50. Rates rise 10bp. The first-order price change is approximately:"
+    choices:
+      - "−$0.63 per 100 face"
+      - "−$6.29 per 100 face"
+      - "+$0.63 per 100 face"
+      - "−$0.10 per 100 face"
+    answer: 0
+    explanation: >
+      $\Delta P \approx -D \cdot P \cdot \Delta y = -6.2 \times 101.50 \times 0.001
+      \approx -0.63$. Convexity would add a small positive correction. DV01-style mental
+      math is a staple of fixed-income interviews.
+  - prompt: "In Markowitz portfolio theory, the risk of a two-asset portfolio is lowest when the correlation between assets is:"
+    choices:
+      - "+1"
+      - "0"
+      - "−1"
+      - "Correlation does not affect portfolio risk"
+    answer: 2
+    explanation: >
+      $\sigma_p^2 = w_1^2\sigma_1^2 + w_2^2\sigma_2^2 + 2w_1 w_2 \rho \sigma_1\sigma_2$ —
+      at $\rho = -1$ you can construct a riskless portfolio. Diversification benefit is
+      monotone in falling correlation: the only free lunch in finance.
+  - prompt: "In the CAPM, an asset's beta is:"
+    choices:
+      - "The asset's volatility divided by market volatility"
+      - "$\\mathrm{Cov}(R_i, R_m)/\\mathrm{Var}(R_m)$ — the slope of regressing asset returns on market returns"
+      - "The correlation between the asset and the market"
+      - "The asset's Sharpe ratio relative to the market"
+    answer: 1
+    explanation: >
+      Beta is a regression slope: how much the asset moves per unit market move. Note
+      $\beta = \rho \cdot \sigma_i/\sigma_m$ — high-vol assets can still have low beta if
+      barely correlated. Only systematic risk is rewarded in CAPM.
+  - prompt: "Historical-simulation VaR's biggest practical weakness is:"
+    choices:
+      - "It requires assuming returns are normally distributed"
+      - "It only reflects scenarios present in the lookback window — yesterday's calm predicts nothing about a new crisis"
+      - "It cannot handle portfolios with options"
+      - "It is too computationally expensive"
+    answer: 1
+    explanation: >
+      Historical sim makes no distributional assumption (that's its strength) but is
+      hostage to its window: if the last 500 days were quiet, VaR is low right up until
+      the regime changes. Parametric and MC methods trade that for model risk instead.

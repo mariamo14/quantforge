@@ -1,0 +1,31 @@
+slug: dsa-trading
+title: DS&A for Trading Systems
+icon: "🧮"
+accent: "#22d3ee"
+order: 2
+description: >
+  The data structures and algorithms that actually appear in trading interviews —
+  streaming statistics, priority queues, and matching engines, all with market data.
+modules:
+  - slug: streaming
+    title: Streaming Data
+    description: Windows, rolling statistics, and numerically stable online computation.
+    items:
+      - kind: lesson
+        ref: sliding-windows
+      - kind: problem
+        ref: rolling-vwap
+      - kind: problem
+        ref: prefix-pnl
+      - kind: problem
+        ref: sliding-window-max
+  - slug: books-and-matching
+    title: Books & Matching
+    description: Priority queues, order books, and price-time priority matching.
+    items:
+      - kind: lesson
+        ref: heaps-top-of-book
+      - kind: problem
+        ref: top-of-book
+      - kind: problem
+        ref: order-matching

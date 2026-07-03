@@ -1,0 +1,71 @@
+title: STL Internals & Container Choice
+description: Complexity is table stakes — interviewers probe memory layout and invalidation rules.
+questions:
+  - prompt: "Which operation can invalidate ALL iterators, pointers, and references into a `std::vector`?"
+    choices:
+      - "pop_back()"
+      - "push_back() when size() == capacity()"
+      - "Reading through operator[]"
+      - "std::sort on the vector"
+    answer: 1
+    explanation: >
+      Growth reallocates: elements move to a new buffer, so every iterator/pointer into
+      the old buffer dangles. `reserve()` up front is the standard fix — and a classic
+      interview follow-up.
+  - prompt: >
+      Why is iterating a `std::map` typically much slower than iterating a sorted
+      `std::vector` of the same data?
+    choices:
+      - "map iteration is O(n log n) rather than O(n)"
+      - "Each map node is a separate heap allocation, so traversal chases pointers across scattered cache lines"
+      - "map must re-balance during iteration"
+      - "map iterators perform bounds checking"
+    answer: 1
+    explanation: >
+      Complexity is O(n) for both, but the red-black tree's node-per-element layout
+      defeats the prefetcher and hits a cache miss per step, while the vector streams
+      contiguous cache lines. Layout beats big-O at this scale.
+  - prompt: "When does `std::unordered_map` lookup degrade to O(n)?"
+    choices:
+      - "When the load factor drops below 0.5"
+      - "When keys hash to the same bucket — adversarial or poorly-hashed keys"
+      - "After any rehash"
+      - "It cannot — the standard guarantees O(1)"
+    answer: 1
+    explanation: >
+      Everything in one bucket means a linear chain scan. Average O(1) assumes a good
+      hash; adversarial keys (or hashing pointers/ids with structure) can collapse it —
+      why some firms use custom hashes and open-addressing tables.
+  - prompt: "For the price levels of a limit order book you need: best price in O(1), ordered iteration over levels, and insert/erase of arbitrary prices. Which container fits with least fuss?"
+    choices:
+      - "std::unordered_map<Price, Level>"
+      - "std::priority_queue<Level>"
+      - "std::map<Price, Level> (best = begin()/rbegin())"
+      - "std::vector<Level> kept unsorted"
+    answer: 2
+    explanation: >
+      `std::map` gives ordered levels with begin()/rbegin() as best bid/ask and O(log n)
+      insert/erase anywhere. A priority_queue can't erase arbitrary prices or iterate in
+      order; unordered_map has no order at all.
+  - prompt: "What does `emplace_back(a, b)` do that `push_back(T(a, b))` might not?"
+    choices:
+      - "Constructs the element in place in the vector's storage, avoiding a temporary + move"
+      - "Skips the capacity check for speed"
+      - "Allows insertion of types with deleted constructors"
+      - "Nothing — they are always identical"
+    answer: 0
+    explanation: >
+      emplace_back perfect-forwards the arguments to construct directly in place. With a
+      cheap-to-move type the difference is small, but for types with real construction
+      cost (or no move ctor) it matters — and interviewers like the distinction.
+  - prompt: "Why does `std::deque` offer O(1) push_front while `std::vector` does not?"
+    choices:
+      - "deque stores elements in fixed-size chunks indexed by a map of pointers, growing at both ends"
+      - "deque keeps elements in a doubly-linked list"
+      - "deque secretly reserves capacity at the front of one big buffer"
+      - "It doesn't — push_front is O(n) amortized"
+    answer: 0
+    explanation: >
+      A deque is an array of chunk pointers; adding at either end allocates a chunk and
+      updates the index. The price: elements aren't fully contiguous, so iteration is
+      slightly slower than vector and pointer arithmetic across chunks costs.

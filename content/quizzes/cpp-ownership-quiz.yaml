@@ -1,0 +1,76 @@
+title: Ownership & Move Semantics
+description: RAII, smart pointers, and value categories — the questions every C++ screen starts with.
+questions:
+  - prompt: >
+      After `auto p2 = std::move(p1);` where `p1` is a `std::unique_ptr<Order>`,
+      what is the state of `p1`?
+    choices:
+      - "Undefined behavior to touch it at all"
+      - "It still owns the Order until p2 goes out of scope"
+      - "It is a valid null pointer — you may reassign or test it, but not dereference it"
+      - "The Order is copied, so both own separate objects"
+    answer: 2
+    explanation: >
+      Moving a `unique_ptr` transfers ownership and leaves the source null. A moved-from
+      standard object is in a valid but unspecified state; for `unique_ptr` it is
+      specified to be null — safe to test or reassign, but dereferencing is a null deref.
+  - prompt: >
+      Why does RAII make exception-safe code dramatically easier than manual `new`/`delete`?
+    choices:
+      - "Destructors of automatic objects run during stack unwinding, releasing resources on every exit path"
+      - "RAII disables exceptions inside constructors"
+      - "The compiler inserts try/catch blocks around every scope automatically"
+      - "Heap allocations are automatically freed when an exception is thrown"
+    answer: 0
+    explanation: >
+      Unwinding runs destructors of every fully-constructed automatic object, so cleanup
+      is tied to scope, not to control flow. Manual `delete` after an early `throw` simply
+      never runs — the classic leak.
+  - prompt: "What is the overhead of `std::shared_ptr` compared to `std::unique_ptr`?"
+    choices:
+      - "None — both compile down to a raw pointer"
+      - "A control block allocation plus atomic reference-count updates on copy/destroy"
+      - "shared_ptr is smaller but slower to dereference"
+      - "unique_ptr needs a virtual destructor, shared_ptr does not"
+    answer: 1
+    explanation: >
+      `shared_ptr` carries a second pointer to a control block and bumps an atomic count
+      on every copy — real cost on a hot path, and why trading code treats `shared_ptr`
+      as a design smell outside genuinely shared ownership.
+  - prompt: >
+      A class defines a destructor to log order lifetimes but nothing else.
+      What happened to its move constructor?
+    choices:
+      - "It is still generated — destructors don't affect special members"
+      - "It is suppressed; copies will be used instead (the rule of five in action)"
+      - "It becomes deleted, so the class can no longer be put in a std::vector"
+      - "It is generated but performs a copy internally"
+    answer: 1
+    explanation: >
+      Declaring a destructor suppresses implicit move constructor/assignment generation;
+      the class silently falls back to copying. That's why "rule of zero, or rule of
+      five" — a stray destructor can quietly make your hot path copy.
+  - prompt: "Which parameter declaration expresses \"this function takes ownership\" most idiomatically?"
+    choices:
+      - "void route(Order* order)"
+      - "void route(const Order& order)"
+      - "void route(std::unique_ptr<Order> order)"
+      - "void route(std::shared_ptr<Order>& order)"
+    answer: 2
+    explanation: >
+      Taking `unique_ptr` by value forces the caller to move in — ownership transfer is
+      visible at the call site and enforced by the type system. Raw pointers and
+      references are non-owning views by convention.
+  - prompt: >
+      `std::vector<Quote> make_book();` — a caller writes
+      `auto book = make_book();`. How many copies of the vector's elements occur?
+    choices:
+      - "Two — one into the return value, one into book"
+      - "One — the return value is copied into book"
+      - "Zero in practice — RVO constructs the result directly in book's storage"
+      - "Depends on whether Quote has a move constructor"
+    answer: 2
+    explanation: >
+      Returning a prvalue mandates copy elision (C++17): the vector is constructed
+      directly in the caller's storage. Even pre-17, NRVO or a cheap 3-pointer move
+      applied — returning containers by value is idiomatic, not wasteful.

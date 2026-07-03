@@ -1,0 +1,71 @@
+title: Low-Latency & Concurrency
+description: The memory model, caches, and hot-path discipline — where senior C++ interviews are won.
+questions:
+  - prompt: >
+      Two threads increment two different counters that happen to sit in the same
+      64-byte cache line. Throughput craters. What is this called, and what's the fix?
+    choices:
+      - "Data race — add a mutex around both counters"
+      - "False sharing — pad/align each counter to its own cache line (alignas(64))"
+      - "Cache thrashing — pin both threads to the same core"
+      - "Store buffering — insert a memory fence between increments"
+    answer: 1
+    explanation: >
+      The line ping-pongs between cores' caches in exclusive state even though the data
+      is logically independent. alignas(64) (or std::hardware_destructive_interference_size)
+      gives each hot variable its own line.
+  - prompt: "In an SPSC ring buffer, the producer writes the payload then publishes by storing the head index. Which memory orderings are the canonical minimum?"
+    choices:
+      - "Both seq_cst — anything weaker is UB"
+      - "Producer: memory_order_release on the index store; consumer: memory_order_acquire on the index load"
+      - "Both relaxed — single producer and consumer need no ordering"
+      - "Producer relaxed, consumer acquire"
+    answer: 1
+    explanation: >
+      Release on the store ensures the payload writes are visible before the index;
+      acquire on the load ensures reads after it see them. Relaxed would let the consumer
+      observe the new index but stale payload.
+  - prompt: "Why is heap allocation banned on the hot path of most trading systems?"
+    choices:
+      - "malloc is O(n) in the number of allocations"
+      - "Allocators take locks, have unpredictable latency (page faults, arena contention), and scatter data across memory"
+      - "The heap is limited to 2 GB on Linux"
+      - "Allocation forces a system call every time"
+    answer: 1
+    explanation: >
+      It's the unpredictability that kills you: an occasional slow malloc (lock contention,
+      page fault, arena growth) blows the tail latency budget. Pools and preallocated
+      buffers make the worst case look like the average case.
+  - prompt: "A branch in your decode loop is taken ~50% of the time with no pattern. Roughly what does each misprediction cost on a modern x86 core?"
+    choices:
+      - "~1 cycle — branches are nearly free"
+      - "~15–20 cycles of flushed pipeline"
+      - "~300 cycles — same as a DRAM access"
+      - "Nothing if the branch target is in L1i"
+    answer: 1
+    explanation: >
+      A mispredict flushes the pipeline: roughly 15–20 cycles wasted. Unpredictable
+      branches in hot loops are why branchless tricks (cmov, arithmetic masks) and
+      sorting-by-branch-direction show up in low-latency code.
+  - prompt: "What is the main reason `std::atomic<int>` with seq_cst can be slower than acquire/release on x86?"
+    choices:
+      - "seq_cst loads require a LOCK prefix"
+      - "seq_cst stores compile to an XCHG (or MFENCE), draining the store buffer"
+      - "seq_cst forces the variable out of registers into DRAM"
+      - "There is no difference on x86 — TSO makes them identical"
+    answer: 1
+    explanation: >
+      On x86, acquire loads and release stores are plain MOVs (TSO gives you the rest),
+      but seq_cst stores need XCHG/MFENCE to forbid store-load reordering — stalling
+      until the store buffer drains. Choose orderings deliberately.
+  - prompt: "Your p50 latency is 800ns but p99.9 is 40µs. Which is the LEAST likely culprit?"
+    choices:
+      - "The scheduler migrating your thread between cores"
+      - "Occasional page faults touching cold memory"
+      - "A slow instruction cache — L1i misses on every packet"
+      - "TLB shootdowns or interrupts landing on your pinned core"
+    answer: 2
+    explanation: >
+      Consistent per-packet i-cache misses would inflate the median, not just the tail.
+      Tail spikes point at rare events: migrations, page faults, interrupts, GC-ish
+      background work. Hence core pinning, hugepages, interrupt steering, prefaulting.

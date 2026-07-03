@@ -1,0 +1,68 @@
+title: Market Microstructure & The Trading Stack
+description: Exchanges, protocols, and order books — the systems knowledge quant dev interviews probe.
+questions:
+  - prompt: "Why do exchanges distribute market data over UDP multicast rather than TCP?"
+    choices:
+      - "UDP is encrypted by default"
+      - "One packet reaches all subscribers with no per-client state, and there's no retransmission-induced head-of-line blocking"
+      - "TCP cannot cross data center boundaries"
+      - "UDP guarantees ordering within a multicast group"
+    answer: 1
+    explanation: >
+      Multicast scales to thousands of subscribers with a single wire-rate stream, and a
+      lost packet doesn't stall everything behind it as a TCP retransmit would. The cost:
+      you must handle gaps yourself — sequence numbers, A/B feeds, recovery channels.
+  - prompt: "In a FIX message, tag 10 (CheckSum) is computed as:"
+    choices:
+      - "CRC32 of the message body"
+      - "The sum of all bytes up to the checksum field, modulo 256, printed as 3 digits"
+      - "MD5 of the header, truncated to 3 characters"
+      - "The count of SOH delimiters in the message"
+    answer: 1
+    explanation: >
+      Byte sum mod 256, zero-padded to exactly three digits — a trivially weak but fast
+      integrity check from the early 90s that still runs the world's order routing.
+  - prompt: "The bid-ask spread compensates a market maker primarily for:"
+    choices:
+      - "Exchange membership fees"
+      - "Adverse selection (trading against better-informed flow), inventory risk, and order-processing costs"
+      - "The capital cost of holding cash overnight"
+      - "Regulatory reporting obligations"
+    answer: 1
+    explanation: >
+      The canonical decomposition. Adverse selection is the deep one: whoever crosses
+      the spread may know something you don't, so every fill is slightly bad news — the
+      spread is the premium charged for that.
+  - prompt: "Under price-time priority, your limit order's queue position matters because:"
+    choices:
+      - "Orders at the front of the queue pay lower fees"
+      - "Front-of-queue orders fill first and capture more spread with less adverse selection"
+      - "The exchange cancels back-of-queue orders after 1 second"
+      - "Queue position determines tick size"
+    answer: 1
+    explanation: >
+      Same price, earlier time fills first. Front-of-queue fills happen even in benign
+      two-sided flow; back-of-queue often fills only when the level is about to trade
+      through — i.e., precisely when you least want it. Queue position is real money.
+  - prompt: "Order book imbalance $I = (V_b - V_a)/(V_b + V_a)$ is a widely used short-horizon signal because:"
+    choices:
+      - "Regulators require quoting proportional to imbalance"
+      - "A heavily bid book means the ask queue depletes faster, so the next mid-price move is more likely upward"
+      - "Imbalance is equal to the spread in ticks"
+      - "It predicts daily closing prices accurately"
+    answer: 1
+    explanation: >
+      If far more resting size sits on the bid, sell flow gets absorbed while the thin
+      ask queue empties — the ask is the level more likely to give way. It's among the
+      strongest simple predictors at horizons of seconds, and useless at horizons of days.
+  - prompt: "Why did HFT-focused venues introduce binary protocols (ITCH/OUCH, SBE) alongside FIX?"
+    choices:
+      - "Binary messages are more secure"
+      - "Parsing ASCII tag=value costs far more cycles than fixed-offset binary fields"
+      - "FIX cannot represent fractional prices"
+      - "Binary protocols work over UDP only"
+    answer: 1
+    explanation: >
+      FIX means scanning for delimiters, converting ASCII numbers, hashing tags. Binary
+      formats put each field at a known offset — decode is a struct cast. When the race
+      is nanoseconds, serialization format is a first-order latency decision.

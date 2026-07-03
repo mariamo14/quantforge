@@ -1,0 +1,68 @@
+title: Options & Black-Scholes
+description: Pricing, parity, and the Greeks — rapid-fire checks on the core options facts.
+questions:
+  - prompt: "Which of these is NOT an assumption of the Black-Scholes model?"
+    choices:
+      - "Constant volatility"
+      - "Continuous frictionless trading"
+      - "Normally distributed asset prices"
+      - "A constant risk-free rate"
+    answer: 2
+    explanation: >
+      Black-Scholes assumes lognormal prices (normal log-returns) — prices can't go
+      negative. Saying "normal prices" is a classic trap answer. The assumptions that
+      break hardest in practice are constant vol and continuous hedging.
+  - prompt: "In $C = S N(d_1) - K e^{-rT} N(d_2)$, what is the interpretation of $N(d_2)$?"
+    choices:
+      - "The option's delta"
+      - "The risk-neutral probability the option expires in the money"
+      - "The expected payoff divided by the strike"
+      - "The hedge ratio for the bond leg"
+    answer: 1
+    explanation: >
+      $N(d_2) = \mathbb{Q}(S_T > K)$ — risk-neutral, not real-world. $N(d_1)$ is the
+      delta of the call. Interviewers love asking you to distinguish the two.
+  - prompt: "Put-call parity for European options on a non-dividend stock states:"
+    choices:
+      - "$C - P = S - K e^{-rT}$"
+      - "$C + P = S + K e^{-rT}$"
+      - "$C - P = K e^{-rT} - S$"
+      - "$C \\cdot P = S \\cdot K e^{-rT}$"
+    answer: 0
+    explanation: >
+      Long call + short put replicates a forward: pay $K$ at $T$, receive the stock.
+      No model needed — pure no-arbitrage, which is why violating it is a free lunch and
+      why it's the first sanity check on any pricer.
+  - prompt: "The delta of an at-the-money European call (short-dated, low rates) is approximately:"
+    choices:
+      - "0"
+      - "0.25"
+      - "0.5"
+      - "1.0"
+    answer: 2
+    explanation: >
+      ATM, $d_1 \approx 0$ so $\Delta = N(d_1) \approx 0.5$ — a coin flip on finishing
+      in the money, hedged with half a share. Slightly above 0.5 in practice because of
+      drift in $d_1$.
+  - prompt: "Where is gamma largest?"
+    choices:
+      - "Deep in the money, long-dated"
+      - "At the money, close to expiry"
+      - "Deep out of the money, close to expiry"
+      - "Gamma is constant across strikes"
+    answer: 1
+    explanation: >
+      Near expiry, an ATM option's delta flips from ~0 to ~1 over a tiny price range —
+      that rate of change IS gamma. This is why pinned short-gamma books near expiry are
+      the stuff of trading-desk war stories.
+  - prompt: "You are long a delta-hedged call. You make money when:"
+    choices:
+      - "The stock drifts upward steadily"
+      - "Realized volatility exceeds the implied volatility you paid"
+      - "Interest rates fall"
+      - "The stock stays exactly where it is"
+    answer: 1
+    explanation: >
+      Delta-hedged, the directional exposure is gone; what remains is gamma P&L
+      $\tfrac{1}{2}\Gamma(\Delta S)^2$ versus theta bleed. You paid implied vol and you
+      earn realized vol — long options is a bet that realized beats implied.

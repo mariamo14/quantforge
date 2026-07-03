@@ -1,0 +1,47 @@
+slug: cpp-for-quant-devs
+title: C++ for Quant Developers
+icon: "⚡"
+accent: "#f59e0b"
+order: 1
+description: >
+  Modern C++ the way trading firms use it — ownership, move semantics, templates,
+  the memory model, and the low-latency patterns behind real trading systems.
+modules:
+  - slug: ownership-lifetime
+    title: Ownership & Object Lifetime
+    description: RAII, smart pointers, and move semantics — the foundation of every C++ interview.
+    items:
+      - kind: lesson
+        ref: raii-and-ownership
+      - kind: lesson
+        ref: move-semantics
+      - kind: quiz
+        ref: cpp-ownership-quiz
+      - kind: problem
+        ref: fixed-point-price
+  - slug: templates-stl
+    title: Templates & the STL Under the Hood
+    description: Zero-cost abstraction, container internals, and picking the right structure for market data.
+    items:
+      - kind: lesson
+        ref: templates-generic-programming
+      - kind: lesson
+        ref: stl-containers-complexity
+      - kind: quiz
+        ref: stl-quiz
+      - kind: problem
+        ref: ring-buffer
+  - slug: low-latency
+    title: Low-Latency C++
+    description: The memory model, cache behavior, and the hot-path discipline of HFT codebases.
+    items:
+      - kind: lesson
+        ref: memory-model-atomics
+      - kind: lesson
+        ref: cache-friendly-code
+      - kind: lesson
+        ref: low-latency-patterns
+      - kind: quiz
+        ref: low-latency-quiz
+      - kind: problem
+        ref: order-book

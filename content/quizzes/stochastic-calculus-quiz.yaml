@@ -1,0 +1,68 @@
+title: Stochastic Calculus
+description: Brownian motion, Itô's lemma, and the facts every quant interview assumes you know cold.
+questions:
+  - prompt: "For standard Brownian motion $W_t$, what is $\\mathrm{Var}(W_t - W_s)$ for $t > s$?"
+    choices:
+      - "$t + s$"
+      - "$t - s$"
+      - "$\\sqrt{t-s}$"
+      - "$t^2 - s^2$"
+    answer: 1
+    explanation: >
+      Increments are stationary and normal: $W_t - W_s \sim N(0, t-s)$. Variance grows
+      linearly in time — which is why volatility scales with $\sqrt{t}$ and why
+      "annualize by $\sqrt{252}$" works.
+  - prompt: "What is the quadratic variation of Brownian motion over $[0, t]$?"
+    choices:
+      - "$0$ — smooth functions have zero quadratic variation"
+      - "$t$, deterministically"
+      - "$W_t^2$"
+      - "A random variable with mean $t$ and variance $2t$"
+    answer: 1
+    explanation: >
+      $[W]_t = t$ with probability 1 — the sum of squared increments converges to a
+      deterministic limit. This single fact ($(dW)^2 = dt$) is the reason Itô calculus
+      differs from ordinary calculus.
+  - prompt: "Using Itô's lemma, $d(W_t^2)$ equals:"
+    choices:
+      - "$2 W_t\\, dW_t$"
+      - "$2 W_t\\, dW_t + dt$"
+      - "$2 W_t\\, dt$"
+      - "$dt$"
+    answer: 1
+    explanation: >
+      With $f(x)=x^2$: $df = f'\,dW + \tfrac{1}{2}f''\,(dW)^2 = 2W\,dW + dt$. The extra
+      $dt$ is the Itô correction — ordinary calculus would give only the first term.
+  - prompt: "The solution of the GBM SDE $dS = \\mu S\\,dt + \\sigma S\\,dW$ is $S_t = S_0 \\exp\\left((\\mu - \\tfrac{\\sigma^2}{2})t + \\sigma W_t\\right)$. Where does the $-\\sigma^2/2$ come from?"
+    choices:
+      - "A convention to make returns comparable across assets"
+      - "The Itô correction from applying Itô's lemma to $\\ln S$"
+      - "Continuous compounding of the risk-free rate"
+      - "It's the variance of the terminal distribution"
+    answer: 1
+    explanation: >
+      Applying Itô to $\ln S$ gives $d(\ln S) = (\mu - \sigma^2/2)dt + \sigma dW$: the
+      convexity of the exponential means median growth sits below mean growth. An
+      interview favorite — "why is the drift of log-price not $\mu$?"
+  - prompt: "Which process is the natural model for a mean-reverting spread between two cointegrated assets?"
+    choices:
+      - "Geometric Brownian motion"
+      - "The Ornstein-Uhlenbeck process $dX = \\kappa(\\theta - X)\\,dt + \\sigma\\,dW$"
+      - "A Poisson jump process"
+      - "Arithmetic Brownian motion with zero drift"
+    answer: 1
+    explanation: >
+      OU pulls the process toward $\theta$ at speed $\kappa$ — the standard model for
+      spreads, rates, and anything that shouldn't wander to infinity. Bonus point:
+      half-life of reversion $= \ln 2 / \kappa$.
+  - prompt: "Discretizing $dS = \\mu S\\,dt + \\sigma S\\,dW$ with Euler-Maruyama over step $\\Delta t$, the update is:"
+    choices:
+      - "$S_{t+\\Delta t} = S_t + \\mu S_t \\Delta t + \\sigma S_t \\sqrt{\\Delta t}\\, Z$ with $Z \\sim N(0,1)$"
+      - "$S_{t+\\Delta t} = S_t (1 + \\mu \\Delta t)$"
+      - "$S_{t+\\Delta t} = S_t + \\mu S_t \\Delta t + \\sigma S_t \\Delta t \\, Z$"
+      - "$S_{t+\\Delta t} = S_t e^{\\mu \\Delta t}$"
+    answer: 0
+    explanation: >
+      The Brownian increment over $\Delta t$ has standard deviation $\sqrt{\Delta t}$ —
+      the single most common bug in hand-rolled Monte Carlo is scaling the shock by
+      $\Delta t$ instead of $\sqrt{\Delta t}$.
