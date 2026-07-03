@@ -69,17 +69,38 @@ export function TrackDetail() {
       </div>
 
       <div className="mt-8 flex flex-col gap-8">
-        {track.modules.map((module, moduleIndex) => (
+        {track.modules.map((module, moduleIndex) => {
+          const moduleDone = module.items.filter((i) => i.done).length
+          const moduleComplete = moduleDone === module.items.length
+          return (
           <section key={module.slug}>
-            <div className="mb-3 flex items-baseline gap-3">
-              <span className="flex size-7 items-center justify-center rounded-lg bg-surface-2 text-xs font-bold text-ink-muted">
-                {moduleIndex + 1}
+            <div className="mb-3 flex items-center gap-3">
+              <span
+                className={`flex size-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
+                  moduleComplete ? 'bg-good-soft text-good' : 'bg-surface-2 text-ink-muted'
+                }`}
+              >
+                {moduleComplete ? '✓' : moduleIndex + 1}
               </span>
-              <div>
+              <div className="min-w-0 flex-1">
                 <h2 className="font-semibold">{module.title}</h2>
                 {module.description && (
                   <p className="text-sm text-ink-muted">{module.description}</p>
                 )}
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <div className="h-1.5 w-16 overflow-hidden rounded-full bg-surface-3">
+                  <div
+                    className="h-full rounded-full transition-[width] duration-500"
+                    style={{
+                      width: `${module.items.length ? (moduleDone / module.items.length) * 100 : 0}%`,
+                      backgroundColor: track.accent,
+                    }}
+                  />
+                </div>
+                <span className="text-xs font-medium text-ink-faint">
+                  {moduleDone}/{module.items.length}
+                </span>
               </div>
             </div>
 
@@ -152,7 +173,8 @@ export function TrackDetail() {
               })}
             </Card>
           </section>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

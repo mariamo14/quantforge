@@ -111,6 +111,27 @@ public class ActionController {
         return new LessonCompleteResponse(true, alreadyDone ? 0 : ProgressService.LESSON_XP);
     }
 
+    public record QuizCheckRequest(@NotNull Long questionId, @NotNull Integer answer) {
+    }
+
+    public record QuizCheckResponse(boolean correct, int correctIndex, String explanationMd) {
+    }
+
+    /** Instant per-question feedback (CodeSignal-style). Nothing is recorded. */
+    @PostMapping("/quizzes/{slug}/check")
+    @Transactional(readOnly = true)
+    public QuizCheckResponse checkAnswer(@PathVariable String slug,
+                                         @Valid @RequestBody QuizCheckRequest request) {
+        Quiz quiz = quizzes.findBySlug(slug)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Quiz not found"));
+        QuizQuestion question = quiz.getQuestions().stream()
+                .filter(q -> q.getId().equals(request.questionId()))
+                .findFirst()
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Question not found"));
+        return new QuizCheckResponse(request.answer() == question.getCorrectIndex(),
+                question.getCorrectIndex(), question.getExplanationMd());
+    }
+
     @PostMapping("/quizzes/{slug}/submit")
     @Transactional
     public QuizResultResponse submitQuiz(@PathVariable String slug,

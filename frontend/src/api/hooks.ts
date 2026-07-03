@@ -1,12 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { get, post } from './client'
 import type {
+  ContextDto,
   DailyChallengeDto,
   ItemKind,
   LessonDto,
   MeResponse,
   NextItemDto,
   ProblemDto,
+  QuizCheckResponse,
   QuizDto,
   QuizResultResponse,
   RunResponse,
@@ -18,6 +20,15 @@ import type {
 /** The item after this one in its track — powers "Next up" after completion. */
 export const fetchNext = (kind: ItemKind, slug: string) =>
   get<NextItemDto>(`/api/next?kind=${kind}&slug=${encodeURIComponent(slug)}`)
+
+export const useItemContext = (kind: ItemKind, slug: string) =>
+  useQuery({
+    queryKey: ['context', kind, slug],
+    queryFn: () => get<ContextDto>(`/api/context?kind=${kind}&slug=${encodeURIComponent(slug)}`),
+  })
+
+export const checkQuizAnswer = (slug: string, questionId: number, answer: number) =>
+  post<QuizCheckResponse>(`/api/quizzes/${slug}/check`, { questionId, answer })
 
 export const useMe = () => useQuery({ queryKey: ['me'], queryFn: () => get<MeResponse>('/api/me') })
 

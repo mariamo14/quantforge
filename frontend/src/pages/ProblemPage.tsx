@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Editor from '@monaco-editor/react'
 import confetti from 'canvas-confetti'
 import { useProblem, useRunCode, useSubmitCode } from '../api/hooks'
 import type { ProblemDto, RunResponse } from '../api/types'
 import { Markdown } from '../components/Markdown'
 import { NextUp } from '../components/NextUp'
+import { TrackContextBar } from '../components/TrackContextBar'
 import { DifficultyBadge, Spinner, VerdictBadge, XpPill, VERDICT_LABELS } from '../components/ui'
 import { useTheme } from '../state/theme'
 
@@ -70,10 +71,8 @@ function Workspace({ problem }: { problem: ProblemDto }) {
 
   return (
     <div className="flex h-full flex-col">
+      <TrackContextBar kind="problem" slug={problem.slug} />
       <header className="flex flex-wrap items-center gap-3 border-b border-line bg-surface-1 px-5 py-3">
-        <Link to="/tracks" className="text-sm text-ink-muted hover:text-ink">
-          ←
-        </Link>
         <h1 className="font-semibold">{problem.title}</h1>
         <DifficultyBadge difficulty={problem.difficulty} />
         {problem.solved ? (

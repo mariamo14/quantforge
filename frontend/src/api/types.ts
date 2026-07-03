@@ -42,6 +42,29 @@ export interface NextItemDto {
   endOfTrack: boolean
 }
 
+export interface ItemRef {
+  kind: ItemKind
+  slug: string
+  title: string
+}
+
+export interface ContextDto {
+  trackSlug: string
+  trackTitle: string
+  accent: string
+  index: number
+  total: number
+  doneCount: number
+  prev: ItemRef | null
+  next: ItemRef | null
+}
+
+export interface QuizCheckResponse {
+  correct: boolean
+  correctIndex: number
+  explanationMd: string
+}
+
 export interface ModuleDto {
   slug: string
   title: string

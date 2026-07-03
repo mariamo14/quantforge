@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti'
 import { useCompleteLesson, useLesson } from '../api/hooks'
 import { Markdown } from '../components/Markdown'
 import { NextUp } from '../components/NextUp'
+import { TrackContextBar } from '../components/TrackContextBar'
 import { Spinner } from '../components/ui'
 
 export function LessonPage() {
@@ -22,7 +23,9 @@ export function LessonPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl p-8">
+    <div>
+      <TrackContextBar kind="lesson" slug={slug!} />
+      <div className="mx-auto max-w-3xl p-8">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-ink-faint">
@@ -54,6 +57,7 @@ export function LessonPage() {
             {complete.isPending ? 'Saving…' : 'Mark complete (+25 XP)'}
           </button>
         )}
+      </div>
       </div>
     </div>
   )

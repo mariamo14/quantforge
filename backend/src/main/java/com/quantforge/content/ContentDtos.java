@@ -20,6 +20,15 @@ public final class ContentDtos {
                               String trackSlug, String trackTitle, boolean endOfTrack) {
     }
 
+    public record ItemRef(String kind, String slug, String title) {
+    }
+
+    /** Course-player context: where this item sits inside its track. */
+    public record ContextDto(String trackSlug, String trackTitle, String accent,
+                             int index, int total, int doneCount,
+                             ItemRef prev, ItemRef next) {
+    }
+
     public record ModuleDto(String slug, String title, String description, List<ItemDto> items) {
     }
 

@@ -102,9 +102,10 @@ public class ContentController {
         };
     }
 
-    /** The item after the given one in its track — powers the "Next up" flow. */
-    @GetMapping("/next")
-    public NextItemDto next(@RequestParam String kind, @RequestParam String slug) {
+    private record TrackPosition(Track track, List<ModuleItem> flattened, int index) {
+    }
+
+    private TrackPosition locate(String kind, String slug) {
         ModuleItem current = switch (kind) {
             case "lesson" -> moduleItems.findFirstByLessonSlug(slug).orElse(null);
             case "problem" -> moduleItems.findFirstByProblemSlug(slug).orElse(null);
@@ -114,9 +115,7 @@ public class ContentController {
         if (current == null) {
             throw new ApiException(HttpStatus.NOT_FOUND, "Item not found in any track");
         }
-        TrackModule module = current.getModule();
-        Track track = module.getTrack();
-
+        Track track = current.getModule().getTrack();
         List<ModuleItem> flattened = track.getModules().stream()
                 .flatMap(m -> m.getItems().stream())
                 .toList();
@@ -127,18 +126,50 @@ public class ContentController {
                 break;
             }
         }
-        if (index < 0 || index + 1 >= flattened.size()) {
-            return new NextItemDto(null, null, null, track.getSlug(), track.getTitle(), true);
-        }
-        ModuleItem next = flattened.get(index + 1);
-        return switch (next.getKind()) {
-            case LESSON -> new NextItemDto("lesson", next.getLesson().getSlug(),
-                    next.getLesson().getTitle(), track.getSlug(), track.getTitle(), false);
-            case PROBLEM -> new NextItemDto("problem", next.getProblem().getSlug(),
-                    next.getProblem().getTitle(), track.getSlug(), track.getTitle(), false);
-            case QUIZ -> new NextItemDto("quiz", next.getQuiz().getSlug(),
-                    next.getQuiz().getTitle(), track.getSlug(), track.getTitle(), false);
+        return new TrackPosition(track, flattened, index);
+    }
+
+    private static ItemRef toItemRef(ModuleItem item) {
+        return switch (item.getKind()) {
+            case LESSON -> new ItemRef("lesson", item.getLesson().getSlug(), item.getLesson().getTitle());
+            case PROBLEM -> new ItemRef("problem", item.getProblem().getSlug(), item.getProblem().getTitle());
+            case QUIZ -> new ItemRef("quiz", item.getQuiz().getSlug(), item.getQuiz().getTitle());
         };
+    }
+
+    /** The item after the given one in its track — powers the "Next up" flow. */
+    @GetMapping("/next")
+    public NextItemDto next(@RequestParam String kind, @RequestParam String slug) {
+        TrackPosition pos = locate(kind, slug);
+        if (pos.index() < 0 || pos.index() + 1 >= pos.flattened().size()) {
+            return new NextItemDto(null, null, null, pos.track().getSlug(),
+                    pos.track().getTitle(), true);
+        }
+        ItemRef ref = toItemRef(pos.flattened().get(pos.index() + 1));
+        return new NextItemDto(ref.kind(), ref.slug(), ref.title(),
+                pos.track().getSlug(), pos.track().getTitle(), false);
+    }
+
+    /** Course-player context bar: "Step i of N" plus prev/next, for item pages. */
+    @GetMapping("/context")
+    public ContextDto context(@RequestParam String kind, @RequestParam String slug,
+                              @AuthenticationPrincipal User user) {
+        TrackPosition pos = locate(kind, slug);
+        Set<Long> lessonIds = progress.completedLessonIds(user.getId());
+        Set<Long> problemIds = progress.solvedProblemIds(user.getId());
+        Set<Long> quizIds = progress.passedQuizIds(user.getId());
+        int doneCount = 0;
+        for (ModuleItem item : pos.flattened()) {
+            if (progress.isItemDone(item, lessonIds, problemIds, quizIds)) {
+                doneCount++;
+            }
+        }
+        ItemRef prev = pos.index() > 0 ? toItemRef(pos.flattened().get(pos.index() - 1)) : null;
+        ItemRef next = pos.index() >= 0 && pos.index() + 1 < pos.flattened().size()
+                ? toItemRef(pos.flattened().get(pos.index() + 1)) : null;
+        return new ContextDto(pos.track().getSlug(), pos.track().getTitle(),
+                pos.track().getAccent(), pos.index() + 1, pos.flattened().size(),
+                doneCount, prev, next);
     }
 
     @GetMapping("/lessons/{slug}")

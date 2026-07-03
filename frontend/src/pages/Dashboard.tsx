@@ -1,16 +1,37 @@
 import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { get } from '../api/client'
 import { useDaily, useMe } from '../api/hooks'
+import type { TrackDetail } from '../api/types'
 import { Card, DifficultyBadge, ProgressRing, Spinner, XpPill } from '../components/ui'
+
+const ITEM_PATHS = { lesson: '/lessons', problem: '/problems', quiz: '/quizzes' } as const
 
 export function Dashboard() {
   const { data: me, isLoading } = useMe()
   const { data: daily } = useDaily()
 
+  const continueTrack = me?.tracks.find((t) => t.done > 0 && t.done < t.total) ?? me?.tracks[0]
+
+  // Deep-link Continue straight to the frontier item, not just the track page.
+  const { data: continueDetail } = useQuery({
+    queryKey: ['track', continueTrack?.slug],
+    queryFn: () => get<TrackDetail>(`/api/tracks/${continueTrack!.slug}`),
+    enabled: !!continueTrack,
+  })
+
   if (isLoading || !me) {
     return <Spinner label="Loading your forge…" />
   }
 
-  const continueTrack = me.tracks.find((t) => t.done > 0 && t.done < t.total) ?? me.tracks[0]
+  const frontier = continueDetail?.modules
+    .flatMap((m) => m.items)
+    .find((item) => !item.done && !item.locked)
+  const continueHref = frontier
+    ? `${ITEM_PATHS[frontier.kind]}/${frontier.slug}`
+    : continueTrack
+      ? `/tracks/${continueTrack.slug}`
+      : '/tracks'
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening'
 
@@ -29,10 +50,10 @@ export function Dashboard() {
         </div>
         {continueTrack && continueTrack.total > 0 && (
           <Link
-            to={`/tracks/${continueTrack.slug}`}
+            to={continueHref}
             className="rounded-xl bg-gradient-to-r from-brand to-accent px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
           >
-            Continue {continueTrack.title} →
+            {frontier ? `Continue: ${frontier.title} →` : `Continue ${continueTrack.title} →`}
           </Link>
         )}
       </div>
