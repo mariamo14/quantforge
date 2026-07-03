@@ -3,6 +3,8 @@ title: Heaps, Priority Queues & Top-of-Book
 minutes: 12
 ---
 
+**Builds on:** *STL Containers: Complexity & Memory Layout* (C++ track) — `std::priority_queue` internals.
+
 # Heaps, Priority Queues & Top-of-Book
 
 "What's the best bid right now?" is the most-asked question in a trading system, and the heap is the textbook answer for *give me the extreme element fast*. This lesson covers heap mechanics, the `std::priority_queue` gotchas interviewers probe, the lazy-deletion trick, and the honest comparison against `std::map` for order book levels.

@@ -3,6 +3,8 @@ title: The C++ Memory Model & Atomics
 minutes: 18
 ---
 
+**Builds on:** *Values, References & const* and *STL Containers* — you should be comfortable with C++ object basics before touching atomics.
+
 # The C++ Memory Model & Atomics
 
 If you interview for a quant dev role, someone *will* probe your understanding of the memory model. It's the perfect filter question: it separates engineers who have shipped multithreaded, latency-critical code from those who have only read about `std::thread`. Trading systems are full of single-producer/single-consumer queues, sequence locks, and lock-free tickers — all of which are wrong-by-default unless you understand happens-before.

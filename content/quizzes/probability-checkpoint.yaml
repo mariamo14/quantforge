@@ -1,0 +1,48 @@
+title: "Checkpoint: Probability & Expectation"
+description: Four questions to lock in the probability foundations.
+xpPerCorrect: 5
+questions:
+  - prompt: "The probability of at least one six in four rolls of a fair die is:"
+    choices:
+      - "$4 \\times \\frac{1}{6} = \\frac{2}{3}$"
+      - "$1 - (5/6)^4 \\approx 0.52$"
+      - "$(1/6)^4$"
+      - "Exactly 1/2"
+    answer: 1
+    explanation: >
+      "At least one" goes through the complement: P(no six in four rolls) = $(5/6)^4
+      \approx 0.482$, so P(at least one) ≈ 0.518. Adding $\frac16$ four times
+      double-counts rolls with multiple sixes — the classic error.
+  - prompt: "A fair coin has landed heads 5 times in a row. The probability the next flip is heads is:"
+    choices:
+      - "Less than 1/2 — tails is \"due\""
+      - "Exactly 1/2 — the coin has no memory"
+      - "More than 1/2 — heads is \"hot\""
+      - "1/64"
+    answer: 1
+    explanation: >
+      Independence means past flips carry zero information about the next one. The
+      "due for tails" feeling is the gambler's fallacy — and recognizing it instantly
+      matters, because markets prey on exactly this intuition.
+  - prompt: "You're paid the face value of one fair die roll, in dollars. The fair price to play is:"
+    choices:
+      - "$3.00"
+      - "$3.50"
+      - "$6.00"
+      - "$2.50"
+    answer: 1
+    explanation: >
+      Expected value = average payout over many plays = $(1+2+3+4+5+6)/6 = 3.5$. "Fair
+      price = expected value" is the single most reused idea in this entire track —
+      pricing theory refines *which probabilities* to use, not the principle.
+  - prompt: "Two funds both average +8% per year. Fund A's yearly results are tightly clustered around 8%; Fund B swings between −30% and +45%. In finance terms:"
+    choices:
+      - "They are equivalent investments"
+      - "Same expected return, but B has far higher variance — i.e. more risk"
+      - "B is strictly better because its best year is higher"
+      - "A must be fraudulent"
+    answer: 1
+    explanation: >
+      Variance (spread around the average) is the baseline measure of risk. Same mean,
+      different spread = very different investments — and (recall the returns checkpoint)
+      big swings also compound worse. Risk-adjusted comparison is the whole game.

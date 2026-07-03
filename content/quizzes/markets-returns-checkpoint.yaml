@@ -1,0 +1,48 @@
+title: "Checkpoint: Markets & Returns"
+description: Quick check before moving on — four questions on the first two lessons.
+xpPerCorrect: 5
+questions:
+  - prompt: "A stock quotes bid 99.98 / ask 100.02. If you want to BUY right now, you pay:"
+    choices:
+      - "99.98 — the bid"
+      - "100.02 — the ask"
+      - "100.00 — the midpoint"
+      - "Whatever you offer"
+    answer: 1
+    explanation: >
+      The ask is the lowest price anyone is currently willing to sell at — buying
+      immediately means taking that offer. The bid is where you could sell immediately.
+      The 4-cent gap is the spread, and it's the market maker's compensation.
+  - prompt: "An investment gains 50% one year, then loses 50% the next. Overall you have:"
+    choices:
+      - "Exactly what you started with"
+      - "75% of what you started with"
+      - "125% of what you started with"
+      - "50% of what you started with"
+    answer: 1
+    explanation: >
+      Returns multiply: $1.50 \times 0.50 = 0.75$. \$100 → \$150 → \$75. The −50% acts
+      on the larger amount. This asymmetry is why "average return" without compounding
+      is meaningless — and why log returns exist.
+  - prompt: "The special property of log returns is that they:"
+    choices:
+      - "Are always positive"
+      - "Add across time: a two-day log return is the sum of the daily ones"
+      - "Are larger than simple returns"
+      - "Don't require knowing the price"
+    answer: 1
+    explanation: >
+      $\ln(P_2/P_0) = \ln(P_2/P_1) + \ln(P_1/P_0)$. Addition is far easier to work with
+      than multiplication (averages, variances, models), which is why quant work runs on
+      log returns. For small moves, log ≈ simple anyway.
+  - prompt: "We analyze returns rather than raw price changes because:"
+    choices:
+      - "Prices are secret"
+      - "A $5 move means something completely different on a $10 stock than a $1000 one — returns make assets comparable"
+      - "Returns are always normally distributed"
+      - "Exchanges only publish returns"
+    answer: 1
+    explanation: >
+      A \$5 move is +50% on a \$10 stock and +0.5% on a \$1000 one. Scaling by price puts
+      every asset on the same footing — the first normalization in essentially all of
+      quantitative finance.

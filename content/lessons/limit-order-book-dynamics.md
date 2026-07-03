@@ -3,6 +3,8 @@ title: Limit Order Book Dynamics
 minutes: 12
 ---
 
+**Builds on:** *Market Microstructure Fundamentals*.
+
 # Limit Order Book Dynamics
 
 The limit order book (LOB) is the central data structure of modern markets — and of quant dev interviews. "Design an order book" is the single most common systems question in the space, and the follow-ups probe whether you understand the *dynamics*: what the book's shape predicts, what order flow actually looks like, and what gets built on top.

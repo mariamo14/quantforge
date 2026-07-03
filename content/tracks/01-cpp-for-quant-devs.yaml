@@ -7,6 +7,16 @@ description: >
   Modern C++ the way trading firms use it — ownership, move semantics, templates,
   the memory model, and the low-latency patterns behind real trading systems.
 modules:
+  - slug: cpp-foundations
+    title: C++ Foundations
+    description: "Step 1: how C++ builds and how it thinks about values — the shift from managed languages."
+    items:
+      - kind: lesson
+        ref: cpp-compilation-model
+      - kind: lesson
+        ref: values-references-const
+      - kind: quiz
+        ref: cpp-basics-checkpoint
   - slug: ownership-lifetime
     title: Ownership & Object Lifetime
     description: RAII, smart pointers, and move semantics — the foundation of every C++ interview.

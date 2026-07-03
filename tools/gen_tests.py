@@ -442,7 +442,45 @@ def lru_cache():
     yield "\n".join(ops) + "\n", False
 
 
+def time_value_calculator():
+    yield "4\nFV 100 0.10 2\nPV 121 0.10 2\nFV 100 0.05 3\nPV 1000000 0.03 30\n", True
+    rng = random.Random(42)
+    q = 1000
+    lines = [str(q)]
+    for _ in range(q):
+        op = rng.choice(["FV", "PV"])
+        amount = round(rng.uniform(1, 10**7), 2)
+        r = round(rng.uniform(0, 0.5), 4)
+        n = rng.randint(0, 50)
+        lines.append(f"{op} {amount} {r} {n}")
+    yield "\n".join(lines) + "\n", False
+    yield "3\nFV 100 0 10\nPV 100 0 10\nFV 0.01 0.5 50\n", False
+
+
+def option_payoff():
+    # straddle at $100 (strikes in cents)
+    yield "2 3\n1 C 10000\n1 P 10000\n8000 10000 12000\n", True
+    # covered call: long stock, short call at $50
+    yield "2 4\n1 S\n-1 C 5000\n3000 5000 7000 20000\n", True
+    rng = random.Random(42)
+    n, m = 100, 1000
+    lines = [f"{n} {m}"]
+    for _ in range(n):
+        qty = rng.randint(-1000, 1000) or 1
+        kind = rng.choice(["C", "P", "S"])
+        if kind == "S":
+            lines.append(f"{qty} S")
+        else:
+            lines.append(f"{qty} {kind} {rng.randint(1, 10**7)}")
+    lines.append(" ".join(str(rng.randint(1, 10**7)) for _ in range(m)))
+    yield "\n".join(lines) + "\n", False
+    # parity: long call short put == forward payoff (includes negatives)
+    yield "2 5\n1 C 10000\n-1 P 10000\n5000 9999 10000 10001 15000\n", False
+
+
 GENERATORS = {
+    "time-value-calculator": time_value_calculator,
+    "option-payoff": option_payoff,
     "implied-volatility": implied_volatility,
     "bond-pricer": bond_pricer,
     "currency-arbitrage": currency_arbitrage,

@@ -1,0 +1,48 @@
+title: "Checkpoint: Streaming Statistics"
+description: Windows, stability, and the deque trick — before you code them.
+xpPerCorrect: 5
+questions:
+  - prompt: "To maintain a rolling sum over the last K trades in O(1) per trade, you:"
+    choices:
+      - "Re-add all K values each time"
+      - "Add the newcomer and subtract the value that just left the window"
+      - "Sort the window and take the ends"
+      - "Use a hash map keyed by trade id"
+    answer: 1
+    explanation: >
+      Add-new, subtract-departing — the window "slides" without ever being rescanned.
+      A ring buffer of the last K values supplies the departing element. Every rolling
+      statistic starts from this move.
+  - prompt: "Computing running variance via $E[X^2] - (E[X])^2$ on prices around 10,000 fails because:"
+    choices:
+      - "The formula is wrong mathematically"
+      - "Two huge nearly-equal numbers get subtracted, destroying precision (catastrophic cancellation) — Welford's algorithm avoids this"
+      - "It's too slow"
+      - "Variance can't be computed online"
+    answer: 1
+    explanation: >
+      Both terms are ~$10^8$ while their difference may be ~$10^{-2}$: the subtraction
+      wipes out the significant digits. Welford accumulates deviations from a running
+      mean instead — same O(1) update, numerically sound.
+  - prompt: "The monotonic deque computes a rolling maximum in O(1) amortized because:"
+    choices:
+      - "It keeps the whole window sorted"
+      - "Each element is pushed once and popped at most once over the entire stream"
+      - "Deques have O(1) search"
+      - "It only works when prices are increasing"
+    answer: 1
+    explanation: >
+      Older values dominated by a newer, larger one can never be the max again, so they
+      leave permanently. Total pushes = total pops ≤ stream length — that's the
+      amortized argument, and interviewers want to hear it stated exactly this way.
+  - prompt: "Compared with a hard K-day window, an EWMA ($ema \\leftarrow \\alpha x + (1-\\alpha) ema$):"
+    choices:
+      - "Requires storing all K values"
+      - "Needs O(1) memory and fades old data smoothly instead of dropping it off a cliff"
+      - "Is always more accurate"
+      - "Cannot be computed online"
+    answer: 1
+    explanation: >
+      EWMA keeps one number of state and decays the past exponentially — no artificial
+      jump when a big value exits a window ("ghosting"). Hard windows answer "exactly the
+      last K"; EWMA answers "recent, smoothly weighted." Quants use both, deliberately.

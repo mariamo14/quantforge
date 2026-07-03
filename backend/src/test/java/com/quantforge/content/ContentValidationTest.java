@@ -37,9 +37,21 @@ class ContentValidationTest {
     @Test
     void contentVolumeMatchesPlan() {
         assertEquals(5, tracks.count(), "tracks");
-        assertTrue(lessons.count() >= 34, "expected at least 34 lessons, got " + lessons.count());
-        assertEquals(19, problems.count(), "problems");
-        assertTrue(quizzes.count() >= 15, "quizzes");
+        assertTrue(lessons.count() >= 45, "expected at least 45 lessons, got " + lessons.count());
+        assertEquals(21, problems.count(), "problems");
+        assertTrue(quizzes.count() >= 21, "quizzes");
+    }
+
+    @Test
+    void everyTrackStartsWithALesson() {
+        // Step-by-step principle: a from-zero learner's first step is always a lesson,
+        // never a problem or quiz they can't yet do.
+        for (Track track : tracks.findAll()) {
+            assertFalse(track.getModules().isEmpty(), track.getSlug() + " has no modules");
+            ModuleItem first = track.getModules().getFirst().getItems().getFirst();
+            assertEquals(ModuleItem.Kind.LESSON, first.getKind(),
+                    track.getSlug() + " must open with a lesson, found " + first.getKind());
+        }
     }
 
     @Test

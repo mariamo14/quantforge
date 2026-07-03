@@ -3,6 +3,8 @@ title: Probability Essentials for Quants
 minutes: 15
 ---
 
+**Builds on:** *Probability from Scratch* and *Random Variables & Expected Value* — this lesson deepens those foundations toward the distributions quants actually use.
+
 Probability is the substrate of everything else in quant finance: pricing is an expectation, risk is a distribution, and Monte Carlo error is a CLT statement. Interviewers use probability questions as a fast filter, so these fundamentals need to be reflexive.
 
 ## Random variables and expectation as a fair price

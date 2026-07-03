@@ -3,6 +3,8 @@ title: Itô Calculus & SDEs
 minutes: 18
 ---
 
+**Builds on:** *Random Walks to Brownian Motion* — especially quadratic variation.
+
 Itô calculus is the chain rule for processes driven by Brownian motion. Every pricing PDE, every simulation scheme, and the most-asked derivation in quant interviews (GBM's solution) sit on top of one idea: **squared Brownian noise is not negligible — it's time**.
 
 ## Why the ordinary chain rule fails

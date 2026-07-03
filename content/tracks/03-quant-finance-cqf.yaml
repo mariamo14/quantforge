@@ -4,24 +4,71 @@ icon: "📈"
 accent: "#a78bfa"
 order: 3
 description: >
-  The quantitative-finance core, modeled on the CQF syllabus — stochastic calculus,
-  Black-Scholes, the Greeks, portfolio theory, fixed income, risk, and ML in finance.
+  From absolute zero to Black-Scholes and beyond — one step at a time. Starts with
+  what a market even is; ends with the CQF syllabus: stochastic calculus, option
+  pricing, volatility, portfolio theory, rates, credit, and ML in finance.
 modules:
-  - slug: stochastic-calculus
-    title: Probability & Stochastic Calculus
-    description: From coin flips to Brownian motion and Itô's lemma — the math beneath every model.
+  - slug: money-markets-returns
+    title: Money, Markets & Returns
+    description: "Step 1: what markets are, how we measure gains, and why time is money. No background assumed."
     items:
       - kind: lesson
+        ref: what-is-a-market
+      - kind: lesson
+        ref: prices-and-returns
+      - kind: quiz
+        ref: markets-returns-checkpoint
+      - kind: lesson
+        ref: time-value-of-money
+      - kind: problem
+        ref: time-value-calculator
+  - slug: probability-from-zero
+    title: Probability from Zero
+    description: "Step 2: uncertainty as a number — dice and coins first, distributions after."
+    items:
+      - kind: lesson
+        ref: probability-from-scratch
+      - kind: lesson
+        ref: random-variables-expectation
+      - kind: quiz
+        ref: probability-checkpoint
+      - kind: lesson
         ref: probability-essentials
+  - slug: randomness-in-time
+    title: Randomness in Time
+    description: "Step 3: from coin flips to Brownian motion to Itô — the math prices actually follow."
+    items:
       - kind: lesson
         ref: random-walks-brownian-motion
+      - kind: quiz
+        ref: random-walk-checkpoint
       - kind: lesson
         ref: ito-calculus
       - kind: quiz
         ref: stochastic-calculus-quiz
+  - slug: derivatives-from-zero
+    title: Derivatives from Zero
+    description: "Step 4: forwards, options, and the one rule — no-arbitrage — that prices them all."
+    items:
+      - kind: lesson
+        ref: forwards-and-futures
+      - kind: lesson
+        ref: options-basics
+      - kind: problem
+        ref: option-payoff
+      - kind: lesson
+        ref: no-arbitrage-pricing
+      - kind: quiz
+        ref: derivatives-checkpoint
+  - slug: pricing-trees-first
+    title: "Pricing: Trees First"
+    description: "Step 5: price an option on the simplest possible model — one coin flip — then let the tree grow."
+    items:
+      - kind: lesson
+        ref: binomial-trees
   - slug: options-black-scholes
-    title: Options & Black-Scholes
-    description: Pricing, hedging, and the Greeks — then build the pricer yourself in C++.
+    title: Black-Scholes
+    description: "Step 6: the continuous-time limit — the formula, the Greeks, and inverting it for implied vol."
     items:
       - kind: lesson
         ref: black-scholes
@@ -32,17 +79,15 @@ modules:
       - kind: problem
         ref: black-scholes-pricer
       - kind: problem
-        ref: monte-carlo-option
-      - kind: problem
         ref: implied-volatility
   - slug: numerical-methods
     title: Numerical Methods
-    description: Trees for early exercise, Monte Carlo craft for everything high-dimensional.
+    description: Monte Carlo done properly — then price by simulation yourself.
     items:
       - kind: lesson
-        ref: binomial-trees
-      - kind: lesson
         ref: monte-carlo-methods
+      - kind: problem
+        ref: monte-carlo-option
       - kind: quiz
         ref: pricing-methods-quiz
   - slug: volatility

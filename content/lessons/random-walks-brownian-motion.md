@@ -3,6 +3,8 @@ title: Random Walks to Brownian Motion
 minutes: 15
 ---
 
+**Builds on:** *Random Variables & Expected Value* (variance, the normal distribution).
+
 Brownian motion is the noise source for essentially every continuous-time model in finance. The fastest way to understand it — and to answer interview questions about it — is to build it from a coin flip.
 
 ## The coin-flip random walk

@@ -13,6 +13,8 @@ modules:
     items:
       - kind: lesson
         ref: sliding-windows
+      - kind: quiz
+        ref: streaming-checkpoint
       - kind: problem
         ref: rolling-vwap
       - kind: problem
@@ -35,5 +37,7 @@ modules:
     title: Graph Problems
     description: The log-space reduction every quant interviewer loves.
     items:
+      - kind: lesson
+        ref: graphs-for-quants
       - kind: problem
         ref: currency-arbitrage

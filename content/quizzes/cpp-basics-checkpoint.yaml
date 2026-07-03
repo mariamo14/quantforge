@@ -1,0 +1,50 @@
+title: "Checkpoint: C++ Foundations"
+description: The mental-model shift from managed languages — verify it stuck.
+xpPerCorrect: 5
+questions:
+  - prompt: "In C++, after `Order b = a;` (where Order is a class), modifying `b`:"
+    choices:
+      - "Also modifies a — b is a reference to the same object, like Java"
+      - "Leaves a untouched — b is a full independent copy"
+      - "Is a compile error unless Order is marked Copyable"
+      - "Is undefined behavior"
+    answer: 1
+    explanation: >
+      C++ variables ARE objects, not references to them: assignment copies. This is the
+      single biggest mental shift from Java/Python — and the reason C++ then needs
+      references (`Order&`) to opt back INTO aliasing when you want it.
+  - prompt: "The linker error `undefined reference to 'price(double)'` means:"
+    choices:
+      - "You forgot to #include the header"
+      - "The function was declared (the compiler was satisfied) but no object file contains its definition"
+      - "A syntax error in price()"
+      - "The function is private"
+    answer: 1
+    explanation: >
+      Compilation and linking are separate stages: headers/declarations satisfy the
+      compiler per translation unit; the linker then needs exactly one definition
+      somewhere. Missing .cpp in the build = undefined reference. Understanding this
+      dissolves half of all beginner C++ errors.
+  - prompt: "The idiomatic way to pass a `std::vector<double>` of a million prices to a read-only function is:"
+    choices:
+      - "By value: void f(std::vector<double> prices)"
+      - "By const reference: void f(const std::vector<double>& prices)"
+      - "By pointer to the first element"
+      - "As a global variable"
+    answer: 1
+    explanation: >
+      By value copies a million doubles (8 MB!) on every call; `const&` aliases the
+      caller's vector at zero copy cost and the const promises you won't modify it.
+      Rule of thumb: cheap types by value, everything else by const reference.
+  - prompt: "A C++ reference (`int& r = x;`) differs from a pointer in that a reference:"
+    choices:
+      - "Can be null"
+      - "Cannot be null and cannot be re-pointed at a different object after binding"
+      - "Requires the -> operator"
+      - "Occupies no memory ever, by definition"
+    answer: 1
+    explanation: >
+      A reference is an alias fixed at birth: no null state, no reseating — which is why
+      APIs prefer references ("this parameter always exists") and use pointers when
+      absence is meaningful. (Under the hood it may compile to a pointer; the language
+      guarantees are what differ.)

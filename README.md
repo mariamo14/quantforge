@@ -16,6 +16,8 @@ An interview-prep platform for becoming a **quant developer** — CodeSignal-sty
 
 **Features:** live C++ judge (compile + run against hidden tests with per-test verdicts), Monaco editor with ⌘↵/⌘⇧↵ shortcuts, XP/levels/streaks, daily challenge, editorials unlocked on solve, KaTeX-rendered math, dark/light themes.
 
+**Step-by-step progression (CodeSignal-style):** tracks assume zero prior knowledge — the quant track literally starts at "what is a market?" and climbs to Black-Scholes one concept at a time, with a short checkpoint quiz after each idea and an easy coding exercise before each hard one. Items unlock sequentially (finish a step to open the next; a "Next up" button carries you forward), and a per-track **Free roam** toggle opens everything for experienced users. Lessons that depend on earlier material declare it with a *Builds on:* line.
+
 ## Stack
 
 - **Frontend** — React 19 + TypeScript, Vite, Tailwind CSS v4, TanStack Query, Monaco, KaTeX

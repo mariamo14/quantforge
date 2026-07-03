@@ -3,6 +3,8 @@ title: Low-Latency Patterns for Trading Systems
 minutes: 16
 ---
 
+**Builds on:** *The C++ Memory Model & Atomics* and *Cache-Friendly Code*.
+
 # Low-Latency Patterns for Trading Systems
 
 Interviewers ask about low-latency patterns to test whether you think like a systems engineer under a real-time constraint — not "is it fast on average?" but "what is the *worst* thing that can happen on the tick-to-trade path?" This lesson is the catalogue of answers they expect.

@@ -3,6 +3,8 @@ title: The Black-Scholes Framework
 minutes: 20
 ---
 
+**Builds on:** *Binomial Trees* (replication & risk-neutral pricing), *No-Arbitrage & Put-Call Parity*, and *Itô Calculus*.
+
 Black-Scholes is the load-bearing wall of derivatives pricing. Interviewers use it as a litmus test: not "can you recite the formula," but "do you understand *why* an option has a unique price at all?" The deep idea is that under certain assumptions, an option's payoff can be perfectly **replicated** by dynamically trading the stock and a bond — so its price is forced by no-arbitrage, independent of anyone's opinion about where the stock is going.
 
 ## The assumptions (and where reality breaks them)

@@ -1,0 +1,38 @@
+title: "Checkpoint: Random Walks"
+description: Three quick questions before Itô calculus.
+xpPerCorrect: 5
+questions:
+  - prompt: "For a symmetric random walk (±1 steps, fair coin), after $n$ steps the typical distance from the start grows like:"
+    choices:
+      - "$n$"
+      - "$\\sqrt{n}$"
+      - "$\\log n$"
+      - "It stays near 0"
+    answer: 1
+    explanation: >
+      The expected position is 0, but the variance after $n$ steps is $n$ — so the
+      typical (standard-deviation) distance is $\sqrt{n}$. This square-root-of-time
+      scaling survives all the way to Brownian motion and is why volatility scales
+      with $\sqrt{t}$.
+  - prompt: "Brownian motion increments over non-overlapping time intervals are:"
+    choices:
+      - "Equal to each other"
+      - "Independent, normally distributed, with variance equal to the interval's length"
+      - "Positively correlated"
+      - "Always positive"
+    answer: 1
+    explanation: >
+      That triple — independent, stationary, normal with $\mathrm{Var} = \Delta t$ — IS
+      the definition (plus continuous paths). Every simulation and every pricing formula
+      leans on it.
+  - prompt: "Simulating one step of Brownian motion over a small time $\\Delta t$, you add:"
+    choices:
+      - "$\\Delta t \\cdot Z$ where $Z \\sim N(0,1)$"
+      - "$\\sqrt{\\Delta t} \\cdot Z$ where $Z \\sim N(0,1)$"
+      - "$Z$ regardless of $\\Delta t$"
+      - "$\\Delta t$ exactly"
+    answer: 1
+    explanation: >
+      Variance must equal $\Delta t$, so the standard deviation is $\sqrt{\Delta t}$.
+      Scaling by $\Delta t$ instead is the most common Monte Carlo bug in existence —
+      you'll be tested on it here and by real code for the rest of your career.

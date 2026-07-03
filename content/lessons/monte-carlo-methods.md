@@ -3,6 +3,8 @@ title: Monte Carlo Methods in Practice
 minutes: 15
 ---
 
+**Builds on:** *Itô Calculus* (simulating GBM) and *The Black-Scholes Framework* (the prices you're approximating).
+
 # Monte Carlo Methods in Practice
 
 Monte Carlo is the pricing method quant developers actually live in: it's embarrassingly parallel, it eats any payoff you can simulate, and its performance characteristics are governed by one deceptively simple formula. Interviews for dev roles lean hard on MC because it sits exactly at the intersection of math and engineering.

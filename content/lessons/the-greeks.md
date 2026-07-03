@@ -3,6 +3,8 @@ title: The Greeks & Hedging
 minutes: 15
 ---
 
+**Builds on:** *The Black-Scholes Framework*.
+
 The Greeks are the partial derivatives of an option's value with respect to market inputs — the local sensitivities a trading desk actually manages. Interviewers care less about formulas and more about **signs, shapes, and the P&L story**: if the market moves, who makes money and why?
 
 ## Delta: directional exposure
