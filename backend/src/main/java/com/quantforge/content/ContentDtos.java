@@ -12,7 +12,12 @@ public final class ContentDtos {
     }
 
     public record ItemDto(String kind, String slug, String title, String difficulty,
-                          Integer minutes, Integer questionCount, Integer xp, boolean done) {
+                          Integer minutes, Integer questionCount, Integer xp, boolean done,
+                          boolean locked) {
+    }
+
+    public record NextItemDto(String kind, String slug, String title,
+                              String trackSlug, String trackTitle, boolean endOfTrack) {
     }
 
     public record ModuleDto(String slug, String title, String description, List<ItemDto> items) {

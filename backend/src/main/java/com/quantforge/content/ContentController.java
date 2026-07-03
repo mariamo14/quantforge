@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -32,16 +33,19 @@ public class ContentController {
     private final QuizRepository quizzes;
     private final ProgressService progress;
     private final SubmissionRepository submissions;
+    private final ModuleItemRepository moduleItems;
 
     public ContentController(TrackRepository tracks, LessonRepository lessons,
                              ProblemRepository problems, QuizRepository quizzes,
-                             ProgressService progress, SubmissionRepository submissions) {
+                             ProgressService progress, SubmissionRepository submissions,
+                             ModuleItemRepository moduleItems) {
         this.tracks = tracks;
         this.lessons = lessons;
         this.problems = problems;
         this.quizzes = quizzes;
         this.progress = progress;
         this.submissions = submissions;
+        this.moduleItems = moduleItems;
     }
 
     @GetMapping("/tracks")
@@ -67,24 +71,73 @@ public class ContentController {
         Set<Long> problemIds = progress.solvedProblemIds(user.getId());
         Set<Long> quizIds = progress.passedQuizIds(user.getId());
 
-        List<ModuleDto> moduleDtos = track.getModules().stream().map(module ->
-                new ModuleDto(module.getSlug(), module.getTitle(), module.getDescription(),
-                        module.getItems().stream().map(item -> toItemDto(item,
-                                progress.isItemDone(item, lessonIds, problemIds, quizIds))).toList())
-        ).toList();
+        // Sequential unlock: an item is open iff it's done, or everything before it
+        // in the track is done — i.e. the first incomplete item is the frontier.
+        boolean allPreviousDone = true;
+        List<ModuleDto> moduleDtos = new java.util.ArrayList<>();
+        for (TrackModule module : track.getModules()) {
+            List<ItemDto> items = new java.util.ArrayList<>();
+            for (ModuleItem item : module.getItems()) {
+                boolean done = progress.isItemDone(item, lessonIds, problemIds, quizIds);
+                boolean locked = !done && !allPreviousDone;
+                items.add(toItemDto(item, done, locked));
+                allPreviousDone = allPreviousDone && done;
+            }
+            moduleDtos.add(new ModuleDto(module.getSlug(), module.getTitle(),
+                    module.getDescription(), items));
+        }
         return new TrackDetail(track.getSlug(), track.getTitle(), track.getIcon(),
                 track.getAccent(), track.getDescription(), moduleDtos);
     }
 
-    private static ItemDto toItemDto(ModuleItem item, boolean done) {
+    private static ItemDto toItemDto(ModuleItem item, boolean done, boolean locked) {
         return switch (item.getKind()) {
             case LESSON -> new ItemDto("lesson", item.getLesson().getSlug(), item.getLesson().getTitle(),
-                    null, item.getLesson().getMinutes(), null, ProgressService.LESSON_XP, done);
+                    null, item.getLesson().getMinutes(), null, ProgressService.LESSON_XP, done, locked);
             case PROBLEM -> new ItemDto("problem", item.getProblem().getSlug(), item.getProblem().getTitle(),
-                    item.getProblem().getDifficulty().name(), null, null, item.getProblem().getXp(), done);
+                    item.getProblem().getDifficulty().name(), null, null, item.getProblem().getXp(), done, locked);
             case QUIZ -> new ItemDto("quiz", item.getQuiz().getSlug(), item.getQuiz().getTitle(),
                     null, null, item.getQuiz().getQuestions().size(),
-                    item.getQuiz().getQuestions().size() * item.getQuiz().getXpPerCorrect(), done);
+                    item.getQuiz().getQuestions().size() * item.getQuiz().getXpPerCorrect(), done, locked);
+        };
+    }
+
+    /** The item after the given one in its track — powers the "Next up" flow. */
+    @GetMapping("/next")
+    public NextItemDto next(@RequestParam String kind, @RequestParam String slug) {
+        ModuleItem current = switch (kind) {
+            case "lesson" -> moduleItems.findFirstByLessonSlug(slug).orElse(null);
+            case "problem" -> moduleItems.findFirstByProblemSlug(slug).orElse(null);
+            case "quiz" -> moduleItems.findFirstByQuizSlug(slug).orElse(null);
+            default -> throw new ApiException(HttpStatus.BAD_REQUEST, "Unknown kind: " + kind);
+        };
+        if (current == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "Item not found in any track");
+        }
+        TrackModule module = current.getModule();
+        Track track = module.getTrack();
+
+        List<ModuleItem> flattened = track.getModules().stream()
+                .flatMap(m -> m.getItems().stream())
+                .toList();
+        int index = -1;
+        for (int i = 0; i < flattened.size(); i++) {
+            if (flattened.get(i).getId().equals(current.getId())) {
+                index = i;
+                break;
+            }
+        }
+        if (index < 0 || index + 1 >= flattened.size()) {
+            return new NextItemDto(null, null, null, track.getSlug(), track.getTitle(), true);
+        }
+        ModuleItem next = flattened.get(index + 1);
+        return switch (next.getKind()) {
+            case LESSON -> new NextItemDto("lesson", next.getLesson().getSlug(),
+                    next.getLesson().getTitle(), track.getSlug(), track.getTitle(), false);
+            case PROBLEM -> new NextItemDto("problem", next.getProblem().getSlug(),
+                    next.getProblem().getTitle(), track.getSlug(), track.getTitle(), false);
+            case QUIZ -> new NextItemDto("quiz", next.getQuiz().getSlug(),
+                    next.getQuiz().getTitle(), track.getSlug(), track.getTitle(), false);
         };
     }
 

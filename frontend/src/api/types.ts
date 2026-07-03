@@ -30,6 +30,16 @@ export interface ItemDto {
   questionCount: number | null
   xp: number | null
   done: boolean
+  locked: boolean
+}
+
+export interface NextItemDto {
+  kind: ItemKind | null
+  slug: string | null
+  title: string | null
+  trackSlug: string
+  trackTitle: string
+  endOfTrack: boolean
 }
 
 export interface ModuleDto {

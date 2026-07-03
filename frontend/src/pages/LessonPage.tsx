@@ -1,7 +1,8 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import { useCompleteLesson, useLesson } from '../api/hooks'
 import { Markdown } from '../components/Markdown'
+import { NextUp } from '../components/NextUp'
 import { Spinner } from '../components/ui'
 
 export function LessonPage() {
@@ -43,12 +44,7 @@ export function LessonPage() {
           {lesson.done ? 'Nice — this one is in the bank.' : 'Finished reading?'}
         </p>
         {lesson.done ? (
-          <Link
-            to="/tracks"
-            className="rounded-xl border border-line-strong px-4 py-2 text-sm font-semibold transition-colors hover:border-brand hover:text-brand"
-          >
-            Back to tracks
-          </Link>
+          <NextUp kind="lesson" slug={lesson.slug} active={true} />
         ) : (
           <button
             onClick={markComplete}

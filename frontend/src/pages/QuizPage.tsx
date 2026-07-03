@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti'
 import { useQuiz, useSubmitQuiz } from '../api/hooks'
 import type { QuizResultResponse } from '../api/types'
 import { Markdown } from '../components/Markdown'
+import { NextUp } from '../components/NextUp'
 import { Card, Spinner } from '../components/ui'
 
 export function QuizPage() {
@@ -40,6 +41,7 @@ export function QuizPage() {
   if (outcome) {
     return (
       <QuizResults
+        quizSlug={quiz.slug}
         quizTitle={quiz.title}
         outcome={outcome}
         onRetry={() => {
@@ -146,10 +148,12 @@ export function QuizPage() {
 }
 
 function QuizResults({
+  quizSlug,
   quizTitle,
   outcome,
   onRetry,
 }: {
+  quizSlug: string
   quizTitle: string
   outcome: QuizResultResponse
   onRetry: () => void
@@ -166,19 +170,23 @@ function QuizResults({
           {quizTitle} — {outcome.passed ? 'passed!' : 'not passed yet (70% to pass)'}
           {outcome.xpAwarded > 0 && ` · +${outcome.xpAwarded} XP`}
         </p>
-        <div className="mt-5 flex justify-center gap-3">
+        <div className="mt-5 flex flex-wrap justify-center gap-3">
           <button
             onClick={onRetry}
             className="rounded-xl border border-line-strong px-4 py-2 text-sm font-semibold transition-colors hover:border-brand hover:text-brand"
           >
             Try again
           </button>
-          <Link
-            to="/tracks"
-            className="rounded-xl bg-gradient-to-r from-brand to-accent px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-          >
-            Back to tracks
-          </Link>
+          {outcome.passed ? (
+            <NextUp kind="quiz" slug={quizSlug} active={true} />
+          ) : (
+            <Link
+              to="/tracks"
+              className="rounded-xl bg-gradient-to-r from-brand to-accent px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              Back to tracks
+            </Link>
+          )}
         </div>
       </Card>
 

@@ -5,6 +5,7 @@ import confetti from 'canvas-confetti'
 import { useProblem, useRunCode, useSubmitCode } from '../api/hooks'
 import type { ProblemDto, RunResponse } from '../api/types'
 import { Markdown } from '../components/Markdown'
+import { NextUp } from '../components/NextUp'
 import { DifficultyBadge, Spinner, VerdictBadge, XpPill, VERDICT_LABELS } from '../components/ui'
 import { useTheme } from '../state/theme'
 
@@ -175,7 +176,14 @@ function Workspace({ problem }: { problem: ProblemDto }) {
                   +{result.xpAwarded} XP — first accept! 🎉
                 </span>
               )}
-              <span className="ml-auto text-[11px] text-ink-faint">⌘↵ run · ⌘⇧↵ submit</span>
+              <span className="ml-auto flex items-center gap-3">
+                <NextUp
+                  kind="problem"
+                  slug={problem.slug}
+                  active={resultKind === 'submit' && result?.verdict === 'ACCEPTED'}
+                />
+                <span className="text-[11px] text-ink-faint">⌘↵ run · ⌘⇧↵ submit</span>
+              </span>
             </div>
 
             <div className="p-4">
