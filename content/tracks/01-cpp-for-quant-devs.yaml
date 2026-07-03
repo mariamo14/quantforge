@@ -45,3 +45,17 @@ modules:
         ref: low-latency-quiz
       - kind: problem
         ref: order-book
+  - slug: correctness-internals
+    title: Correctness & Internals
+    description: Vtables, undefined behavior, floating point — where senior C++ interviews dig.
+    items:
+      - kind: lesson
+        ref: vtables-and-dispatch
+      - kind: lesson
+        ref: undefined-behavior-sanitizers
+      - kind: lesson
+        ref: floating-point-numerics
+      - kind: quiz
+        ref: cpp-internals-quiz
+      - kind: problem
+        ref: lru-cache

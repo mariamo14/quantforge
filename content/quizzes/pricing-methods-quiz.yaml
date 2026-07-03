@@ -1,0 +1,69 @@
+title: Pricing Methods — Trees & Monte Carlo
+description: Binomial trees, early exercise, and Monte Carlo craft — the numerical-methods round.
+questions:
+  - prompt: "In a one-period binomial tree, the risk-neutral probability $q = \\frac{e^{r\\Delta t} - d}{u - d}$ comes from:"
+    choices:
+      - "Estimating the historical probability of an up-move"
+      - "No-arbitrage: it's the unique weight making the discounted stock price a martingale"
+      - "Assuming investors are risk-neutral in reality"
+      - "Calibrating to the option's market price"
+    answer: 1
+    explanation: >
+      $q$ is whatever probability makes $S_0 = e^{-r\Delta t}(q S u + (1-q) S d)$ hold —
+      pure no-arbitrage bookkeeping. Investors' actual beliefs and risk appetite never
+      enter; that is the deepest single idea in derivatives pricing.
+  - prompt: "An American call on a non-dividend-paying stock is worth:"
+    choices:
+      - "More than the European call, because you can exercise any time"
+      - "Exactly the same as the European call — early exercise is never optimal"
+      - "Less than the European call"
+      - "It depends on volatility"
+    answer: 1
+    explanation: >
+      Before expiry, $C \ge S - Ke^{-rT} > S - K$: the call is always worth more alive
+      than exercised. Selling beats exercising. With dividends (or for puts) this breaks —
+      the follow-up every interviewer asks.
+  - prompt: "For which option does early exercise CAN be optimal, making the binomial tree genuinely necessary?"
+    choices:
+      - "European call"
+      - "American put (deep in the money)"
+      - "American call on a non-dividend stock"
+      - "Any option with high volatility"
+    answer: 1
+    explanation: >
+      Deep ITM, a put's upside is capped at $K$ (stock at zero) — collecting $K - S$ now
+      and earning interest beats waiting. At each tree node you compare intrinsic vs
+      continuation; the early-exercise boundary is the output.
+  - prompt: "Your Monte Carlo price has standard error $0.04. To get it to $0.01 you need roughly:"
+    choices:
+      - "4× the paths"
+      - "16× the paths"
+      - "2× the paths"
+      - "100× the paths"
+    answer: 1
+    explanation: >
+      Error $\propto 1/\sqrt{N}$: quartering the error costs $4^2 = 16\times$ the paths.
+      This brutal scaling is why variance reduction (antithetics, control variates,
+      Sobol) is a job requirement, not an academic nicety.
+  - prompt: "Antithetic variates (pairing each draw $Z$ with $-Z$) reduce variance most reliably when:"
+    choices:
+      - "The payoff is monotone in the underlying draw"
+      - "The payoff is symmetric around the strike"
+      - "Volatility is high"
+      - "They always cut variance in half regardless of payoff"
+    answer: 0
+    explanation: >
+      Monotonicity makes the paired payoffs negatively correlated, which is what cancels
+      noise. For non-monotone payoffs (straddles, barriers) the pairing can help little —
+      knowing the *condition* rather than the recipe is the senior answer.
+  - prompt: "When does Monte Carlo beat a binomial tree/PDE grid?"
+    choices:
+      - "Always — MC is more accurate"
+      - "High-dimensional payoffs (baskets, path-dependence on many factors), where grids blow up exponentially"
+      - "American options, which MC handles trivially"
+      - "Whenever a closed form exists"
+    answer: 1
+    explanation: >
+      MC error is dimension-independent ($1/\sqrt{N}$); grids pay exponentially in
+      dimension. Conversely, early exercise is natural on a tree and awkward in MC
+      (Longstaff-Schwartz regression) — each tool owns its territory.

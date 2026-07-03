@@ -4,15 +4,15 @@ An interview-prep platform for becoming a **quant developer** — CodeSignal-sty
 
 ## What's inside
 
-**5 learning tracks** — 24 lessons, 12 judged C++ problems, 9 quizzes (55 questions):
+**5 learning tracks** — 34 lessons, 19 judged C++ problems, 15 quizzes (~90 questions):
 
 | Track | Focus |
 |---|---|
-| ⚡ C++ for Quant Developers | RAII, move semantics, templates, memory model, cache-friendly & low-latency patterns |
-| 🧮 DS&A for Trading Systems | Streaming stats, monotonic deques, heaps with lazy deletion, matching engines |
-| 📈 Quant Finance — CQF Core | Stochastic calculus, Black-Scholes & Greeks, portfolio theory, fixed income, VaR/ES, ML in finance |
-| 🛰️ Systems & Microstructure | Networking, FIX protocol, kernel bypass, exchange mechanics, LOB dynamics |
-| 🧠 Brainteasers & Mental Math | Probability puzzles and market-maker games |
+| ⚡ C++ for Quant Developers | RAII, move semantics, templates, memory model, low-latency patterns, vtables, UB & sanitizers, floating point |
+| 🧮 DS&A for Trading Systems | Streaming stats, monotonic deques, heaps with lazy deletion, matching engines, LRU caches, arbitrage graphs |
+| 📈 Quant Finance — CQF Core | Stochastic calculus, Black-Scholes & Greeks, implied vol, binomial trees, Monte Carlo methods, volatility models, portfolio theory, fixed income, rates & credit, VaR/ES, ML in finance |
+| 🛰️ Systems & Microstructure | Networking, FIX & binary protocols, kernel bypass, feed-handler design, exchange mechanics, LOB dynamics |
+| 🧠 Brainteasers & Mental Math | Probability puzzles, market-maker games, and timed mental-math drills |
 
 **Features:** live C++ judge (compile + run against hidden tests with per-test verdicts), Monaco editor with ⌘↵/⌘⇧↵ shortcuts, XP/levels/streaks, daily challenge, editorials unlocked on solve, KaTeX-rendered math, dark/light themes.
 

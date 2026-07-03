@@ -19,6 +19,12 @@ modules:
         ref: fix-checksum
       - kind: lesson
         ref: kernel-bypass-hardware
+      - kind: lesson
+        ref: feed-handler-design
+      - kind: problem
+        ref: binary-feed-decoder
+      - kind: quiz
+        ref: trading-stack-quiz
   - slug: how-exchanges-work
     title: How Exchanges Work
     description: Microstructure, priority rules, and what actually moves prices.

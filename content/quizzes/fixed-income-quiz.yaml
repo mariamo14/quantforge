@@ -1,0 +1,69 @@
+title: Fixed Income & Duration
+description: Bond math with numbers — the mental-arithmetic side of the rates interview.
+questions:
+  - prompt: "The Macaulay duration of a 10-year zero-coupon bond is:"
+    choices:
+      - "Slightly less than 10 years"
+      - "Exactly 10 years"
+      - "Depends on the yield"
+      - "Zero"
+    answer: 1
+    explanation: >
+      Duration is the PV-weighted average time to cashflow — a zero has exactly one
+      cashflow, at maturity. Corollary: coupons can only pull duration *below* maturity,
+      which anchors every sanity check.
+  - prompt: "A $1M face position in a bond priced at par with modified duration 6.2. Rates rise 1bp. P&L ≈"
+    choices:
+      - "−$62"
+      - "−$620"
+      - "−$6,200"
+      - "−$62,000"
+    answer: 1
+    explanation: >
+      DV01 $= D_{\text{mod}} \times V \times 10^{-4} = 6.2 \times 1{,}000{,}000 \times
+      0.0001 = \$620$. Basis-point fluency at position scale is tested constantly on
+      rates desks.
+  - prompt: "Two 10-year bonds at the same yield: one pays 2% coupons, the other 8%. Which has the longer duration?"
+    choices:
+      - "The 8% coupon bond"
+      - "The 2% coupon bond"
+      - "Identical — duration depends only on maturity"
+      - "Cannot be determined"
+    answer: 1
+    explanation: >
+      Higher coupons shift more PV weight to earlier dates, shortening duration. The 2%
+      bond is closer to a zero, so its duration is closer to 10 years. Low-coupon =
+      high-duration = more rate risk.
+  - prompt: "Positive convexity means a delta-hedged (duration-matched) long bond position:"
+    choices:
+      - "Loses on any large rate move"
+      - "Gains on large rate moves in either direction, relative to the linear estimate"
+      - "Is exactly flat for all rate moves"
+      - "Gains only when rates fall"
+    answer: 1
+    explanation: >
+      The price-yield curve bends the holder's way: $\Delta P \approx -D P \Delta y +
+      \tfrac12 C P (\Delta y)^2$, and the second term is positive both ways. That's why
+      convexity trades rich — you pay (in yield) for the smile-shaped payoff.
+  - prompt: "A bond's price rises. Its yield to maturity:"
+    choices:
+      - "Rises"
+      - "Falls"
+      - "Is unchanged — yield is fixed at issue"
+      - "Depends on the coupon"
+    answer: 1
+    explanation: >
+      Price and yield are two coordinates for the same object, inversely related: pay
+      more today for the same fixed cashflows and your return is lower. Obvious, but
+      interviewers use it as a two-second filter.
+  - prompt: "A portfolio holds $2M (market value) of duration-4 bonds and $1M of duration-10 bonds. Portfolio duration ≈"
+    choices:
+      - "7.0"
+      - "6.0"
+      - "4.7"
+      - "14.0"
+    answer: 1
+    explanation: >
+      Duration aggregates value-weighted: $(2 \times 4 + 1 \times 10)/3 = 6$. The same
+      weighting logic runs every book-level risk roll-up — durations, deltas, DV01s all
+      add in value (not count) space.

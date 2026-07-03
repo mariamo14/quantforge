@@ -37,9 +37,9 @@ class ContentValidationTest {
     @Test
     void contentVolumeMatchesPlan() {
         assertEquals(5, tracks.count(), "tracks");
-        assertTrue(lessons.count() >= 24, "expected at least 24 lessons, got " + lessons.count());
-        assertEquals(12, problems.count(), "problems");
-        assertTrue(quizzes.count() >= 9, "quizzes");
+        assertTrue(lessons.count() >= 34, "expected at least 34 lessons, got " + lessons.count());
+        assertEquals(19, problems.count(), "problems");
+        assertTrue(quizzes.count() >= 15, "quizzes");
     }
 
     @Test

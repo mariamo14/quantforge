@@ -1,0 +1,69 @@
+title: C++ Internals — Dispatch, UB, Numerics
+description: Vtables, undefined behavior, and floating point — the "do you really know C++" round.
+questions:
+  - prompt: "`Base* p = new Derived(); delete p;` where Base has a non-virtual destructor. This is:"
+    choices:
+      - "Fine — Derived's destructor runs via the vtable"
+      - "Undefined behavior — Base's destructor must be virtual to delete through a base pointer"
+      - "A memory leak but otherwise well-defined"
+      - "A compile error"
+    answer: 1
+    explanation: >
+      Deleting a derived object through a base pointer requires a virtual destructor;
+      without one it's UB (in practice: Derived's destructor and often its memory
+      never released properly). The single most common C++ screening question.
+  - prompt: "On a typical 64-bit ABI, `struct Quote { int x; virtual void f(); };` has sizeof:"
+    choices:
+      - "4"
+      - "8"
+      - "16"
+      - "12"
+    answer: 2
+    explanation: >
+      The first virtual function adds a hidden vptr (8 bytes, aligned first), then
+      `int x` (4) pads to the pointer alignment → 16. Knowing that polymorphism costs a
+      pointer *per object* — not per class — matters when you have millions of quotes.
+  - prompt: "Which sanitizer finds data races in your lock-free queue?"
+    choices:
+      - "AddressSanitizer (ASan)"
+      - "ThreadSanitizer (TSan)"
+      - "UndefinedBehaviorSanitizer (UBSan)"
+      - "MemorySanitizer (MSan)"
+    answer: 1
+    explanation: >
+      TSan instruments memory accesses and happens-before edges to catch races — the only
+      tool in the list that sees concurrency bugs. ASan = bad addresses (overflow, UAF);
+      UBSan = arithmetic/UB traps; MSan = uninitialized reads.
+  - prompt: "For signed `int x`, the compiler may optimize `if (x + 1 < x)` to `if (false)` because:"
+    choices:
+      - "The comparison is always false mathematically"
+      - "Signed overflow is undefined behavior, so the compiler assumes it never happens"
+      - "Integer promotion converts to unsigned first"
+      - "It cannot — that would change program behavior"
+    answer: 1
+    explanation: >
+      UB is a promise you make to the compiler. Since `x + 1` overflowing is UB, the
+      optimizer reasons from "this never overflows" and deletes your overflow check —
+      the canonical example of UB biting defensively-written code.
+  - prompt: "`0.1 + 0.2 == 0.3` is false in IEEE 754 doubles because:"
+    choices:
+      - "Doubles only hold 7 significant digits"
+      - "None of 0.1, 0.2, 0.3 has an exact binary representation, and the rounding errors don't cancel"
+      - "Addition of doubles is non-deterministic"
+      - "The compiler evaluates it in extended precision"
+    answer: 1
+    explanation: >
+      Binary fractions can only represent sums of powers of 1/2; 1/10 recurs forever.
+      Each literal rounds, the sum rounds again, and the two sides differ by 1 ULP.
+      Fix: tolerance comparisons — or integer ticks for anything that is money.
+  - prompt: "Computing variance as $E[X^2] - (E[X])^2$ in one pass over prices near 10,000 gives garbage because:"
+    choices:
+      - "The formula is mathematically wrong"
+      - "Catastrophic cancellation: two nearly equal large numbers are subtracted, annihilating the significant digits"
+      - "Doubles cannot hold numbers that large"
+      - "Overflow in the squared term"
+    answer: 1
+    explanation: >
+      Both terms are ~$10^8$ while the variance may be ~$10^{-2}$ — the subtraction wipes
+      out 10 significant digits. Welford's online algorithm (accumulate deviations from a
+      running mean) is the standard fix, and a favorite "fix this code" interview prompt.

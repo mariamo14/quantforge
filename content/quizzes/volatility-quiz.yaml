@@ -1,0 +1,69 @@
+title: Volatility Modeling
+description: Realized, EWMA, GARCH, and implied — the vol-desk vocabulary check.
+questions:
+  - prompt: "Daily volatility is 1.2%. Annualized volatility is approximately:"
+    choices:
+      - "3.0%"
+      - "19%"
+      - "302%"
+      - "1.2%"
+    answer: 1
+    explanation: >
+      Variance scales with time, so vol scales with $\sqrt{t}$: $1.2\% \times \sqrt{252}
+      \approx 1.2\% \times 15.87 \approx 19\%$. Multiplying by 252 instead of $\sqrt{252}$
+      is the classic instant-fail.
+  - prompt: "With RiskMetrics decay $\\lambda = 0.94$, the half-life of a shock's weight in the EWMA variance is roughly:"
+    choices:
+      - "1 day"
+      - "11 days"
+      - "94 days"
+      - "252 days"
+    answer: 1
+    explanation: >
+      Weights decay as $\lambda^k$; half-life $= \ln 2 / \ln(1/0.94) \approx 0.693/0.0619
+      \approx 11$ days. Small numbers like this make the "how responsive is your risk
+      model" conversation concrete.
+  - prompt: "In GARCH(1,1), $\\sigma_t^2 = \\omega + \\alpha r_{t-1}^2 + \\beta \\sigma_{t-1}^2$, the long-run (unconditional) variance is:"
+    choices:
+      - "$\\omega$"
+      - "$\\omega / (1 - \\alpha - \\beta)$"
+      - "$\\alpha + \\beta$"
+      - "$\\omega / (\\alpha \\beta)$"
+    answer: 1
+    explanation: >
+      Set $\mathbb{E}[\sigma_t^2] = \mathbb{E}[\sigma_{t-1}^2] = \bar\sigma^2$ and solve.
+      Persistence $\alpha + \beta < 1$ is what makes the level exist; typical equity fits
+      have $\alpha + \beta \approx 0.98$ — very slow mean reversion.
+  - prompt: "EWMA is exactly a GARCH(1,1) with:"
+    choices:
+      - "$\\omega = 0$ and $\\alpha + \\beta = 1$ — hence no mean reversion and no long-run level"
+      - "$\\alpha = 0$"
+      - "$\\beta = 0$"
+      - "It is unrelated to GARCH"
+    answer: 0
+    explanation: >
+      $\sigma_t^2 = \lambda\sigma_{t-1}^2 + (1-\lambda)r_t^2$ is the boundary case: shocks
+      never decay toward a long-run level because there isn't one. That's EWMA's main
+      criticism — forecasts are flat at today's vol forever.
+  - prompt: "\"Volatility clustering\" refers to the empirical fact that:"
+    choices:
+      - "Returns are strongly autocorrelated day to day"
+      - "Large (absolute) moves tend to be followed by large moves — |returns| are autocorrelated even though returns barely are"
+      - "Volatility is the same across all assets in a sector"
+      - "Vol is higher at the market open and close"
+    answer: 1
+    explanation: >
+      Return signs are nearly unpredictable; return *magnitudes* are persistent. This is
+      THE stylized fact that makes EWMA/GARCH work at all — you can forecast risk far
+      better than direction.
+  - prompt: "Index implied volatility is usually observed to be ... realized volatility, because ..."
+    choices:
+      - "below; option sellers compete spreads away"
+      - "above; option buyers pay a premium for crash protection (the variance risk premium)"
+      - "equal to; otherwise there'd be arbitrage"
+      - "unrelated to; they measure different things"
+    answer: 1
+    explanation: >
+      Systematically selling index vol earns the variance risk premium — compensation for
+      being short exactly when everything blows up. "Implied > realized on average, why,
+      and why isn't it free money?" is a beloved interview chain.

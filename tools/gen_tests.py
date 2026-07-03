@@ -265,7 +265,191 @@ def fix_checksum():
     yield f"{len(msgs)}\n" + "\n".join(msgs) + "\n", False
 
 
+def _bs_call(S, K, r, sigma, T):
+    import math
+    vol_sqrt_t = sigma * math.sqrt(T)
+    d1 = (math.log(S / K) + (r + 0.5 * sigma * sigma) * T) / vol_sqrt_t
+    d2 = d1 - vol_sqrt_t
+    N = lambda x: 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
+    return S * N(d1) - K * math.exp(-r * T) * N(d2)
+
+
+def implied_volatility():
+    # prices generated FROM known vols, so recovery is exact and unambiguous
+    sample = [(100, 100, 0.05, 0.20, 1.0), (100, 120, 0.02, 0.45, 0.5), (50, 40, 0.03, 0.80, 2.0)]
+    lines = [str(len(sample))]
+    for S, K, r, sigma, T in sample:
+        lines.append(f"{_bs_call(S, K, r, sigma, T):.10f} {S} {K} {r} {T}")
+    yield "\n".join(lines) + "\n", True
+
+    rng = random.Random(42)
+    q = 500
+    lines = [str(q)]
+    for _ in range(q):
+        S = round(rng.uniform(5, 500), 2)
+        K = round(S * rng.uniform(0.5, 1.8), 2)
+        r = round(rng.uniform(0, 0.15), 4)
+        sigma = round(rng.uniform(0.02, 3.5), 4)
+        T = round(rng.uniform(0.05, 10), 4)
+        lines.append(f"{_bs_call(S, K, r, sigma, T):.10f} {S} {K} {r} {T}")
+    yield "\n".join(lines) + "\n", False
+    # near the bracket edges
+    edges = [(100, 100, 0.01, 0.011, 1.0), (100, 100, 0.0, 3.9, 0.25)]
+    lines = [str(len(edges))]
+    for S, K, r, sigma, T in edges:
+        lines.append(f"{_bs_call(S, K, r, sigma, T):.10f} {S} {K} {r} {T}")
+    yield "\n".join(lines) + "\n", False
+
+
+def bond_pricer():
+    yield "3\n1000 0.05 0.05 10 2\n1000 0.06 0.04 5 1\n100 0 0.07 30 2\n", True
+    rng = random.Random(42)
+    q = 500
+    lines = [str(q)]
+    for _ in range(q):
+        F = rng.choice([100, 1000, 10000, 1000000])
+        c = round(rng.uniform(0, 0.15), 4)
+        y = round(rng.uniform(0.001, 0.20), 4)
+        n = rng.randint(1, 30)
+        m = rng.choice([1, 2])
+        lines.append(f"{F} {c} {y} {n} {m}")
+    yield "\n".join(lines) + "\n", False
+
+
+def currency_arbitrage():
+    # sample 1: classic triangle with product 1.02 -> ARBITRAGE
+    yield "3 3\n1 2 0.8\n2 3 1.5\n3 1 0.85\n", True  # 0.8*1.5*0.85 = 1.02
+    # sample 2: same triangle scaled down -> OK (product 0.96)
+    yield "3 3\n1 2 0.8\n2 3 1.5\n3 1 0.8\n", True  # 0.96
+    rng = random.Random(42)
+
+    def build(n, m, arb):
+        potentials = [rng.uniform(0.1, 10) for _ in range(n)]
+        edges = set()
+        lines = []
+        while len(lines) < m - (4 if arb else 0):
+            u, v = rng.randrange(n), rng.randrange(n)
+            if u == v or (u, v) in edges:
+                continue
+            edges.add((u, v))
+            rate = potentials[u] / potentials[v] * rng.uniform(0.90, 0.99)
+            lines.append(f"{u + 1} {v + 1} {rate:.6f}")
+        if arb:
+            cycle = rng.sample(range(n), 4)
+            gain = 1.05 ** 0.25
+            for a, b in zip(cycle, cycle[1:] + cycle[:1]):
+                rate = potentials[a] / potentials[b] * gain
+                lines.append(f"{a + 1} {b + 1} {rate:.6f}")
+        return f"{n} {len(lines)}\n" + "\n".join(lines) + "\n"
+
+    yield build(100, 5000, arb=False), False
+    yield build(100, 5000, arb=True), False
+    yield build(50, 600, arb=True), False
+    # disconnected component holding the arbitrage
+    yield "6 5\n1 2 0.5\n2 1 1.9\n4 5 1.1\n5 6 1.1\n6 4 0.9\n", False  # 4-5-6 cycle: 1.089
+    yield build(80, 2000, arb=False), False
+
+
+def ewma_volatility():
+    yield "0.94 5\n0.01 -0.02 0.015 -0.03 0.005\n", True
+    rng = random.Random(42)
+    n = 200000
+    returns = " ".join(f"{rng.gauss(0.0002, 0.012):.6f}" for _ in range(n))
+    yield f"0.94 {n}\n{returns}\n", False
+    rng = random.Random(7)
+    n = 50000
+    returns = " ".join(f"{rng.gauss(0, 0.03):.6f}" for _ in range(n))
+    yield f"0.999 {n}\n{returns}\n", False
+
+
+def _qfp_add(seq, oid, side, symbol, price, qty):
+    body = b"A" + seq.to_bytes(4, "big") + oid.to_bytes(8, "big") + side.encode()
+    body += symbol.ljust(6).encode() + price.to_bytes(4, "big") + qty.to_bytes(4, "big")
+    return body.hex()
+
+
+def _qfp_exec(seq, oid, qty):
+    return (b"E" + seq.to_bytes(4, "big") + oid.to_bytes(8, "big") + qty.to_bytes(4, "big")).hex()
+
+
+def _qfp_cancel(seq, oid):
+    return (b"X" + seq.to_bytes(4, "big") + oid.to_bytes(8, "big")).hex()
+
+
+def binary_feed_decoder():
+    sample = [
+        _qfp_add(1000, 900001, "B", "AAPL", 18950, 100),
+        _qfp_exec(1001, 900001, 40),
+        _qfp_cancel(1003, 900001),  # gap: expected 1002
+        _qfp_add(1004, 900002, "S", "MSFT", 41275, 250),
+    ]
+    yield f"{len(sample)}\n" + "\n".join(sample) + "\n", True
+
+    rng = random.Random(42)
+    msgs = []
+    seq = 1
+    for _ in range(50000):
+        if rng.random() < 0.01:
+            seq += rng.randint(2, 100)  # gap
+        kind = rng.random()
+        oid = rng.randint(1, 2**63)
+        if kind < 0.5:
+            msgs.append(_qfp_add(seq, oid, rng.choice("BS"),
+                                 rng.choice(["AAPL", "MSFT", "GOOG", "ES", "ZN", "SPY"]),
+                                 rng.randint(1, 10**6), rng.randint(1, 10**6)))
+        elif kind < 0.8:
+            msgs.append(_qfp_exec(seq, oid, rng.randint(1, 10**6)))
+        else:
+            msgs.append(_qfp_cancel(seq, oid))
+        seq += 1
+    yield f"{len(msgs)}\n" + "\n".join(msgs) + "\n", False
+
+
+def single_trade_max_profit():
+    yield "6\n7 1 5 3 6 4\n", True
+    yield "5\n9 7 6 4 3\n", True  # no profitable trade
+    rng = random.Random(42)
+    n = 200000
+    vals = [str(rng.randint(1, 10**9)) for _ in range(n)]
+    yield f"{n}\n" + " ".join(vals) + "\n", False
+    # tie-breaking: two trades with equal profit; earliest sell must win
+    yield "8\n5 1 6 1 6 1 6 2\n", False
+    # equal minima: earliest buy day must be reported
+    yield "6\n3 3 3 8 3 8\n", False
+    n = 100000
+    vals = [str(i + 1) for i in range(n)]  # strictly increasing
+    yield f"{n}\n" + " ".join(vals) + "\n", False
+
+
+def lru_cache():
+    yield ("2 9\nPUT 1 10\nPUT 2 20\nGET 1\nPUT 3 30\nGET 2\nGET 1\nGET 3\nPUT 4 40\nGET 1\n"), True
+    yield "1 5\nPUT 5 50\nGET 5\nPUT 6 60\nGET 5\nGET 6\n", True
+    rng = random.Random(42)
+    ops = ["100 400000"]
+    for _ in range(399999):
+        if rng.random() < 0.55:
+            ops.append(f"PUT {rng.randint(0, 300)} {rng.randint(0, 10**9)}")
+        else:
+            ops.append(f"GET {rng.randint(0, 300)}")
+    yield "\n".join(ops) + "\n", False
+    rng = random.Random(9)
+    ops = ["1 20000"]
+    for _ in range(19999):
+        if rng.random() < 0.6:
+            ops.append(f"PUT {rng.randint(0, 5)} {rng.randint(0, 99)}")
+        else:
+            ops.append(f"GET {rng.randint(0, 5)}")
+    yield "\n".join(ops) + "\n", False
+
+
 GENERATORS = {
+    "implied-volatility": implied_volatility,
+    "bond-pricer": bond_pricer,
+    "currency-arbitrage": currency_arbitrage,
+    "ewma-volatility": ewma_volatility,
+    "binary-feed-decoder": binary_feed_decoder,
+    "single-trade-max-profit": single_trade_max_profit,
+    "lru-cache": lru_cache,
     "fixed-point-price": fixed_point_price,
     "ring-buffer": ring_buffer,
     "order-book": order_book,

@@ -18,6 +18,8 @@ modules:
       - kind: problem
         ref: prefix-pnl
       - kind: problem
+        ref: single-trade-max-profit
+      - kind: problem
         ref: sliding-window-max
   - slug: books-and-matching
     title: Books & Matching
@@ -29,3 +31,9 @@ modules:
         ref: top-of-book
       - kind: problem
         ref: order-matching
+  - slug: graphs
+    title: Graph Problems
+    description: The log-space reduction every quant interviewer loves.
+    items:
+      - kind: problem
+        ref: currency-arbitrage

@@ -13,6 +13,8 @@ modules:
     items:
       - kind: lesson
         ref: quant-interview-guide
+      - kind: lesson
+        ref: mental-math-toolkit
   - slug: probability-puzzles
     title: Probability Puzzles
     description: Classic interview brainteasers — dice, coins, and counterintuitive conditioning.
@@ -25,3 +27,5 @@ modules:
     items:
       - kind: quiz
         ref: expected-value-games
+      - kind: quiz
+        ref: mental-math-drill

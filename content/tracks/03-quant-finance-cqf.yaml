@@ -33,6 +33,28 @@ modules:
         ref: black-scholes-pricer
       - kind: problem
         ref: monte-carlo-option
+      - kind: problem
+        ref: implied-volatility
+  - slug: numerical-methods
+    title: Numerical Methods
+    description: Trees for early exercise, Monte Carlo craft for everything high-dimensional.
+    items:
+      - kind: lesson
+        ref: binomial-trees
+      - kind: lesson
+        ref: monte-carlo-methods
+      - kind: quiz
+        ref: pricing-methods-quiz
+  - slug: volatility
+    title: Volatility
+    description: Realized, EWMA, GARCH, and the premium between implied and realized.
+    items:
+      - kind: lesson
+        ref: volatility-modeling
+      - kind: problem
+        ref: ewma-volatility
+      - kind: quiz
+        ref: volatility-quiz
   - slug: portfolio-risk
     title: Portfolio Theory & Risk
     description: Markowitz, CAPM, bonds and duration, VaR and Expected Shortfall.
@@ -41,12 +63,24 @@ modules:
         ref: portfolio-theory
       - kind: lesson
         ref: fixed-income-duration
+      - kind: problem
+        ref: bond-pricer
+      - kind: quiz
+        ref: fixed-income-quiz
       - kind: lesson
         ref: var-expected-shortfall
       - kind: quiz
         ref: risk-quiz
       - kind: problem
         ref: portfolio-var
+  - slug: rates-credit
+    title: Rates & Credit
+    description: Short-rate models, the forward curve, and default as a priced event.
+    items:
+      - kind: lesson
+        ref: interest-rate-models
+      - kind: lesson
+        ref: credit-derivatives
   - slug: ml-finance
     title: Machine Learning in Finance
     description: Why finance breaks textbook ML, and the validation discipline that survives it.

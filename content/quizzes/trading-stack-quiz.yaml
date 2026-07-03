@@ -1,0 +1,70 @@
+title: The Trading Stack
+description: Feeds, gaps, kernel bypass — the systems round for feed-handler builders.
+questions:
+  - prompt: "Exchanges publish market data on redundant A and B multicast feeds. The standard consumer strategy is:"
+    choices:
+      - "Subscribe to A; fail over to B if A dies"
+      - "Subscribe to both and take whichever copy of each sequence number arrives first"
+      - "Subscribe to both and average the prices"
+      - "Alternate between feeds each second"
+    answer: 1
+    explanation: >
+      Line arbitration: identical streams race, per-packet. You get lower effective loss
+      AND lower latency (min of two arrival times) for free. Failover-only designs waste
+      the second feed's latency benefit.
+  - prompt: "After detecting a sequence gap on an incremental feed, the correct recovery is:"
+    choices:
+      - "Reset the book to empty and continue from the next packet"
+      - "Buffer incoming deltas, apply a snapshot, then replay buffered deltas with sequence numbers beyond the snapshot's"
+      - "Stop trading permanently"
+      - "Apply the snapshot and discard everything received meanwhile"
+    answer: 1
+    explanation: >
+      The snapshot+incremental sync dance: the snapshot is stamped with the sequence it
+      reflects, so buffered deltas ≤ that stamp are already included and the rest replay
+      on top. Getting this exactly right (no gap, no double-apply) is the feed-handler
+      interview's core question.
+  - prompt: "TCP's head-of-line blocking means:"
+    choices:
+      - "The first connection on a port gets priority"
+      - "One lost packet delays delivery of everything behind it until retransmission completes"
+      - "Large messages block small ones"
+      - "The kernel processes sockets in FIFO order"
+    answer: 1
+    explanation: >
+      TCP guarantees in-order delivery, so bytes after a hole wait for the retransmit —
+      milliseconds of added latency on data that already arrived. Exactly what market
+      data cannot tolerate, hence UDP multicast + app-level gap handling.
+  - prompt: "Kernel bypass (DPDK/Onload) eliminates which costs? Pick the FALSE one:"
+    choices:
+      - "System-call overhead per receive"
+      - "Kernel-to-userspace buffer copies"
+      - "Interrupt handling and context switches"
+      - "The propagation delay of the network itself"
+    answer: 3
+    explanation: >
+      Bypass removes software overhead — syscalls, copies, interrupts — worth microseconds.
+      The speed of light doesn't negotiate: wire distance is fixed, which is why the other
+      lever is colocation, and why firms count meters of fiber.
+  - prompt: "A hot thread busy-polls its receive ring instead of sleeping on an interrupt. The trade-off is:"
+    choices:
+      - "Burns a full core at 100% to gain lower and far more predictable wake-up latency"
+      - "Uses less power for the same latency"
+      - "Only works on FPGA NICs"
+      - "It's slower but simpler"
+    answer: 0
+    explanation: >
+      Interrupt wake-ups cost microseconds and jitter; a spinning core notices new data
+      in nanoseconds, every time. Trading systems happily spend whole pinned cores on
+      this — determinism is the product.
+  - prompt: "Huge pages (2MB instead of 4KB) help a low-latency process mainly by:"
+    choices:
+      - "Increasing total available memory"
+      - "Reducing TLB misses — each TLB entry now covers 512× more address space"
+      - "Making malloc faster"
+      - "Preventing the OOM killer from targeting the process"
+    answer: 1
+    explanation: >
+      The TLB has a fixed number of entries; bigger pages mean a working set fits in far
+      fewer of them, so fewer page-walk stalls and — crucially — fewer *surprise* stalls.
+      Tail latency work is mostly a hunt for surprise sources like this.
