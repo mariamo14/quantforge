@@ -1,0 +1,4 @@
+title: Order Rate Throttle (Token Bucket)
+difficulty: MEDIUM
+xp: 100
+timeLimitMs: 2000

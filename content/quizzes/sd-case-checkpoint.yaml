@@ -1,0 +1,48 @@
+title: "Checkpoint: System Design Interviews"
+description: The method and the case studies — the final gate of the track.
+xpPerCorrect: 5
+questions:
+  - prompt: "The correct FIRST move in any system design interview is:"
+    choices:
+      - "Draw the architecture you've memorized for this question type"
+      - "Ask clarifying requirements — functional needs AND the numbers (rates, latency targets, durability)"
+      - "Choose the database"
+      - "Estimate the AWS bill"
+    answer: 1
+    explanation: >
+      Designing before scoping is the #1 rejection reason. "How many messages per
+      second? What latency? What happens if we lose one?" — the numbers change the
+      design entirely, and asking for them is itself being graded.
+  - prompt: "In the market-data pipeline design, the capture-to-disk path must:"
+    choices:
+      - "Run before data is distributed to strategies, to guarantee durability"
+      - "Never block the live path — it hangs off the side, and if it falls behind, live distribution continues unharmed"
+      - "Use the same thread as the book builder"
+      - "Compress data before the feed handler sees it"
+    answer: 1
+    explanation: >
+      Recording is important; trading is urgent. The capture path taps the stream
+      independently (own queue, own budget) so a slow disk can never add a microsecond
+      to tick-to-trade. Isolating the important from the urgent is the design lesson.
+  - prompt: "An order gateway crashes right after sending an order but before recording the exchange's response. On restart it should:"
+    choices:
+      - "Resend the order to be safe"
+      - "Assume the order failed and move on"
+      - "Reconcile: replay its event log, then query the exchange (order status / drop copy) to learn the order's true state before doing anything"
+      - "Cancel all positions immediately"
+    answer: 2
+    explanation: >
+      The order's fate is unknown — it may be resting, filled, or lost. Resending risks
+      a double-trade; assuming failure risks an unmanaged position. Recover state from
+      the log, then ask the exchange for truth. "Reconcile, don't guess."
+  - prompt: "A backtesting platform prevents lookahead bias most robustly by:"
+    choices:
+      - "Asking researchers to be careful"
+      - "Making it architecturally impossible: a pull-based event loop hands the strategy data strictly in timestamp order, so future data physically cannot be accessed"
+      - "Running backtests twice"
+      - "Using only daily data"
+    answer: 1
+    explanation: >
+      Discipline fails; architecture doesn't. If the simulator only ever delivers events
+      up to the current simulated instant, no strategy code — however buggy — can peek
+      ahead. Turning a research rule into a structural guarantee is senior-level design.

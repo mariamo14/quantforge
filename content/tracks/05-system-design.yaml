@@ -1,0 +1,68 @@
+slug: system-design
+title: System Design for Quant Devs
+icon: "🏗️"
+accent: "#f472b6"
+order: 5
+description: >
+  From "what is a server?" to whiteboarding a trading system — computers, networks,
+  and distributed-systems building blocks from zero, then the interview method and
+  three fully worked quant case studies.
+modules:
+  - slug: computers-from-zero
+    title: Computers from Zero
+    description: "Step 1: what a machine actually does, and the latency numbers that rule every design."
+    items:
+      - kind: lesson
+        ref: how-programs-run
+      - kind: lesson
+        ref: latency-numbers
+      - kind: quiz
+        ref: sd-computing-checkpoint
+  - slug: networks-and-data
+    title: Networks & Data
+    description: "Step 2: how programs talk across machines and where their memories live."
+    items:
+      - kind: lesson
+        ref: clients-servers-networks
+      - kind: lesson
+        ref: state-and-databases
+      - kind: quiz
+        ref: sd-network-checkpoint
+  - slug: building-blocks
+    title: Building Blocks of Big Systems
+    description: "Step 3: scaling, queues, and designing for the failures that WILL happen."
+    items:
+      - kind: lesson
+        ref: scaling-basics
+      - kind: lesson
+        ref: queues-and-messaging
+      - kind: lesson
+        ref: reliability-basics
+      - kind: quiz
+        ref: sd-blocks-checkpoint
+  - slug: trading-anatomy
+    title: Anatomy of a Trading System
+    description: "Step 4: the full map — hot path vs support systems, and where the data goes."
+    items:
+      - kind: lesson
+        ref: trading-system-overview
+      - kind: lesson
+        ref: tick-data-storage
+      - kind: problem
+        ref: token-bucket
+      - kind: quiz
+        ref: sd-trading-checkpoint
+  - slug: case-studies
+    title: Interview Case Studies
+    description: "Step 5: the method, then three real quant-dev design questions worked end to end."
+    items:
+      - kind: lesson
+        ref: sd-interview-method
+      - kind: lesson
+        ref: case-study-market-data-pipeline
+      - kind: lesson
+        ref: case-study-order-gateway
+      - kind: lesson
+        ref: case-study-backtester
+      - kind: quiz
+        ref: sd-case-checkpoint

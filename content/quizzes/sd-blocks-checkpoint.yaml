@@ -1,0 +1,48 @@
+title: "Checkpoint: Scaling, Queues & Reliability"
+description: The building blocks — four questions before the trading-specific material.
+xpPerCorrect: 5
+questions:
+  - prompt: "Your market-data service can't keep up. The most natural sharding key for trading workloads is:"
+    choices:
+      - "Random assignment"
+      - "By symbol — each shard owns some instruments end-to-end, so no cross-shard coordination on the hot path"
+      - "By timestamp"
+      - "By user id"
+    answer: 1
+    explanation: >
+      Symbol is the natural unit of independence: AAPL's book doesn't need MSFT's. The
+      classic follow-up is the hot shard — everyone trades SPY — answered by giving hot
+      symbols dedicated shards.
+  - prompt: "A queue between a fast producer and a slow consumer eventually fills. For MARKET DATA the standard policy is ... and for ORDERS it is ..."
+    choices:
+      - "drop old data and recover via snapshot; never drop — block and alarm instead"
+      - "crash; drop silently"
+      - "block the exchange; drop the oldest orders"
+      - "both drop newest"
+    answer: 0
+    explanation: >
+      Stale quotes are worthless — drop and resynchronize from a snapshot. Orders are
+      money — dropping one silently is unforgivable, so you apply backpressure and page
+      a human. Same mechanism, opposite policies: THE backpressure interview answer.
+  - prompt: "Retrying a failed \"submit order\" request is dangerous unless:"
+    choices:
+      - "You wait at least 5 seconds"
+      - "The operation is idempotent — e.g. a client order ID lets the receiver detect and ignore the duplicate"
+      - "You retry on a different server"
+      - "The order is small"
+    answer: 1
+    explanation: >
+      The failure might have happened AFTER the order was accepted — a blind retry
+      double-trades. Idempotency keys (client order ids) make retries safe: the second
+      copy is recognized and ignored. This word wins system design interviews.
+  - prompt: "99.99% availability allows roughly how much downtime per year?"
+    choices:
+      - "8.7 hours"
+      - "52 minutes"
+      - "5 minutes"
+      - "3.65 days"
+    answer: 1
+    explanation: >
+      Each nine divides downtime by ten: 99.9% ≈ 8.7h, 99.99% ≈ 52min, 99.999% ≈ 5min.
+      Knowing the ladder lets you translate an availability requirement into how much
+      redundancy (and cost) a design actually needs.

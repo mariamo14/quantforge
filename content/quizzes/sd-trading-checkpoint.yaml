@@ -1,0 +1,48 @@
+title: "Checkpoint: Trading System Anatomy"
+description: The map and the storage — verify it before the case studies.
+xpPerCorrect: 5
+questions:
+  - prompt: "The \"hot path\" of a trading system is:"
+    choices:
+      - "The most CPU-intensive component"
+      - "The market-data-in → decision → order-out chain, where every microsecond counts; everything else can be merely correct"
+      - "The path packets take through the hottest datacenter aisle"
+      - "The riskiest strategy"
+    answer: 1
+    explanation: >
+      Tick-to-trade is the racing line: feed handler → book → signal → risk check →
+      gateway. Monitoring, P&L, storage all matter, but they can take milliseconds
+      without losing money. Every design choice starts with "is this on the hot path?"
+  - prompt: "A \"drop copy\" is:"
+    choices:
+      - "A packet that was dropped and retransmitted"
+      - "An independent feed of your own executions from the exchange, used to reconcile what you THINK happened with what actually did"
+      - "A backup of the codebase"
+      - "A cancelled order"
+    answer: 1
+    explanation: >
+      The exchange tells you — on a separate channel — every fill you got. Reconciling
+      it against your OMS catches missed acks, bugs, even fraud. Independent
+      verification of state is a theme interviewers reward everywhere.
+  - prompt: "Why do tick databases store data by COLUMN (all prices together, all sizes together) rather than by row?"
+    choices:
+      - "Columns are alphabetical"
+      - "Queries scan few fields over long time ranges — columnar layout reads only what's needed and compresses similar values superbly"
+      - "Rows are limited to 255 bytes"
+      - "It makes writes faster for single trades"
+    answer: 1
+    explanation: >
+      "Average spread for AAPL over 2024" touches 2 columns of billions of rows.
+      Column layout reads exactly those bytes, and prices-next-to-prices delta-compress
+      brilliantly. Row stores (great for "fetch order #123") read everything.
+  - prompt: "\"Point-in-time correctness\" in market data storage means:"
+    choices:
+      - "Timestamps are synchronized to the nanosecond"
+      - "Queries return what was KNOWN at that historical moment — later corrections don't leak back — so backtests can't cheat"
+      - "Data is stored in chronological order"
+      - "The database clock is correct"
+    answer: 1
+    explanation: >
+      If a bad print was corrected an hour later, a backtest replaying that moment must
+      see the bad print (that's what a live strategy would have seen). Leaking
+      corrections backward is lookahead bias wearing a database costume.

@@ -43,7 +43,9 @@ modules:
       - kind: quiz
         ref: random-walk-checkpoint
       - kind: lesson
-        ref: ito-calculus
+        ref: why-ito-calculus
+      - kind: lesson
+        ref: ito-lemma-gbm
       - kind: quiz
         ref: stochastic-calculus-quiz
   - slug: derivatives-from-zero
@@ -71,7 +73,9 @@ modules:
     description: "Step 6: the continuous-time limit — the formula, the Greeks, and inverting it for implied vol."
     items:
       - kind: lesson
-        ref: black-scholes
+        ref: black-scholes-idea
+      - kind: lesson
+        ref: black-scholes-formula
       - kind: lesson
         ref: the-greeks
       - kind: quiz

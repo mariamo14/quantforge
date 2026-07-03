@@ -1,0 +1,48 @@
+title: "Checkpoint: Networks & Storage"
+description: Clients, servers, protocols, and where data lives.
+xpPerCorrect: 5
+questions:
+  - prompt: "A \"server\" is best described as:"
+    choices:
+      - "A special kind of expensive hardware"
+      - "A program that listens on a port on an always-on machine and answers requests"
+      - "Any computer without a screen"
+      - "The same thing as a database"
+    answer: 1
+    explanation: >
+      It's software, not hardware: your laptop becomes a server the moment a program
+      listens for requests on it. Demystifying this word early makes every architecture
+      diagram readable.
+  - prompt: "TCP vs UDP in one line:"
+    choices:
+      - "TCP is for text, UDP is for binary data"
+      - "TCP guarantees ordered, complete delivery (retransmitting when needed); UDP fires packets and never looks back"
+      - "UDP is encrypted, TCP is not"
+      - "TCP is newer and always preferred"
+    answer: 1
+    explanation: >
+      Registered mail vs postcards. The guarantee costs latency when packets drop (a
+      retransmit stalls everything behind it) — which is exactly why market data
+      choosers UDP and handles gaps itself, while order entry keeps TCP's guarantees.
+  - prompt: "A database transaction means:"
+    choices:
+      - "Any query that involves money"
+      - "A group of changes that happens entirely or not at all — a transfer debits one account and credits another, never just one"
+      - "A backup taken every night"
+      - "A query that takes a long time"
+    answer: 1
+    explanation: >
+      All-or-nothing is the point: no crash timing can leave the money half-moved.
+      Systems that track positions and orders lean on this property (or reimplement it
+      with append-only event logs).
+  - prompt: "A cache improves performance by:"
+    choices:
+      - "Compressing data on disk"
+      - "Keeping frequently-used answers in fast memory — accepting the new problem of knowing when those answers go stale"
+      - "Adding more servers"
+      - "Encrypting hot data"
+    answer: 1
+    explanation: >
+      Caching trades freshness for speed. The follow-up every interviewer asks is
+      invalidation: how do you know the cached answer is still true? ("One of the two
+      hard problems in computer science" — say it with a smile.)

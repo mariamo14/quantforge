@@ -1,0 +1,48 @@
+title: "Checkpoint: Computers & Latency"
+description: The physical facts every design rests on — four quick questions.
+xpPerCorrect: 5
+questions:
+  - prompt: "The key difference between RAM and disk is:"
+    choices:
+      - "RAM is bigger but slower"
+      - "RAM is thousands of times faster but forgets everything when power is lost; disk is slow but permanent"
+      - "Disk can only store text files"
+      - "There is no practical difference on modern hardware"
+    answer: 1
+    explanation: >
+      RAM: ~100 nanoseconds, volatile. Disk/SSD: ~100 microseconds (1000× slower),
+      durable. Every system design is at heart a decision about what lives in fast
+      forgetful memory versus slow permanent storage.
+  - prompt: "Threads within one process differ from separate processes in that threads:"
+    choices:
+      - "Cannot run at the same time"
+      - "Share the same memory — which enables fast communication and also data-race bugs"
+      - "Are always faster than processes"
+      - "Each get their own copy of all data"
+    answer: 1
+    explanation: >
+      Shared memory is the double-edged sword: threads pass data by just reading it
+      (fast!) but two threads touching the same data unsynchronized is a race. Processes
+      are isolated — safer, but communication costs more.
+  - prompt: "A round trip between two machines in the same datacenter (~500µs) compared to one L1 cache access (~1ns) is roughly:"
+    choices:
+      - "5× slower"
+      - "500× slower"
+      - "500,000× slower"
+      - "About the same"
+    answer: 2
+    explanation: >
+      500µs / 1ns = 500,000×. In the humanized ladder: if a cache hit is one second, a
+      datacenter round trip is nearly a week. This single ratio explains most of
+      low-latency design: never leave the machine on the hot path.
+  - prompt: "Why can't any amount of clever engineering make a New York server respond to a London request in under ~28ms round trip?"
+    choices:
+      - "Operating systems impose a minimum delay"
+      - "The speed of light: ~5,600km each way through fiber at ~200,000 km/s sets a hard physical floor"
+      - "TCP requires 28ms of handshaking"
+      - "It can, with enough servers"
+    answer: 1
+    explanation: >
+      Light in fiber covers ~200km per millisecond; NY–London is ~5,600km, so ~28ms
+      round trip is physics, not engineering. This is why latency-sensitive systems
+      colocate next to the exchange rather than optimizing code across an ocean.

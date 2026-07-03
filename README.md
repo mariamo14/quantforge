@@ -4,19 +4,20 @@ An interview-prep platform for becoming a **quant developer** — CodeSignal-sty
 
 ## What's inside
 
-**5 learning tracks** — 34 lessons, 19 judged C++ problems, 15 quizzes (~90 questions):
+**6 learning tracks** — ~60 lessons, 22 judged C++ problems, 26 quizzes (~120 questions):
 
 | Track | Focus |
 |---|---|
-| ⚡ C++ for Quant Developers | RAII, move semantics, templates, memory model, low-latency patterns, vtables, UB & sanitizers, floating point |
+| ⚡ C++ for Quant Developers | From the compilation model and value semantics up through RAII, moves, templates, the memory model, low-latency patterns, UB & floating point |
 | 🧮 DS&A for Trading Systems | Streaming stats, monotonic deques, heaps with lazy deletion, matching engines, LRU caches, arbitrage graphs |
-| 📈 Quant Finance — CQF Core | Stochastic calculus, Black-Scholes & Greeks, implied vol, binomial trees, Monte Carlo methods, volatility models, portfolio theory, fixed income, rates & credit, VaR/ES, ML in finance |
+| 📈 Quant Finance — CQF Core | From "what is a market?" to Black-Scholes and beyond: returns, TVM, probability, stochastic calculus, derivatives, trees, MC, volatility, portfolio/risk, rates & credit, ML |
 | 🛰️ Systems & Microstructure | Networking, FIX & binary protocols, kernel bypass, feed-handler design, exchange mechanics, LOB dynamics |
+| 🏗️ System Design for Quant Devs | From "what is a server?" through scaling, queues, and reliability to worked interview case studies: market-data pipeline, order gateway, backtester |
 | 🧠 Brainteasers & Mental Math | Probability puzzles, market-maker games, and timed mental-math drills |
 
 **Features:** live C++ judge (compile + run against hidden tests with per-test verdicts), Monaco editor with ⌘↵/⌘⇧↵ shortcuts, XP/levels/streaks, daily challenge, editorials unlocked on solve, KaTeX-rendered math, dark/light themes.
 
-**Step-by-step progression (CodeSignal-style):** tracks assume zero prior knowledge — the quant track literally starts at "what is a market?" and climbs to Black-Scholes one concept at a time, with a short checkpoint quiz after each idea and an easy coding exercise before each hard one. Items unlock sequentially (finish a step to open the next; a "Next up" button carries you forward), and a per-track **Free roam** toggle opens everything for experienced users. Lessons that depend on earlier material declare it with a *Builds on:* line.
+**Step-by-step progression (CodeSignal-style):** tracks assume zero prior knowledge — the quant track literally starts at "what is a market?" and climbs to Black-Scholes one concept at a time, with a short checkpoint quiz after each idea and an easy coding exercise before each hard one. Items unlock sequentially (finish a step to open the next; a "Next up" button carries you forward), and a per-track **Free roam** toggle opens everything for experienced users. Every lesson/problem/quiz page carries a course-player bar (track, "Step i of N", progress, prev/next); quizzes give **instant per-question feedback** — answer, check, read the explanation, advance. Lessons that depend on earlier material declare it with a *Builds on:* line.
 
 ## Stack
 

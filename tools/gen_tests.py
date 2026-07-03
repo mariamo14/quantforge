@@ -478,7 +478,31 @@ def option_payoff():
     yield "2 5\n1 C 10000\n-1 P 10000\n5000 9999 10000 10001 15000\n", False
 
 
+def token_bucket():
+    # C=2, R=1 token/sec: burst of 3 -> third rejected; 1s later one token back
+    yield ("2 1 6\nORDER 0\nORDER 0\nORDER 0\nORDER 500\nORDER 1000\nORDER 3000\n"), True
+    rng = random.Random(42)
+    c, r, m = 100, 50, 200000
+    t = 0
+    lines = [f"{c} {r} {m}"]
+    for _ in range(m):
+        t += rng.choice([0, 0, 1, 2, 5, 20, 100])
+        lines.append(f"ORDER {t}")
+    yield "\n".join(lines) + "\n", False
+    # int64 stress: huge timestamps, max rate
+    yield ("1000000 1000000 4\nORDER 0\nORDER 999999999999\nORDER 999999999999\nORDER 1000000000000\n"), False
+    # capacity 1, sub-token refills accumulate across events
+    rng = random.Random(9)
+    t = 0
+    lines = ["1 3 20000"]
+    for _ in range(20000):
+        t += rng.choice([100, 200, 300, 333, 334])
+        lines.append(f"ORDER {t}")
+    yield "\n".join(lines) + "\n", False
+
+
 GENERATORS = {
+    "token-bucket": token_bucket,
     "time-value-calculator": time_value_calculator,
     "option-payoff": option_payoff,
     "implied-volatility": implied_volatility,

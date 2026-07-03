@@ -3,7 +3,7 @@ title: Monte Carlo Methods in Practice
 minutes: 15
 ---
 
-**Builds on:** *Itô Calculus* (simulating GBM) and *The Black-Scholes Framework* (the prices you're approximating).
+**Builds on:** *Itô's Lemma & Geometric Brownian Motion* (simulating GBM) and *Black-Scholes II: The Formula* (the prices you're approximating).
 
 # Monte Carlo Methods in Practice
 
