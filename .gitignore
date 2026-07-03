@@ -1,0 +1,19 @@
+# Java / Maven
+backend/target/
+*.class
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Local data
+backend/data/
+*.db
+*.mv.db
+*.trace.db
+
+# OS / editor
+.DS_Store
+*.iml
+.idea/
+.vscode/
