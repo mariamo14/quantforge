@@ -180,12 +180,19 @@ public class JudgeService {
     private ProcessResult run(ProcessBuilder builder, String stdin, long timeoutMs) throws IOException {
         Process process = builder.start();
         try {
+            // Feed stdin on a separate thread: a submission that never reads its
+            // input would otherwise fill the 64KB pipe and block THIS thread
+            // forever — before the wall-clock timeout below ever runs. Killing
+            // the child breaks the pipe (EPIPE) and unblocks the writer.
             if (stdin != null) {
-                try (var out = process.getOutputStream()) {
-                    out.write(stdin.getBytes(StandardCharsets.UTF_8));
-                } catch (IOException ignored) {
-                    // process may exit without reading all input — not an error
-                }
+                byte[] input = stdin.getBytes(StandardCharsets.UTF_8);
+                java.util.concurrent.CompletableFuture.runAsync(() -> {
+                    try (var out = process.getOutputStream()) {
+                        out.write(input);
+                    } catch (IOException ignored) {
+                        // child exited or stopped reading — not an error
+                    }
+                });
             } else {
                 process.getOutputStream().close();
             }

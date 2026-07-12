@@ -134,6 +134,25 @@ class JudgeServiceTest {
     }
 
     @Test
+    void submissionThatNeverReadsStdinCannotWedgeTheJudge() {
+        // Regression: stdin is fed on a worker thread. A busy-looping program
+        // that ignores a multi-megabyte input used to fill the 64KB pipe and
+        // block the judge thread forever, ahead of the wall-clock timeout.
+        String ignoresInput = """
+                int main() {
+                    volatile long long x = 0;
+                    while (true) { x++; }
+                }
+                """;
+        String hugeInput = "42\n".repeat(2_000_000);  // ~6MB, far beyond pipe capacity
+        long start = System.nanoTime();
+        JudgeResult result = judge.judge(ignoresInput, tests(hugeInput, "whatever\n"));
+        long elapsedMs = (System.nanoTime() - start) / 1_000_000;
+        assertEquals(Verdict.TIME_LIMIT, result.verdict());
+        assertTrue(elapsedMs < 15_000, "judge must enforce the timeout, took " + elapsedMs + "ms");
+    }
+
+    @Test
     void capsRunawayOutput() {
         String spam = """
                 #include <cstdio>
