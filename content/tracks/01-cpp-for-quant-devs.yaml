@@ -15,6 +15,10 @@ modules:
         ref: cpp-compilation-model
       - kind: lesson
         ref: values-references-const
+      - kind: lesson
+        ref: using-the-judge
+      - kind: problem
+        ref: first-trades
       - kind: quiz
         ref: cpp-basics-checkpoint
   - slug: ownership-lifetime

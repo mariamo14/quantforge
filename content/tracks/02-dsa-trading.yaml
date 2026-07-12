@@ -16,6 +16,8 @@ modules:
       - kind: quiz
         ref: streaming-checkpoint
       - kind: problem
+        ref: rolling-sum
+      - kind: problem
         ref: rolling-vwap
       - kind: problem
         ref: welford-stats

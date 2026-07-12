@@ -743,7 +743,40 @@ def memory_pool():
     yield "\n".join(lines) + "\n", False
 
 
+def first_trades():
+    yield "3\n10050 100\n9900 250\n10200 50\n", True
+    yield "1\n1000000000 1000000\n", True
+    rng = random.Random(42)
+    n = 100000
+    lines = [str(n)] + [f"{rng.randint(1, 10**9)} {rng.randint(1, 10**6)}" for _ in range(n)]
+    yield "\n".join(lines) + "\n", False  # total qty overflows int32 by far
+    yield "2\n5 1\n5 1\n", False          # min == max
+
+
+def rolling_sum():
+    yield "6 3\n4 -2 7 1 -5 3\n", True
+    rng = random.Random(42)
+    n, k = 300000, 50000
+    vals = " ".join(str(rng.randint(-10**9, 10**9)) for _ in range(n))
+    yield f"{n} {k}\n{vals}\n", False  # window sums stress int64
+    yield "4 1\n10 20 -30 40\n", False  # K=1: output mirrors input
+    yield "3 3\n1000000000 1000000000 1000000000\n", False
+
+
+def random_walk_stats():
+    yield "6\n1 1 -1 -1 -1 1\n", True   # final 0, high 2, zeros 2
+    yield "3\n-1 -1 -1\n", True          # all downhill: high stays 0
+    rng = random.Random(42)
+    n = 1000000
+    steps = " ".join(rng.choice(["1", "-1"]) for _ in range(n))
+    yield f"{n}\n{steps}\n", False
+    yield "5\n1 -1 1 -1 1\n", False      # alternating: returns to zero twice
+
+
 GENERATORS = {
+    "first-trades": first_trades,
+    "rolling-sum": rolling_sum,
+    "random-walk-stats": random_walk_stats,
     "bs-greeks": bs_greeks,
     "delta-hedge-pnl": delta_hedge_pnl,
     "ols-regression": ols_regression,

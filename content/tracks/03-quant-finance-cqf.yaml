@@ -40,6 +40,10 @@ modules:
     items:
       - kind: lesson
         ref: random-walks-brownian-motion
+      - kind: lesson
+        ref: simulating-randomness
+      - kind: problem
+        ref: random-walk-stats
       - kind: quiz
         ref: random-walk-checkpoint
       - kind: lesson
