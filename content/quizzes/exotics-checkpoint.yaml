@@ -1,0 +1,49 @@
+title: "Checkpoint: Exotic Options"
+description: Digitals, barriers, Asians — quick checks on the exotic zoo.
+xpPerCorrect: 5
+questions:
+  - prompt: "A cash-or-nothing digital call pays \\$1 if $S_T > K$. Under Black-Scholes its price is:"
+    choices:
+      - "$e^{-rT} N(d_1)$"
+      - "$e^{-rT} N(d_2)$"
+      - "$S N(d_1)$"
+      - "$N(d_1) - N(d_2)$"
+    answer: 1
+    explanation: >
+      $N(d_2)$ IS the risk-neutral probability of finishing in the money — discount it
+      and you've priced the digital. The vanilla formula's two terms are a stock-or-
+      nothing minus K digitals; exotics reveal the formula's anatomy.
+  - prompt: "Knock-in + knock-out (same barrier, strike, expiry) equals:"
+    choices:
+      - "Zero"
+      - "The vanilla option — every path either touches the barrier or doesn't"
+      - "Twice the vanilla"
+      - "A straddle"
+    answer: 1
+    explanation: >
+      In-out parity: each path activates exactly one of the pair, so together they
+      replicate the vanilla payoff always. Model-free, like put-call parity — and the
+      first sanity check on any barrier pricer.
+  - prompt: "An arithmetic-average Asian call is CHEAPER than the vanilla call because:"
+    choices:
+      - "It has a shorter effective maturity"
+      - "The average of prices is less volatile than the terminal price — less volatility, less option value"
+      - "Asian markets trade at a discount"
+      - "It isn't — averaging adds value"
+    answer: 1
+    explanation: >
+      Averaging smooths: the variance of the mean of correlated prices is well below
+      the variance of $S_T$ alone. Lower effective vol ⇒ cheaper option. Corporates
+      hedging monthly flows love exactly this: cheaper AND matches their exposure.
+  - prompt: "Near expiry, hedging a digital option that is at the money is notoriously dangerous because:"
+    choices:
+      - "Its price approaches zero"
+      - "Its delta concentrates into a spike — tiny spot moves flip the payoff between \\$0 and \\$1, demanding huge hedge swings"
+      - "Digitals cannot be hedged in theory"
+      - "Vega becomes infinite"
+    answer: 1
+    explanation: >
+      The payoff is a step function; delta approaches a Dirac spike at the strike as
+      expiry nears. Desks hedge digitals as tight call spreads (which caps the delta) —
+      the standard practitioner answer, and the reason exotic desks earn their pay on
+      hedging rather than pricing.

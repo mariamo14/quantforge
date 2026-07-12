@@ -39,6 +39,10 @@ modules:
         ref: stl-containers-complexity
       - kind: quiz
         ref: stl-quiz
+      - kind: lesson
+        ref: std-algorithms
+      - kind: quiz
+        ref: cpp-algorithms-quiz
       - kind: problem
         ref: ring-buffer
   - slug: low-latency
@@ -48,11 +52,17 @@ modules:
       - kind: lesson
         ref: memory-model-atomics
       - kind: lesson
+        ref: concurrency-in-practice
+      - kind: quiz
+        ref: concurrency-checkpoint
+      - kind: lesson
         ref: cache-friendly-code
       - kind: lesson
         ref: low-latency-patterns
       - kind: quiz
         ref: low-latency-quiz
+      - kind: problem
+        ref: memory-pool
       - kind: problem
         ref: order-book
   - slug: correctness-internals

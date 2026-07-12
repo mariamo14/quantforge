@@ -14,6 +14,8 @@ modules:
       - kind: lesson
         ref: quant-interview-guide
       - kind: lesson
+        ref: quant-career-map
+      - kind: lesson
         ref: mental-math-toolkit
   - slug: probability-puzzles
     title: Probability Puzzles
@@ -21,6 +23,10 @@ modules:
     items:
       - kind: quiz
         ref: probability-brainteasers
+      - kind: quiz
+        ref: bayes-conditioning
+      - kind: quiz
+        ref: counting-combinatorics
   - slug: market-maker-games
     title: Market-Maker Games
     description: Price the game, quote a market, manage your edge.

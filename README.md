@@ -4,7 +4,7 @@ An interview-prep platform for becoming a **quant developer** — CodeSignal-sty
 
 ## What's inside
 
-**6 learning tracks** — ~60 lessons, 22 judged C++ problems, 26 quizzes (~120 questions):
+**6 learning tracks** — 69 lessons, 36 judged C++ problems, 34 quizzes (~160 questions):
 
 | Track | Focus |
 |---|---|
@@ -68,6 +68,17 @@ content/
 ```
 
 Add or edit files, restart the backend, and the seeder upserts by slug — user progress is preserved. To add a problem, write the inputs in `tools/gen_tests.py` and run `python3 tools/gen_tests.py <slug>`: it compiles your `solution.cpp` and generates `tests.yaml` from it. The `ContentValidationTest` then enforces that the reference solution passes.
+
+## Hosting it for other people
+
+The defaults are tuned for personal, local use. Before exposing QuantForge to anyone else:
+
+1. **Set a real JWT secret**: `export QUANTFORGE_JWT_SECRET=$(openssl rand -hex 48)`. The `prod` profile (`--spring.profiles.active=prod`) **refuses to boot** on the default secret.
+2. **The judge sandbox is on by default** (macOS `sandbox-exec`): submissions cannot open network connections or write outside their temp directory — verified by an integration test. On hosts without `sandbox-exec`, the judge logs a warning and runs unsandboxed; for untrusted users on Linux, run the judge inside a container (gVisor/Firecracker-class) instead.
+3. **Auth endpoints are rate-limited** (15/min per IP, in-memory). Behind a reverse proxy, make sure `X-Forwarded-For` is set by the proxy (and stripped from client requests).
+4. **Serve the frontend as static files**: `cd frontend && npm run build`, then put `dist/` behind nginx/Caddy with `/api` proxied to :8080, and terminate TLS there.
+5. **Back up `backend/data/`** — it's the whole database. H2 is fine for a classroom-sized deployment; migrate the JDBC URL to Postgres before serious concurrency.
+6. Judge throughput is `quantforge.judge.max-concurrent` (default 2) — size it to cores minus what the JVM and OS need.
 
 ## Judge safety model
 

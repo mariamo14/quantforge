@@ -1,0 +1,59 @@
+title: Capacity Estimation Drill
+description: The arithmetic half of system design — size each one in your head first.
+xpPerCorrect: 10
+questions:
+  - prompt: "A feed peaks at 2 million messages/sec, 80 bytes each. The bandwidth is roughly:"
+    choices:
+      - "160 KB/s"
+      - "1.3 Gbps"
+      - "13 Gbps"
+      - "160 Mbps"
+    answer: 1
+    explanation: >
+      $2\text{M} \times 80\text{B} = 160$ MB/s $\times 8 = 1.28$ Gbps — comfortably
+      inside one 10G NIC. The bytes→bits factor of 8 is the classic slip; always say
+      which unit you're in.
+  - prompt: "You must store every message of that feed for 5 years (assume ~250 trading days/yr, ~8 trading hours/day, average rate 200k msgs/sec, 80B each). Raw storage is closest to:"
+    choices:
+      - "~6 TB"
+      - "~60 TB"
+      - "~600 TB"
+      - "~6 PB"
+    answer: 2
+    explanation: >
+      200k × 80B = 16 MB/s ≈ 460 GB/trading day (28,800s). ×250×5 = ~576 TB ≈ 600 TB
+      raw — before the ~10× columnar compression that makes tick stores viable. Chained
+      estimates: keep one significant figure and carry units.
+  - prompt: "A strategy needs its decision loop under 10µs. Roughly how many DRAM accesses (~100ns each) can the entire loop afford?"
+    choices:
+      - "~10"
+      - "~100"
+      - "~1,000"
+      - "~10,000"
+    answer: 1
+    explanation: >
+      10µs / 100ns = 100 memory touches — total, including everything the book lookup,
+      feature computation, and risk checks do. This single division explains why hot
+      paths obsess over cache locality: 100 misses IS the whole budget.
+  - prompt: "One symbol shard handles 50k updates/sec, each needing ~2µs of processing. Its CPU utilization is:"
+    choices:
+      - "1%"
+      - "10%"
+      - "50%"
+      - "100% — it can't keep up"
+    answer: 1
+    explanation: >
+      50k × 2µs = 0.1s of work per second = 10%. Comfortable — but say the follow-up:
+      bursts run 10× average, so peak ≈ 100%... which is why you size shards to ~10%
+      average, not 70%. Utilization math plus burst headroom = the real answer.
+  - prompt: "A backtest scans 500 billion events at ~250M events/sec/core (columnar). On 32 cores, one full pass takes roughly:"
+    choices:
+      - "~1 minute"
+      - "~4 minutes"
+      - "~40 minutes"
+      - "~7 hours"
+    answer: 0
+    explanation: >
+      500B / 250M = 2000 core-seconds; / 32 cores ≈ 62s ≈ 1 minute. The estimate that
+      justifies the backtester case study's architecture: partition-parallel columnar
+      scans make "replay everything overnight" trivially feasible.

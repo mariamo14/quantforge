@@ -1,0 +1,48 @@
+title: "Checkpoint: Concurrency in Practice"
+description: Threads, locks, and condition variables — before you ship any of them.
+xpPerCorrect: 5
+questions:
+  - prompt: "A condition_variable wait must always be written as `cv.wait(lock, predicate)` (or a while loop) because:"
+    choices:
+      - "It's just style — an if works fine"
+      - "Spurious wakeups and lost races mean the thread can wake with the condition still false; the predicate re-check is correctness, not paranoia"
+      - "The predicate makes it faster"
+      - "wait() requires a callable argument to compile"
+    answer: 1
+    explanation: >
+      Threads can wake without a notify (spurious wakeup) or wake after another consumer
+      already took the item. The predicate loop re-verifies the world before proceeding.
+      An `if` instead of the loop is THE classic condition-variable bug.
+  - prompt: "Two threads each need locks A and B. Thread 1 takes A then B; thread 2 takes B then A. This design:"
+    choices:
+      - "Is fine — locks queue fairly"
+      - "Deadlocks the moment each thread holds its first lock — fix with a global lock order or std::scoped_lock(A, B)"
+      - "Only deadlocks on single-core machines"
+      - "Throws an exception"
+    answer: 1
+    explanation: >
+      Each waits forever for the other's lock — the canonical deadlock. Either impose one
+      global acquisition order everywhere, or acquire both atomically with
+      std::scoped_lock, which uses a deadlock-avoidance algorithm internally.
+  - prompt: "Trading systems typically prefer PINNED threads that own their data over thread pools because:"
+    choices:
+      - "Thread pools are not available in C++"
+      - "An owned-data, one-writer design needs no locks on the hot path, and pinning keeps caches warm and latency predictable"
+      - "Pools use too much memory"
+      - "Pinned threads run at higher OS priority automatically"
+    answer: 1
+    explanation: >
+      If one thread owns the order book for its symbols, nobody else touches it — no
+      locks, no contention, no surprise scheduling. Pools optimize throughput for
+      interchangeable tasks; hot paths optimize the tail, and ownership + pinning is how.
+  - prompt: "Your lock-free queue passes every unit test. Before trusting it, the concurrency lesson says you must:"
+    choices:
+      - "Run the tests 10 more times"
+      - "Run them under ThreadSanitizer and stress the interleavings — races hide in schedules single runs never produce"
+      - "Add more asserts"
+      - "Rewrite it with mutexes"
+    answer: 1
+    explanation: >
+      Races are schedule-dependent: code can pass a million quiet runs and corrupt data
+      under load. TSan instruments happens-before relationships and finds the race
+      structurally. Threaded tests without TSan are barely tests.

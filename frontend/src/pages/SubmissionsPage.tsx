@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useSubmissions } from '../api/hooks'
 import { Card, EmptyState, Spinner, VerdictBadge } from '../components/ui'
+import { usePageTitle } from '../lib/usePageTitle'
 
 export function SubmissionsPage() {
   const { data: submissions, isLoading } = useSubmissions()
+  usePageTitle('Submissions')
 
   if (isLoading || !submissions) {
     return <Spinner label="Loading submissions…" />

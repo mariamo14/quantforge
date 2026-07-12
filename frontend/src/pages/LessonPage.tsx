@@ -5,11 +5,13 @@ import { Markdown } from '../components/Markdown'
 import { NextUp } from '../components/NextUp'
 import { TrackContextBar } from '../components/TrackContextBar'
 import { Spinner } from '../components/ui'
+import { usePageTitle } from '../lib/usePageTitle'
 
 export function LessonPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: lesson, isLoading } = useLesson(slug!)
   const complete = useCompleteLesson(slug!)
+  usePageTitle(lesson?.title)
 
   if (isLoading || !lesson) {
     return <Spinner label="Loading lesson…" />

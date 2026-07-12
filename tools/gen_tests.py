@@ -501,7 +501,263 @@ def token_bucket():
     yield "\n".join(lines) + "\n", False
 
 
+def binomial_american_put():
+    yield "3\n100 100 0.05 0.2 1 100\n100 120 0.05 0.3 2 500\n50 45 0 0.4 1 50\n", True
+    rng = random.Random(42)
+    q = 100
+    lines = [str(q)]
+    for _ in range(q):
+        S = round(rng.uniform(10, 5000), 2)
+        K = round(S * rng.uniform(0.6, 1.5), 2)
+        r = round(rng.uniform(0, 0.15), 4)
+        sigma = round(rng.uniform(0.05, 1.5), 4)
+        T = round(rng.uniform(0.05, 5), 3)
+        n = rng.randint(10, 2000)
+        lines.append(f"{S} {K} {r} {sigma} {T} {n}")
+    yield "\n".join(lines) + "\n", False
+
+
+def _bond_price_py(F, c, y, n, m):
+    periods = n * m
+    coupon = c * F / m
+    total = 0.0
+    for t in range(1, periods + 1):
+        cf = coupon + (F if t == periods else 0.0)
+        total += cf / (1.0 + y / m) ** t
+    return total
+
+
+def ytm_solver():
+    # prices generated FROM known yields -> exact recovery; includes a par bond
+    sample = [(1000, 0.05, 0.05, 10, 2), (1000, 0.06, 0.0437, 5, 1), (100, 0.0, 0.071, 30, 2)]
+    lines = [str(len(sample))]
+    for F, c, y, n, m in sample:
+        lines.append(f"{_bond_price_py(F, c, y, n, m):.8f} {F} {c} {n} {m}")
+    yield "\n".join(lines) + "\n", True
+    rng = random.Random(42)
+    q = 500
+    lines = [str(q)]
+    for _ in range(q):
+        F = rng.choice([100, 1000, 10000])
+        c = round(rng.uniform(0, 0.15), 4)
+        y = round(rng.uniform(0.0005, 0.5), 6)
+        n = rng.randint(1, 30)
+        m = rng.choice([1, 2])
+        lines.append(f"{_bond_price_py(F, c, y, n, m):.8f} {F} {c} {n} {m}")
+    yield "\n".join(lines) + "\n", False
+
+
+def garch_forecast():
+    yield "0.00001 0.08 0.90 6 21\n0.01 -0.02 0.015 -0.03 0.005 0.012\n", True
+    rng = random.Random(42)
+    n = 500000
+    returns = " ".join(f"{rng.gauss(0.0002, 0.013):.6f}" for _ in range(n))
+    yield f"0.000002 0.05 0.94 {n} 252\n{returns}\n", False
+    rng = random.Random(7)
+    n = 1000
+    returns = " ".join(f"{rng.gauss(0, 0.04):.6f}" for _ in range(n))
+    yield f"0.0000899 0.15 0.80 {n} 1\n{returns}\n", False
+
+
+def markowitz_two_asset():
+    yield "3\n0.08 0.2 0.04 0.1 0.3\n0.1 0.25 0.1 0.25 -0.5\n0.05 0.15 0.12 0.3 -1.0\n", True
+    rng = random.Random(42)
+    q = 1000
+    lines = [str(q)]
+    for _ in range(q):
+        mu1 = round(rng.uniform(-0.2, 0.4), 4)
+        mu2 = round(rng.uniform(-0.2, 0.4), 4)
+        s1 = round(rng.uniform(0.01, 1), 4)
+        s2 = round(rng.uniform(0.01, 1), 4)
+        rho = round(rng.uniform(-0.95, 0.95), 4)
+        lines.append(f"{mu1} {s1} {mu2} {s2} {rho}")
+    yield "\n".join(lines) + "\n", False
+
+
+def welford_stats():
+    yield "5\n100.5 101.5 99.5 100.0 102.5\n", True
+    # the killer: huge offset, tiny variation — naive sum-of-squares dies
+    rng = random.Random(42)
+    n = 200000
+    vals = " ".join(f"{100000000 + rng.gauss(0, 1):.4f}" for _ in range(n))
+    yield f"{n}\n{vals}\n", False
+    rng = random.Random(7)
+    n = 50000
+    vals = " ".join(f"{rng.uniform(1, 1000):.4f}" for _ in range(n))
+    yield f"{n}\n{vals}\n", False
+
+
+def moving_median():
+    yield "8 3\n5 2 8 1 9 3 7 4\n", True
+    rng = random.Random(42)
+    n, k = 200000, 9999
+    vals = " ".join(str(rng.randint(1, 10**9)) for _ in range(n))
+    yield f"{n} {k}\n{vals}\n", False
+    # heavy duplicates — stresses erase-one-occurrence
+    rng = random.Random(9)
+    n, k = 100000, 101
+    vals = " ".join(str(rng.randint(1, 5)) for _ in range(n))
+    yield f"{n} {k}\n{vals}\n", False
+    yield "3 1\n7 3 9\n", False
+
+
+def two_sum_spread():
+    yield "6 100\n30 90 10 40 70 60\n", True
+    yield "4 5\n1 1 8 9\n", True  # NONE
+    rng = random.Random(42)
+    n = 200000
+    vals = [rng.randint(0, 10**9) for _ in range(n)]
+    # plant a pair late so brute force suffers before finding it
+    vals[n - 2] = 10**9
+    vals[n - 1] = 10**9
+    lines = f"{n} {2 * 10**9}\n" + " ".join(map(str, vals)) + "\n"
+    yield lines, False
+    # duplicates: earliest completion, then earliest i
+    yield "6 8\n4 4 4 4 4 4\n", False  # expect 1 2
+    yield "5 6\n3 5 1 3 3\n", False    # pairs (1,4),(1,5): expect 1 4
+    rng = random.Random(3)
+    n = 150000
+    vals = " ".join(str(rng.randint(0, 100)) for _ in range(n))
+    yield f"{n} 201\n{vals}\n", False  # NONE (max sum 200)
+
+
+def max_profit_two_trades():
+    yield "8\n3 3 5 0 0 3 1 4\n", True   # expected 6: (5-3) + (4-0)
+    yield "5\n9 7 6 4 3\n", True         # 0
+    rng = random.Random(42)
+    n = 300000
+    vals = " ".join(str(rng.randint(1, 10**9)) for _ in range(n))
+    yield f"{n}\n{vals}\n", False
+    yield "6\n1 2 3 4 5 6\n", False      # one trade optimal: 5
+    yield "6\n1 5 1 5 1 5\n", False      # two trades: 8
+    yield "2\n5 10\n", False             # 5
+
+
+def merge_halts():
+    yield "4\n5 9\n1 5\n20 30\n25 40\n", True
+    yield "1\n0 1000000000000\n", True
+    rng = random.Random(42)
+    n = 200000
+    lines = [str(n)]
+    for _ in range(n):
+        s = rng.randint(0, 10**12 - 10**6)
+        e = s + rng.randint(1, 10**6)
+        lines.append(f"{s} {e}")
+    yield "\n".join(lines) + "\n", False
+    # nested + touching chains
+    yield "5\n1 10\n2 3\n10 12\n12 13\n50 60\n", False
+
+
+def book_imbalance():
+    yield "4 0.5\n10000 300 10002 100\n10000 300 10002 300\n10000 900 10002 100\n10000 100 10002 900\n", True
+    rng = random.Random(42)
+    n = 150000
+    lines = [f"{n} 0.33"]
+    for _ in range(n):
+        pb = rng.randint(100, 10**7 - 10)
+        pa = pb + rng.randint(1, 10)
+        lines.append(f"{pb} {rng.randint(1, 10**6)} {pa} {rng.randint(1, 10**6)}")
+    yield "\n".join(lines) + "\n", False
+
+
+def bs_greeks():
+    yield "3\n100 100 0.05 0.2 1\n100 120 0.05 0.2 0.5\n50 45 0.02 0.35 2\n", True
+    rng = random.Random(42)
+    q = 500
+    lines = [str(q)]
+    for _ in range(q):
+        s = round(rng.uniform(1, 500), 2)
+        k = round(rng.uniform(1, 500), 2)
+        r = round(rng.uniform(0, 0.2), 4)
+        sig = round(rng.uniform(0.05, 1.5), 4)
+        t = round(rng.uniform(0.01, 30), 4)
+        lines.append(f"{s} {k} {r} {sig} {t}")
+    yield "\n".join(lines) + "\n", False
+
+
+def _gbm_path(rng, s0, mu, sigma_real, T, n):
+    import math
+    dt = T / n
+    path = []
+    s = s0
+    for _ in range(n):
+        s *= math.exp((mu - 0.5 * sigma_real**2) * dt + sigma_real * math.sqrt(dt) * rng.gauss(0, 1))
+        path.append(f"{s:.6f}")
+    return path
+
+
+def delta_hedge_pnl():
+    rng = random.Random(42)
+    # calm path: realized 10% vs implied 30% -> hedged PnL clearly positive
+    path = _gbm_path(rng, 100, 0.05, 0.10, 1.0, 252)
+    yield "100 100 0.05 0.30 1.0 252\n" + " ".join(path) + "\n", True
+    # wild path: realized 60% vs implied 20% -> hedged PnL negative
+    rng = random.Random(7)
+    path = _gbm_path(rng, 100, 0.0, 0.60, 0.5, 126)
+    yield "100 105 0.03 0.20 0.5 126\n" + " ".join(path) + "\n", False
+    # fine discretization, realized == implied -> small residual
+    rng = random.Random(11)
+    path = _gbm_path(rng, 200, 0.02, 0.25, 1.0, 100000)
+    yield "200 210 0.02 0.25 1.0 100000\n" + " ".join(path) + "\n", False
+
+
+def ols_regression():
+    yield ("6\n0.01 -0.02 0.015 -0.005 0.02 -0.01\n0.014 -0.025 0.02 -0.004 0.024 -0.015\n"), True
+    rng = random.Random(42)
+    n = 300000
+    xs, ys = [], []
+    for _ in range(n):
+        x = rng.gauss(0.0002, 0.012)
+        xs.append(f"{x:.6f}")
+        ys.append(f"{1.3 * x + rng.gauss(0, 0.008):.6f}")
+    yield f"{n}\n{' '.join(xs)}\n{' '.join(ys)}\n", False
+    # the cancellation killer: big common level, tiny variation (prices, not returns)
+    rng = random.Random(9)
+    n = 100000
+    xs, ys = [], []
+    for _ in range(n):
+        x = 50000.0 + rng.gauss(0, 1)
+        xs.append(f"{x:.6f}")
+        ys.append(f"{0.8 * x + 10000 + rng.gauss(0, 0.5):.6f}")
+    yield f"{n}\n{' '.join(xs)}\n{' '.join(ys)}\n", False
+
+
+def memory_pool():
+    yield ("3 9\nALLOC\nALLOC\nFREE 0\nALLOC\nALLOC\nALLOC\nFREE 1\nFREE 1\nALLOC\n"), True
+    rng = random.Random(42)
+    n, m = 1000000, 400000
+    lines = [f"{n} {m}"]
+    held = []
+    for _ in range(m):
+        if rng.random() < 0.6 or not held:
+            lines.append("ALLOC")
+            held.append(len(held))  # placeholder; actual indices tracked by solution
+        else:
+            lines.append(f"FREE {rng.randint(0, min(len(held) * 2, n - 1))}")
+    yield "\n".join(lines) + "\n", False
+    # tiny pool, heavy churn and double-frees
+    rng = random.Random(3)
+    lines = ["2 50000"]
+    for _ in range(50000):
+        lines.append("ALLOC" if rng.random() < 0.5 else f"FREE {rng.randint(0, 1)}")
+    yield "\n".join(lines) + "\n", False
+
+
 GENERATORS = {
+    "bs-greeks": bs_greeks,
+    "delta-hedge-pnl": delta_hedge_pnl,
+    "ols-regression": ols_regression,
+    "memory-pool": memory_pool,
+    "binomial-american-put": binomial_american_put,
+    "ytm-solver": ytm_solver,
+    "garch-forecast": garch_forecast,
+    "markowitz-two-asset": markowitz_two_asset,
+    "welford-stats": welford_stats,
+    "moving-median": moving_median,
+    "two-sum-spread": two_sum_spread,
+    "max-profit-two-trades": max_profit_two_trades,
+    "merge-halts": merge_halts,
+    "book-imbalance": book_imbalance,
     "token-bucket": token_bucket,
     "time-value-calculator": time_value_calculator,
     "option-payoff": option_payoff,

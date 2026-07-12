@@ -7,11 +7,13 @@ import { Markdown } from '../components/Markdown'
 import { NextUp } from '../components/NextUp'
 import { TrackContextBar } from '../components/TrackContextBar'
 import { Card, Spinner } from '../components/ui'
+import { usePageTitle } from '../lib/usePageTitle'
 
 export function QuizPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: quiz, isLoading } = useQuiz(slug!)
   const submitQuiz = useSubmitQuiz(slug!)
+  usePageTitle(quiz?.title)
 
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [feedback, setFeedback] = useState<Record<number, QuizCheckResponse>>({})

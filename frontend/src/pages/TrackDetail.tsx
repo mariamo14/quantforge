@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useTrack } from '../api/hooks'
 import type { ItemDto } from '../api/types'
 import { Card, DifficultyBadge, Spinner, XpPill } from '../components/ui'
+import { usePageTitle } from '../lib/usePageTitle'
 
 const KIND_META: Record<ItemDto['kind'], { icon: string; path: string; label: string }> = {
   lesson: { icon: '📖', path: '/lessons', label: 'Lesson' },
@@ -15,6 +16,7 @@ const FREE_ROAM_KEY = 'quantforge.freeroam'
 export function TrackDetail() {
   const { slug } = useParams<{ slug: string }>()
   const { data: track, isLoading } = useTrack(slug!)
+  usePageTitle(track?.title)
   const [freeRoam, setFreeRoam] = useState(() => localStorage.getItem(FREE_ROAM_KEY) === '1')
 
   if (isLoading || !track) {

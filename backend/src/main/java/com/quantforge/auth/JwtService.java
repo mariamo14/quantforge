@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -19,9 +20,18 @@ public class JwtService {
     private final SecretKey key;
     private final long ttlMillis;
 
+    private static final String DEV_SECRET_MARKER = "change-me";
+
     public JwtService(
             @Value("${quantforge.jwt.secret}") String secret,
-            @Value("${quantforge.jwt.ttl-hours}") long ttlHours) {
+            @Value("${quantforge.jwt.ttl-hours}") long ttlHours,
+            Environment environment) {
+        boolean prod = java.util.Arrays.asList(environment.getActiveProfiles()).contains("prod");
+        if (prod && secret.contains(DEV_SECRET_MARKER)) {
+            throw new IllegalStateException(
+                    "Refusing to start with the default JWT secret in the prod profile — "
+                            + "set QUANTFORGE_JWT_SECRET to a long random value");
+        }
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.ttlMillis = ttlHours * 3_600_000L;
     }

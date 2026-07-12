@@ -1,0 +1,73 @@
+title: Bayes & Conditioning
+description: Updating on information — the brainteaser genre that separates finalists.
+xpPerCorrect: 10
+questions:
+  - prompt: "A test for a condition affecting 1 in 1000 people is 99% accurate (both ways). You test positive. The probability you actually have the condition is closest to:"
+    choices:
+      - "99%"
+      - "9%"
+      - "50%"
+      - "1%"
+    answer: 1
+    explanation: >
+      Base rates dominate: out of 100,000 people, ~100 have it (99 true positives) and
+      ~99,900 don't (~999 false positives). P(have it | positive) ≈ 99/(99+999) ≈ 9%.
+      The most famous Bayes trap in existence — and the structure of every "my signal
+      fired, is it real?" question in trading.
+  - prompt: "A family has two children. You learn at least one is a boy. The probability both are boys is:"
+    choices:
+      - "1/2"
+      - "1/3"
+      - "1/4"
+      - "2/3"
+    answer: 1
+    explanation: >
+      Equally likely orderings: BB, BG, GB, GG. "At least one boy" removes GG, leaving
+      three, of which one is BB → 1/3. (Contrast: "the ELDER is a boy" gives 1/2 —
+      how you learn information changes the conditioning, the deep lesson here.)
+  - prompt: "Urn A has 2 red, 1 blue; urn B has 1 red, 2 blue. A fair coin picks an urn, and you draw a red ball. The probability it came from urn A is:"
+    choices:
+      - "1/2"
+      - "2/3"
+      - "3/4"
+      - "1/3"
+    answer: 1
+    explanation: >
+      Red paths: A gives red w.p. ½ × ⅔ = ⅓; B gives red w.p. ½ × ⅓ = ⅙.
+      P(A | red) = ⅓ / (⅓ + ⅙) = 2/3. Mechanical Bayes — worth drilling until it takes
+      ten seconds, because interviewers time it.
+  - prompt: "You flip a coin twice and it lands heads both times. The coin came from a bag of 99 fair coins and 1 double-headed coin. The probability you hold the double-headed coin is:"
+    choices:
+      - "1/100"
+      - "4/103"
+      - "1/25"
+      - "1/2"
+    answer: 1
+    explanation: >
+      HH paths: fair (99/100 × 1/4) = 99/400; double-headed (1/100 × 1) = 4/400.
+      P(double | HH) = 4/(99+4) = 4/103 ≈ 3.9%. Two heads is weak evidence against a
+      99:1 prior — the "extraordinary claims need extraordinary evidence" quantified.
+  - prompt: "In a trading context, the base-rate lesson of Bayes says a backtest with a great Sharpe ratio should be believed LESS when:"
+    choices:
+      - "It used more data"
+      - "It was one of thousands of strategies searched — most 'discoveries' from a large search are false positives"
+      - "The strategy trades liquid instruments"
+      - "It was found by a senior researcher"
+    answer: 1
+    explanation: >
+      Testing 1000 random strategies yields dozens that look great by chance — exactly
+      the disease-test structure with 'true edge' as the rare condition. This is why
+      deflated Sharpe ratios and out-of-sample discipline exist (see the ML lesson).
+      Connecting Bayes to backtest overfitting is a genuinely impressive interview move.
+  - prompt: "Two envelopes hold $x$ and $2x$. You open one: \\$100. The 'paradox' says switching gains expected \\$12.50. The resolution is:"
+    choices:
+      - "Switching really is better — always switch"
+      - "The calculation assumes 'other = 50 or 200 equally likely', which requires an impossible uniform prior over all amounts; with any real prior, conditioning on \\$100 breaks the symmetry"
+      - "Money isn't linear in utility"
+      - "The envelopes are dependent"
+    answer: 1
+    explanation: >
+      The flaw: P(other = 200 | saw 100) = ½ presumes every scale of x is equally
+      likely a priori — not a valid distribution. Given an actual prior, seeing \$100
+      tells you which case you're likely in. The interview point is recognizing an
+      ill-posed prior, a skill that transfers directly to model assumptions.

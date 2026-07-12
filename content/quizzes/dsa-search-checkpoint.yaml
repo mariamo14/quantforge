@@ -1,0 +1,48 @@
+title: "Checkpoint: Search Patterns"
+description: Binary search, hashing, two pointers — before you code them.
+xpPerCorrect: 5
+questions:
+  - prompt: "To find the book state as of time t in a sorted array of timestamped events, you want the LAST event with timestamp ≤ t. With C++ iterators this is:"
+    choices:
+      - "lower_bound(t)"
+      - "upper_bound(t), then step back one (guarding the everything-after-t case)"
+      - "find(t)"
+      - "binary_search(t)"
+    answer: 1
+    explanation: >
+      upper_bound gives the first element with timestamp > t; the element before it is
+      the last one ≤ t — the as-of lookup. If upper_bound returns begin(), t predates
+      all data: no state exists, and unguarded code dereferences before the array.
+  - prompt: "The one-pass two-sum uses a hash map of value → index. The key correctness detail is:"
+    choices:
+      - "Insert the current value before checking for its complement"
+      - "Check for the complement BEFORE inserting the current value — so an element can't pair with itself"
+      - "Sort the array first"
+      - "Use a multimap"
+    answer: 1
+    explanation: >
+      Check-then-insert means the map only holds strictly earlier elements — self-pairing
+      is structurally impossible and every found pair automatically has i < j. Order of
+      two lines, all of the correctness.
+  - prompt: "Binary searching for a real-valued answer (like implied vol), the robust termination condition is:"
+    choices:
+      - "Loop until f(mid) == target exactly"
+      - "A fixed iteration count (or bracket width below a tolerance) — floating point may never hit the target exactly"
+      - "Until mid stops changing"
+      - "Exactly 10 iterations always"
+    answer: 1
+    explanation: >
+      Exact equality can loop forever in floating point. ~100 halvings shrink any
+      bracket below double precision (2^-100), so fixed-count loops are both safe and
+      branch-predictable — exactly how the implied-vol and YTM reference solvers work.
+  - prompt: "Merging two sorted market-data feeds into one time-ordered stream uses:"
+    choices:
+      - "A hash map keyed by timestamp"
+      - "Two pointers — repeatedly emit the smaller head, advancing that feed's pointer"
+      - "Re-sorting the concatenation"
+      - "Binary search on each element"
+    answer: 1
+    explanation: >
+      The merge step of merge-sort: O(n+m), one pass, no memory beyond the output. With
+      k feeds, the two pointers generalize to a min-heap of heads — the k-way merge from
+      the heaps lesson. Feed handlers do this for real (A/B arbitration is a 2-way merge).

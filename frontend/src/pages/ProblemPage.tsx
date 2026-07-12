@@ -9,10 +9,12 @@ import { NextUp } from '../components/NextUp'
 import { TrackContextBar } from '../components/TrackContextBar'
 import { DifficultyBadge, Spinner, VerdictBadge, XpPill, VERDICT_LABELS } from '../components/ui'
 import { useTheme } from '../state/theme'
+import { usePageTitle } from '../lib/usePageTitle'
 
 export function ProblemPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: problem, isLoading } = useProblem(slug!)
+  usePageTitle(problem?.title)
 
   if (isLoading || !problem) {
     return <Spinner label="Loading problem…" />

@@ -1,0 +1,71 @@
+title: Counting & Combinatorics
+description: Choose, arrange, include-exclude — the counting toolkit under time pressure.
+xpPerCorrect: 10
+questions:
+  - prompt: "How many distinct paths go from the bottom-left to the top-right of a 4×4 grid of streets (moving only right or up, 4 blocks each way)?"
+    choices:
+      - "16"
+      - "70"
+      - "24"
+      - "256"
+    answer: 1
+    explanation: >
+      A path is a word with 4 R's and 4 U's: $\binom{8}{4} = 70$. Lattice paths are the
+      canonical "counting = choosing positions" reframe, and the warm-up to ballot
+      problems and reflection tricks.
+  - prompt: "A committee of 3 is chosen from 5 traders and 4 developers. How many committees have at least one developer?"
+    choices:
+      - "74"
+      - "84"
+      - "10"
+      - "34"
+    answer: 0
+    explanation: >
+      Complement: all committees $\binom{9}{3} = 84$ minus all-trader ones
+      $\binom{5}{3} = 10$ → 74. "At least one" almost always means "count the
+      complement" — same move as the probability version with dice.
+  - prompt: "In how many ways can 8 people sit around a round table (rotations considered identical)?"
+    choices:
+      - "8! = 40320"
+      - "7! = 5040"
+      - "8!/2 = 20160"
+      - "64"
+    answer: 1
+    explanation: >
+      Fix one person to kill the rotational symmetry; the rest arrange in 7! ways.
+      (If reflections are also identical, divide by 2 → 2520.) Symmetry-fixing is the
+      general technique, not the formula.
+  - prompt: "Expected number of boxes of cereal to collect all 6 distinct toys (one uniform-random toy per box)?"
+    choices:
+      - "6"
+      - "14.7"
+      - "36"
+      - "10.5"
+    answer: 1
+    explanation: >
+      Coupon collector: $6\left(1 + \tfrac12 + \tfrac13 + \tfrac14 + \tfrac15 +
+      \tfrac16\right) = 6 \times 2.45 = 14.7$. Each new toy is a geometric wait with
+      success probability (remaining/6), and expectations add — linearity again.
+  - prompt: "6 people each randomly grab one of the 6 hats they checked. The expected number who get their OWN hat is:"
+    choices:
+      - "0"
+      - "1"
+      - "6/e ≈ 2.2"
+      - "3"
+    answer: 1
+    explanation: >
+      Indicator per person: P(own hat) = 1/6, and expectations add regardless of
+      dependence: $6 \times \tfrac16 = 1$. (The number with NO one matched tends to
+      $1/e$ — a different, harder question; interviewers love pairing them.)
+  - prompt: "How many 5-card poker hands contain exactly one pair (and nothing better)?"
+    choices:
+      - "1,098,240"
+      - "123,552"
+      - "54,912"
+      - "2,598,960"
+    answer: 0
+    explanation: >
+      Choose the pair rank (13), its suits $\binom{4}{2} = 6$, then 3 distinct other
+      ranks $\binom{12}{3} = 220$, each with 4 suit choices: $13 \times 6 \times 220
+      \times 64 = 1{,}098{,}240$. Structured multiplication — rank first, suits second —
+      is the discipline that prevents double-counting.

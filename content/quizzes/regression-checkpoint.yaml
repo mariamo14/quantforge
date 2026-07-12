@@ -1,0 +1,48 @@
+title: "Checkpoint: Regression"
+description: Beta, R², and the traps — before you fit anything to market data.
+xpPerCorrect: 5
+questions:
+  - prompt: "In the regression $y = \\alpha + \\beta x$ of asset returns on market returns, $\\beta = 1.4$ means:"
+    choices:
+      - "The asset returns 1.4% per year more than the market"
+      - "The asset moves ~1.4% for each 1% market move — and hedging it takes short 1.4× notional of the market"
+      - "The asset is 40% more volatile in total"
+      - "The correlation is 1.4"
+    answer: 1
+    explanation: >
+      Beta is the slope: sensitivity per unit of market move, and simultaneously the
+      hedge ratio. Note beta ≠ relative volatility: $\beta = \rho\,\sigma_y/\sigma_x$ —
+      a wild but uncorrelated asset can have low beta.
+  - prompt: "$R^2 = 0.25$ in that regression tells you:"
+    choices:
+      - "The hedge removes 75% of the asset's variance"
+      - "The market explains 25% of the asset's variance — a market hedge leaves 75% of the variance behind"
+      - "The regression is invalid"
+      - "Beta is statistically insignificant"
+    answer: 1
+    explanation: >
+      $R^2$ is the fraction of variance explained. Hedging out the market removes
+      exactly that fraction; the rest is idiosyncratic. Low $R^2$ with meaningful beta is
+      common — the hedge is real but partial.
+  - prompt: "Regressing one stock's PRICE on another's price gives a beautiful $R^2 = 0.98$. The lesson's verdict:"
+    choices:
+      - "A tremendous trading discovery"
+      - "Almost certainly spurious — trending levels correlate mechanically; regress returns (or test the spread properly) instead"
+      - "Valid as long as N > 1000"
+      - "It proves cointegration"
+    answer: 1
+    explanation: >
+      Two random walks that both drift produce huge price-on-price R² with no economic
+      link. Returns strip the trend. (True cointegration testing exists — but it is a
+      different, careful procedure, not a naive price regression.)
+  - prompt: "One flash-crash data point sits far from the cloud. Under OLS it will:"
+    choices:
+      - "Be ignored — outliers average out"
+      - "Drag beta disproportionately, because squared loss weights it by the SQUARE of its distance"
+      - "Only affect alpha"
+      - "Reduce R² to zero"
+    answer: 1
+    explanation: >
+      Squared error means a 10σ point pulls 100× harder than a 1σ point. Practitioners
+      winsorize, clip, or fit robustly — and always plot the data before believing a
+      beta. "Did you look at the residuals?" is a real interview question.

@@ -1,0 +1,50 @@
+title: "Checkpoint: The <algorithm> Toolbox"
+description: STL algorithm fluency — the small details that signal real C++ mileage.
+xpPerCorrect: 5
+questions:
+  - prompt: "To find the 95th-percentile latency of 10 million samples (order of other elements irrelevant), the right tool is:"
+    choices:
+      - "std::sort, then index 0.95·n"
+      - "std::nth_element at position 0.95·n — O(n) average, partially ordering around that element"
+      - "std::max_element 5% of the time"
+      - "std::partial_sort of the whole array"
+    answer: 1
+    explanation: >
+      nth_element places the k-th element in its sorted position in O(n) average time —
+      you don't pay O(n log n) to learn one percentile. The go-to for VaR quantiles and
+      latency percentiles; sort only when you need the whole distribution ordered.
+  - prompt: "`std::accumulate(prices.begin(), prices.end(), 0)` where prices is vector<double> — what's wrong?"
+    choices:
+      - "Nothing"
+      - "The int literal 0 makes the accumulator an int: every partial sum truncates to an integer"
+      - "accumulate doesn't work on doubles"
+      - "It overflows immediately"
+    answer: 1
+    explanation: >
+      The init argument's TYPE decides the accumulator type. `0` → int → each addition
+      truncates. Write `0.0` (or `double{}`). One character, silently wrong results —
+      a genuine production bug class and a favorite spot-the-bug snippet.
+  - prompt: "Orders at the same price must execute in arrival order. After sorting a day's orders by price, arrival order within a price level is preserved only if you used:"
+    choices:
+      - "std::sort"
+      - "std::stable_sort"
+      - "std::partial_sort"
+      - "Any of them — sorts preserve input order for ties"
+    answer: 1
+    explanation: >
+      std::sort makes NO guarantee about equal elements (introsort shuffles ties);
+      stable_sort guarantees them at an extra memory/log-factor cost. Time priority is
+      exactly a tie-order requirement — sort vs stable_sort is a correctness decision,
+      not a style one.
+  - prompt: "A strict weak ordering violation — e.g. comparator `a.price <= b.price` — causes:"
+    choices:
+      - "A compile error"
+      - "Undefined behavior in std::sort (real crashes: it can read out of bounds)"
+      - "Just a slower sort"
+      - "Ties sorted randomly but safely"
+    answer: 1
+    explanation: >
+      `<=` makes equal elements each "less than" the other — irreflexivity broken —
+      and std::sort's invariants collapse; implementations genuinely walk past array
+      ends. Comparators must be strict (`<`). This exact bug has crashed real trading
+      systems and appears in real code reviews.

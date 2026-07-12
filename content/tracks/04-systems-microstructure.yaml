@@ -33,5 +33,15 @@ modules:
         ref: market-microstructure
       - kind: lesson
         ref: limit-order-book-dynamics
+      - kind: problem
+        ref: book-imbalance
       - kind: quiz
         ref: microstructure-quiz
+  - slug: operating
+    title: Operating a Trading System
+    description: Time, truth, and telemetry — running the thing you built.
+    items:
+      - kind: lesson
+        ref: clocks-and-time
+      - kind: lesson
+        ref: monitoring-observability

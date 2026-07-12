@@ -58,6 +58,8 @@ modules:
     items:
       - kind: lesson
         ref: sd-interview-method
+      - kind: quiz
+        ref: sd-estimation-drill
       - kind: lesson
         ref: case-study-market-data-pipeline
       - kind: lesson

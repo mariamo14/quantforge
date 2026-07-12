@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useTracks } from '../api/hooks'
 import { Card, ProgressRing, Spinner } from '../components/ui'
+import { usePageTitle } from '../lib/usePageTitle'
 
 export function Tracks() {
   const { data: tracks, isLoading } = useTracks()
+  usePageTitle('Learning Tracks')
 
   if (isLoading || !tracks) {
     return <Spinner label="Loading tracks…" />

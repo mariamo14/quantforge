@@ -18,11 +18,31 @@ modules:
       - kind: problem
         ref: rolling-vwap
       - kind: problem
+        ref: welford-stats
+      - kind: problem
         ref: prefix-pnl
       - kind: problem
         ref: single-trade-max-profit
       - kind: problem
         ref: sliding-window-max
+      - kind: problem
+        ref: moving-median
+  - slug: searching-sorting
+    title: Searching & Sorting
+    description: Binary search, hash maps, and two pointers — the screening-round core.
+    items:
+      - kind: lesson
+        ref: binary-search-time-series
+      - kind: lesson
+        ref: two-pointers-hashing
+      - kind: quiz
+        ref: dsa-search-checkpoint
+      - kind: problem
+        ref: two-sum-spread
+      - kind: problem
+        ref: merge-halts
+      - kind: problem
+        ref: max-profit-two-trades
   - slug: books-and-matching
     title: Books & Matching
     description: Priority queues, order books, and price-time priority matching.

@@ -29,20 +29,49 @@ public class JudgeService {
 
     private static final Logger log = LoggerFactory.getLogger(JudgeService.class);
 
+    private static final String SANDBOX_EXEC = "/usr/bin/sandbox-exec";
+
     private final String compiler;
     private final long compileTimeoutMs;
     private final int maxOutputBytes;
     private final Semaphore slots;
+    private final boolean sandboxAvailable;
 
     public JudgeService(
             @Value("${quantforge.judge.compiler}") String compiler,
             @Value("${quantforge.judge.compile-timeout-ms}") long compileTimeoutMs,
             @Value("${quantforge.judge.max-output-bytes}") int maxOutputBytes,
-            @Value("${quantforge.judge.max-concurrent}") int maxConcurrent) {
+            @Value("${quantforge.judge.max-concurrent}") int maxConcurrent,
+            @Value("${quantforge.judge.sandbox:true}") boolean sandboxEnabled) {
         this.compiler = compiler;
         this.compileTimeoutMs = compileTimeoutMs;
         this.maxOutputBytes = maxOutputBytes;
         this.slots = new Semaphore(maxConcurrent, true);
+        this.sandboxAvailable = sandboxEnabled && Files.isExecutable(Path.of(SANDBOX_EXEC));
+        if (sandboxEnabled && !sandboxAvailable) {
+            log.warn("Judge sandbox requested but {} not found — submissions run unsandboxed",
+                    SANDBOX_EXEC);
+        } else if (sandboxAvailable) {
+            log.info("Judge sandbox active: network denied, writes confined to the work directory");
+        }
+    }
+
+    /** Sandbox profile: no network, file writes only inside the submission's temp dir. */
+    private static String sandboxProfile(Path workDir) {
+        return "(version 1)\n"
+                + "(allow default)\n"
+                + "(deny network*)\n"
+                + "(deny file-write*)\n"
+                + "(allow file-write* (subpath \"" + workDir.toAbsolutePath() + "\"))\n"
+                + "(allow file-write* (subpath \"/dev\"))\n";
+    }
+
+    private ProcessBuilder submissionRunner(Path workDir, Path binary) {
+        if (sandboxAvailable) {
+            return new ProcessBuilder(SANDBOX_EXEC, "-p", sandboxProfile(workDir),
+                    binary.toString()).directory(workDir.toFile());
+        }
+        return new ProcessBuilder(binary.toString()).directory(workDir.toFile());
     }
 
     public JudgeResult judge(String sourceCode, List<TestCase> testCases) {
@@ -103,9 +132,7 @@ public class JudgeService {
             throws IOException {
         long timeLimitMs = testCase.getProblem().getTimeLimitMs();
         long start = System.nanoTime();
-        ProcessResult run = run(
-                new ProcessBuilder(binary.toString()).directory(workDir.toFile()),
-                testCase.getInput(), timeLimitMs);
+        ProcessResult run = run(submissionRunner(workDir, binary), testCase.getInput(), timeLimitMs);
         long elapsedMs = (System.nanoTime() - start) / 1_000_000;
 
         boolean sample = testCase.isSample();

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../state/auth'
+import { usePageTitle } from '../lib/usePageTitle'
 
 export function AuthPage() {
   const { user, login, register } = useAuth()
@@ -12,6 +13,7 @@ export function AuthPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  usePageTitle('Sign in')
 
   if (user) {
     const from = (location.state as { from?: string } | null)?.from ?? '/'

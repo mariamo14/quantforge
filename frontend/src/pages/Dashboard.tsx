@@ -4,12 +4,14 @@ import { get } from '../api/client'
 import { useDaily, useMe } from '../api/hooks'
 import type { TrackDetail } from '../api/types'
 import { Card, DifficultyBadge, ProgressRing, Spinner, XpPill } from '../components/ui'
+import { usePageTitle } from '../lib/usePageTitle'
 
 const ITEM_PATHS = { lesson: '/lessons', problem: '/problems', quiz: '/quizzes' } as const
 
 export function Dashboard() {
   const { data: me, isLoading } = useMe()
   const { data: daily } = useDaily()
+  usePageTitle('Dashboard')
 
   const continueTrack = me?.tracks.find((t) => t.done > 0 && t.done < t.total) ?? me?.tracks[0]
 

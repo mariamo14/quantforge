@@ -20,9 +20,44 @@ class JudgeServiceTest {
 
     @BeforeAll
     static void setUp() {
-        judge = new JudgeService("clang++", 20_000, 262_144, 2);
+        judge = new JudgeService("clang++", 20_000, 262_144, 2, true);
         problem = new Problem("test-problem");
         problem.setTimeLimitMs(2000);
+    }
+
+    @Test
+    void sandboxBlocksNetworkAndForeignWrites() {
+        org.junit.jupiter.api.Assumptions.assumeTrue(
+                java.nio.file.Files.isExecutable(java.nio.file.Path.of("/usr/bin/sandbox-exec")),
+                "sandbox-exec not available on this host");
+        // seatbelt gates connect() and writes, not bare socket() creation — probe those
+        String probe = """
+                #include <sys/socket.h>
+                #include <netinet/in.h>
+                #include <arpa/inet.h>
+                #include <fcntl.h>
+                #include <cerrno>
+                #include <cstdio>
+                int main() {
+                    int fd = socket(AF_INET, SOCK_STREAM, 0);
+                    fcntl(fd, F_SETFL, O_NONBLOCK);
+                    sockaddr_in addr{};
+                    addr.sin_family = AF_INET;
+                    addr.sin_port = htons(80);
+                    inet_pton(AF_INET, "1.1.1.1", &addr.sin_addr);
+                    int r = connect(fd, (sockaddr*)&addr, sizeof(addr));
+                    // unsandboxed non-blocking connect yields EINPROGRESS; sandbox => EPERM
+                    std::puts(r != 0 && errno != EINPROGRESS ? "CONNECT_BLOCKED" : "CONNECT_OPEN");
+                    FILE* f = std::fopen("/tmp/qf-sandbox-escape.txt", "w");
+                    std::puts(f == nullptr ? "WRITE_BLOCKED" : "WRITE_OPEN");
+                    if (f) std::fclose(f);
+                    return 0;
+                }
+                """;
+        JudgeResult result = judge.judge(probe, tests("", "CONNECT_BLOCKED\nWRITE_BLOCKED\n"));
+        assertEquals(Verdict.ACCEPTED, result.verdict(),
+                "sandbox must deny sockets and writes outside the work dir; got: "
+                        + result.tests().getFirst().actual());
     }
 
     private static List<TestCase> tests(String... inputOutputPairs) {
