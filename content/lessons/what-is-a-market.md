@@ -5,7 +5,7 @@ minutes: 10
 
 ## Start at the farmers' market
 
-Picture a Saturday farmers' market. A farmer shows up with crates of apples. Shoppers show up with money. The farmer wants the highest price she can get; the shoppers want the lowest price they can pay. After a bit of haggling, apples change hands at some price — say $2 a pound.
+Picture a Saturday farmers' market. A farmer shows up with crates of apples. Shoppers show up with money. The farmer wants the highest price she can get; the shoppers want the lowest price they can pay. After a bit of haggling, apples change hands at some price — say \$2 a pound.
 
 That price wasn't set by a committee. It emerged from the meeting of people who want to sell and people who want to buy. If a frost wiped out half the apple crop, apples would be scarce, shoppers would compete for them, and the price would rise. If every farmer had a bumper harvest, the price would fall.
 
@@ -50,10 +50,10 @@ At any moment, a stock doesn't have one price — it has two:
 
 Worked example. Suppose for one stock, right now:
 
-- Best bid: $99.98 (someone will pay up to this)
-- Best ask: $100.02 (someone will sell for as little as this)
+- Best bid: \$99.98 (someone will pay up to this)
+- Best ask: \$100.02 (someone will sell for as little as this)
 
-If you want to buy *immediately*, you pay the ask: $100.02. If you want to sell *immediately*, you receive the bid: $99.98. The $0.04 gap is called the **spread**. Buy and instantly sell, and you lose $0.04 per share — that spread is exactly what the market maker earns for standing ready on both sides.
+If you want to buy *immediately*, you pay the ask: \$100.02. If you want to sell *immediately*, you receive the bid: \$99.98. The \$0.04 gap is called the **spread**. Buy and instantly sell, and you lose \$0.04 per share — that spread is exactly what the market maker earns for standing ready on both sides.
 
 A trade happens the moment someone accepts the other side's price — a buyer pays the ask, or a seller hits the bid. Then the quotes refresh, and the dance continues.
 

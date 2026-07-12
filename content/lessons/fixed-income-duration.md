@@ -60,7 +60,7 @@ Since $C_x > 0$ for vanilla bonds, convexity is **good for the holder**: the bon
 
 - **Macaulay duration:** $D_{\text{Mac}} = \frac{1}{100}\sum_{t=1}^{10} t \cdot \frac{CF_t}{1.05^t} \approx 8.11$ years (coupons pull it well below 10).
 - **Modified duration:** $D_{\text{mod}} = 8.11 / 1.05 \approx 7.72$.
-- **DV01:** $7.72 \times 100 \times 0.0001 \approx \$0.077$ per bp per 100 face.
+- **DV01:** $7.72 \times 100 \times 0.0001 \approx $0.077\$ per bp per 100 face.
 - **Yield rises 100bp to 6%:** duration predicts $\Delta P \approx -7.72 \times 100 \times 0.01 = -7.72$, i.e. $P \approx 92.28$. Exact repricing gives $P = 92.64$. The ~0.36 gap is convexity working in your favor: with $C_x \approx 75$, the correction $\tfrac{1}{2} \times 75 \times (0.01)^2 \times 100 \approx +0.37$ nails it.
 
 Being able to run this loop — price, differentiate, approximate, compare to exact — is precisely what a fixed-income quant dev does in code.

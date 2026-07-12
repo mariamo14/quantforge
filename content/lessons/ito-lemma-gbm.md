@@ -23,7 +23,7 @@ $$dS_t = \mu S_t\,dt + \sigma S_t\,dW_t.$$
 
 **Claim:** $S_t = S_0 \exp\!\big( (\mu - \tfrac{\sigma^2}{2})\,t + \sigma W_t \big)$.
 
-**Derivation (know this cold).** Apply Itô to $f(S) = \ln S$, with $a = \mu S$, $b = \sigma S$, $f' = 1/S$, $f'' = -1/S^2$:
+**Derivation (know this cold).** Apply Itô to $f(S) = \ln S$, with $a = \mu S$, $b = \sigma S$, \$f' = 1/S$, $f'' = -1/S^2\$:
 
 $$d(\ln S_t) = \left( \mu S \cdot \frac{1}{S} + \frac{1}{2} \sigma^2 S^2 \cdot \left(-\frac{1}{S^2}\right) \right) dt + \sigma S \cdot \frac{1}{S}\, dW_t = \left( \mu - \frac{\sigma^2}{2} \right) dt + \sigma\, dW_t.$$
 
@@ -34,7 +34,7 @@ Log-price is arithmetic Brownian motion; integrate and exponentiate. So $\ln S_t
 *"The SDE says the expected instantaneous return is $\mu$ — so why isn't the drift of log-price $\mu$?"* Both statements are true; they answer different questions.
 
 - **Arithmetic mean:** $\mathbb{E}[S_t] = S_0 e^{\mu t}$ exactly. Check via the lognormal mean formula: $\exp\big((\mu - \tfrac{\sigma^2}{2})t + \tfrac{1}{2}\sigma^2 t\big) = e^{\mu t}$ — the $\pm\sigma^2/2$ terms cancel.
-- **Geometric (compound) growth:** the *median* path, and the almost-sure long-run growth rate, is $\mu - \sigma^2/2$. Volatility drags compounding: gain 10% then lose 10% and you sit at $0.99$, not back at par.
+- **Geometric (compound) growth:** the *median* path, and the almost-sure long-run growth rate, is $\mu - \sigma^2/2$. Volatility drags compounding: gain 10% then lose 10% and you sit at \$0.99\$, not back at par.
 
 It's Jensen's inequality — $\ln$ is concave, so $\mathbb{E}[\ln S_t] < \ln \mathbb{E}[S_t]$, and the gap is exactly $\tfrac{\sigma^2}{2}t$. The mean is dragged up by a few lucky, enormous paths; the typical path grows slower. Crisp interview phrasing: *"the mean grows at $\mu$, the typical path grows at $\mu - \sigma^2/2$; the difference is volatility drag."*
 

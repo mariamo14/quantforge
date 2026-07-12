@@ -25,7 +25,7 @@ Each price level holds a FIFO queue of resting orders (under price-time priority
   $50.06  ×  5,000    |    $50.12  ×  4,800
 ```
 
-Spread = 2¢; mid = $50.09. **Depth** is the volume available at or near the touch — it measures how much you can trade before moving the price. In implementation terms, the classic engine layout is price levels in a sorted structure or a contiguous array indexed by tick (books are dense near the touch), each level holding an intrusive doubly-linked FIFO of orders, plus a hash map from order ID → node for O(1) cancels — because, as we'll see, cancels are most of the traffic.
+Spread = 2¢; mid = \$50.09. **Depth** is the volume available at or near the touch — it measures how much you can trade before moving the price. In implementation terms, the classic engine layout is price levels in a sorted structure or a contiguous array indexed by tick (books are dense near the touch), each level holding an intrusive doubly-linked FIFO of orders, plus a hash map from order ID → node for O(1) cancels — because, as we'll see, cancels are most of the traffic.
 
 ## Imbalance: the workhorse predictor
 

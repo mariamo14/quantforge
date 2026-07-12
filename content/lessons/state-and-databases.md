@@ -19,7 +19,7 @@ A **database** is simply a program that solves those three problems for you. It 
 
 ## SQL databases in four sentences
 
-The classic kind is the **SQL database** (PostgreSQL, MySQL). Data lives in **tables** — spreadsheet-like grids where each **row** is one record (one order, one trade) and each column is a field. You ask **queries** in a language called SQL: `SELECT * FROM orders WHERE symbol = 'AAPL'` means "give me every order row for AAPL." And writes can be grouped into **transactions**: a set of changes that is *all-or-nothing* — the canonical example is a bank transfer, which must subtract $100 from account A *and* add $100 to account B; a transaction guarantees the world never sees (and a crash never produces) the halfway state where the money has left A but not arrived at B.
+The classic kind is the **SQL database** (PostgreSQL, MySQL). Data lives in **tables** — spreadsheet-like grids where each **row** is one record (one order, one trade) and each column is a field. You ask **queries** in a language called SQL: `SELECT * FROM orders WHERE symbol = 'AAPL'` means "give me every order row for AAPL." And writes can be grouped into **transactions**: a set of changes that is *all-or-nothing* — the canonical example is a bank transfer, which must subtract \$100 from account A *and* add \$100 to account B; a transaction guarantees the world never sees (and a crash never produces) the halfway state where the money has left A but not arrived at B.
 
 ## Key-value stores: the simpler, faster cousin
 
@@ -27,7 +27,7 @@ Sometimes you don't need tables and queries — just "store this value under thi
 
 ## Durability: the write-ahead log
 
-How does a database survive a crash in the middle of updating its files? With a beautifully simple trick: **write your intentions down before acting on them**. Before touching any table, the database appends one line to a special file — the **write-ahead log (WAL)**: "about to set balance of account A to $900." Appending to the end of a file is fast and, crucially, atomic enough to trust. Only then does it update the real data. After a crash, recovery is just re-reading the log: any intention that was logged but not applied gets re-applied; anything never logged never happened. It's the diligent colleague who writes every task in a notebook first — whatever happens, the notebook can reconstruct the truth.
+How does a database survive a crash in the middle of updating its files? With a beautifully simple trick: **write your intentions down before acting on them**. Before touching any table, the database appends one line to a special file — the **write-ahead log (WAL)**: "about to set balance of account A to \$900." Appending to the end of a file is fast and, crucially, atomic enough to trust. Only then does it update the real data. After a crash, recovery is just re-reading the log: any intention that was logged but not applied gets re-applied; anything never logged never happened. It's the diligent colleague who writes every task in a notebook first — whatever happens, the notebook can reconstruct the truth.
 
 ## Replication: copies for safety
 

@@ -1,12 +1,12 @@
 title: Portfolio Theory & Risk
 description: Markowitz, CAPM, duration, and the VaR/ES distinctions risk interviews hinge on.
 questions:
-  - prompt: "\"1-day 95% VaR of $2M\" means:"
+  - prompt: "\"1-day 95% VaR of \\$2M\" means:"
     choices:
-      - "The desk loses exactly $2M once every 20 days"
-      - "On 95% of days the loss will not exceed $2M; it says nothing about how bad the other 5% get"
-      - "The maximum possible one-day loss is $2M"
-      - "Expected daily loss is 5% of $2M"
+      - "The desk loses exactly \\$2M once every 20 days"
+      - "On 95% of days the loss will not exceed \\$2M; it says nothing about how bad the other 5% get"
+      - "The maximum possible one-day loss is \\$2M"
+      - "Expected daily loss is 5% of \\$2M"
     answer: 1
     explanation: >
       VaR is a quantile of the loss distribution — a threshold exceeded with 5%
@@ -26,10 +26,10 @@ questions:
       reason Basel moved to ES.
   - prompt: "A bond has modified duration 6.2 and price 101.50. Rates rise 10bp. The first-order price change is approximately:"
     choices:
-      - "−$0.63 per 100 face"
-      - "−$6.29 per 100 face"
-      - "+$0.63 per 100 face"
-      - "−$0.10 per 100 face"
+      - "−\\$0.63 per 100 face"
+      - "−\\$6.29 per 100 face"
+      - "+\\$0.63 per 100 face"
+      - "−\\$0.10 per 100 face"
     answer: 0
     explanation: >
       $\Delta P \approx -D \cdot P \cdot \Delta y = -6.2 \times 101.50 \times 0.001

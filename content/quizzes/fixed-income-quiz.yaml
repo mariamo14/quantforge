@@ -12,16 +12,16 @@ questions:
       Duration is the PV-weighted average time to cashflow — a zero has exactly one
       cashflow, at maturity. Corollary: coupons can only pull duration *below* maturity,
       which anchors every sanity check.
-  - prompt: "A $1M face position in a bond priced at par with modified duration 6.2. Rates rise 1bp. P&L ≈"
+  - prompt: "A \\$1M face position in a bond priced at par with modified duration 6.2. Rates rise 1bp. P&L ≈"
     choices:
-      - "−$62"
-      - "−$620"
-      - "−$6,200"
-      - "−$62,000"
+      - "−\\$62"
+      - "−\\$620"
+      - "−\\$6,200"
+      - "−\\$62,000"
     answer: 1
     explanation: >
       DV01 $= D_{\text{mod}} \times V \times 10^{-4} = 6.2 \times 1{,}000{,}000 \times
-      0.0001 = \$620$. Basis-point fluency at position scale is tested constantly on
+      0.0001 = $620\$. Basis-point fluency at position scale is tested constantly on
       rates desks.
   - prompt: "Two 10-year bonds at the same yield: one pays 2% coupons, the other 8%. Which has the longer duration?"
     choices:
@@ -56,7 +56,7 @@ questions:
       Price and yield are two coordinates for the same object, inversely related: pay
       more today for the same fixed cashflows and your return is lower. Obvious, but
       interviewers use it as a two-second filter.
-  - prompt: "A portfolio holds $2M (market value) of duration-4 bonds and $1M of duration-10 bonds. Portfolio duration ≈"
+  - prompt: "A portfolio holds \\$2M (market value) of duration-4 bonds and \\$1M of duration-10 bonds. Portfolio duration ≈"
     choices:
       - "7.0"
       - "6.0"

@@ -57,7 +57,7 @@ $$
 \bar\sigma^2 = \frac{\omega}{1 - \alpha - \beta}
 $$
 
-**Persistence** is $\alpha + \beta$: how slowly shocks decay. Equity index fits routinely give $\alpha \approx 0.05$–$0.10$, $\beta \approx 0.90$, so $\alpha + \beta \approx 0.97$–$0.99$ — shocks take months to wash out, which is precisely volatility clustering rendered in two parameters.
+**Persistence** is $\alpha + \beta$: how slowly shocks decay. Equity index fits routinely give $\alpha \approx 0.05$–\$0.10$, $\beta \approx 0.90$, so $\alpha + \beta \approx 0.97\$–\$0.99\$ — shocks take months to wash out, which is precisely volatility clustering rendered in two parameters.
 
 The connection interviewers fish for: **EWMA is degenerate GARCH**. Set $\omega = 0$ and $\alpha + \beta = 1$ (with $\alpha = 1 - \lambda$, $\beta = \lambda$) and GARCH(1,1) collapses exactly to the EWMA recursion — an integrated (IGARCH) process with infinite-memory persistence and no mean reversion. That's not trivia; it tells you *when* each model is appropriate: EWMA for short-horizon risk where you just want to track current vol, GARCH when the forecast horizon is long enough that mean reversion matters.
 

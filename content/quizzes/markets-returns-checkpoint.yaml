@@ -38,7 +38,7 @@ questions:
   - prompt: "We analyze returns rather than raw price changes because:"
     choices:
       - "Prices are secret"
-      - "A $5 move means something completely different on a $10 stock than a $1000 one — returns make assets comparable"
+      - "A \\$5 move means something completely different on a \\$10 stock than a \\$1000 one — returns make assets comparable"
       - "Returns are always normally distributed"
       - "Exchanges only publish returns"
     answer: 1

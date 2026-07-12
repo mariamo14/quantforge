@@ -26,10 +26,10 @@ questions:
       matters, because markets prey on exactly this intuition.
   - prompt: "You're paid the face value of one fair die roll, in dollars. The fair price to play is:"
     choices:
-      - "$3.00"
-      - "$3.50"
-      - "$6.00"
-      - "$2.50"
+      - "\\$3.00"
+      - "\\$3.50"
+      - "\\$6.00"
+      - "\\$2.50"
     answer: 1
     explanation: >
       Expected value = average payout over many plays = $(1+2+3+4+5+6)/6 = 3.5$. "Fair

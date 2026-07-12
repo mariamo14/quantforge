@@ -56,9 +56,9 @@ $$F = 100 \times (1.05)^1 = 105$$
 
 Now watch what happens if someone quotes anything else.
 
-**Quoted at 110 (too high):** I *sell* the forward at 110, borrow 100, buy the stock. At expiry I deliver the stock, collect 110, repay $100 \times 1.05 = 105$. Profit: $110 - 105 = \$5$, **guaranteed**, in every possible future, with zero starting capital.
+**Quoted at 110 (too high):** I *sell* the forward at 110, borrow 100, buy the stock. At expiry I deliver the stock, collect 110, repay $100 \times 1.05 = 105$. Profit: \$110 - 105 = \$5\$, **guaranteed**, in every possible future, with zero starting capital.
 
-**Quoted at 100 (too low):** reverse everything. I *buy* the forward at 100, sell the stock short today for 100, and invest the proceeds at 5%. At expiry my cash has grown to 105; I pay 100 on the forward, take delivery of the stock, and return it to close my short. Profit: $105 - 100 = \$5$, again riskless.
+**Quoted at 100 (too low):** reverse everything. I *buy* the forward at 100, sell the stock short today for 100, and invest the proceeds at 5%. At expiry my cash has grown to 105; I pay 100 on the forward, take delivery of the stock, and return it to close my short. Profit: \$105 - 100 = \$5\$, again riskless.
 
 A riskless profit from zero capital is called an **arbitrage**. The **no-arbitrage principle** says: in a functioning market, such free money cannot persist — traders will pile in until prices snap back. This is *the* pricing principle of quantitative finance. We didn't ask where the stock is going, what its expected return is, or how volatile it is. Replication plus no-arbitrage pinned the price down completely.
 

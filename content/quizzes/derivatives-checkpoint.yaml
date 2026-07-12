@@ -2,23 +2,23 @@ title: "Checkpoint: Derivatives & No-Arbitrage"
 description: Forwards, option payoffs, and parity — the last gate before pricing models.
 xpPerCorrect: 5
 questions:
-  - prompt: "A stock trades at $100 and the one-year interest rate is 5%. The fair one-year forward price is:"
+  - prompt: "A stock trades at \\$100 and the one-year interest rate is 5%. The fair one-year forward price is:"
     choices:
-      - "$100 — forwards match today's price"
-      - "$105 — buy the stock with borrowed money today and deliver it in a year"
+      - "\\$100 — forwards match today's price"
+      - "\\$105 — buy the stock with borrowed money today and deliver it in a year"
       - "Whatever the market expects the stock to be worth"
-      - "$95"
+      - "\\$95"
     answer: 1
     explanation: >
       Cash-and-carry: borrow \$100, buy the stock, deliver at expiry, repay \$105. That
       replication costs \$105, so the forward must be \$105 — no prediction of the stock
       involved. If someone quotes 110, sell the forward and pocket \$5 risk-free.
-  - prompt: "At expiry the stock is at $87. A call with strike $80 pays ... and a put with strike $80 pays ..."
+  - prompt: "At expiry the stock is at \\$87. A call with strike \\$80 pays ... and a put with strike \\$80 pays ..."
     choices:
-      - "$7 and $0"
-      - "$0 and $7"
-      - "$7 and $7"
-      - "$87 and $80"
+      - "\\$7 and \\$0"
+      - "\\$0 and \\$7"
+      - "\\$7 and \\$7"
+      - "\\$87 and \\$80"
     answer: 0
     explanation: >
       Call: $\max(87 - 80, 0) = 7$ — the right to buy at 80 what sells for 87. Put:
@@ -35,12 +35,12 @@ questions:
       The protective put caps your downside at the strike (minus the premium) while
       keeping the upside — exactly an insurance contract, premium and all. Options ARE
       tradeable insurance; every pricing question is "what should this insurance cost?"
-  - prompt: "Same strike and expiry, no dividends: $C = 12$, $S_0 = 100$, and the present value of the strike is $95. Put-call parity says the put is worth:"
+  - prompt: "Same strike and expiry, no dividends: $C = 12$, $S_0 = 100$, and the present value of the strike is \\$95. Put-call parity says the put is worth:"
     choices:
-      - "$7"
-      - "$12"
-      - "$17"
-      - "$5"
+      - "\\$7"
+      - "\\$12"
+      - "\\$17"
+      - "\\$5"
     answer: 0
     explanation: >
       $C - P = S_0 - PV(K) \Rightarrow P = C - S_0 + PV(K) = 12 - 100 + 95 = 7$. No

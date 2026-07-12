@@ -15,7 +15,7 @@ Microstructure is the study of how trading actually happens — who trades, thro
 
 ## Limit vs market orders
 
-A **limit order** says "buy up to 300 shares at $50.10 or better" — it rests in the book if not immediately matchable, supplying liquidity, earning price improvement but risking non-execution. A **market order** says "buy 300 shares now at whatever the book offers" — guaranteed execution (up to available depth), unknown price. The fundamental tension every execution algorithm manages: **price certainty vs execution certainty**.
+A **limit order** says "buy up to 300 shares at \$50.10 or better" — it rests in the book if not immediately matchable, supplying liquidity, earning price improvement but risking non-execution. A **market order** says "buy 300 shares now at whatever the book offers" — guaranteed execution (up to available depth), unknown price. The fundamental tension every execution algorithm manages: **price certainty vs execution certainty**.
 
 ## What the spread compensates
 
@@ -29,7 +29,7 @@ In a liquid large-cap, adverse selection dominates the economics.
 
 ## Adverse selection: a concrete scenario
 
-You're making markets in a mid-cap biotech, quoting $20.00 × $20.02, 500 up. A hedge fund's NLP pipeline parses an FDA press release 300 µs before your feed handler flags it: trial failed. They hit your $20.00 bid for 500 shares. Two seconds later the stock trades $18.50. You "earned" a two-cent spread and lost $750 on inventory — you were **adversely selected**: filled precisely *because* your quote was stale. This is why makers pay for speed (fast cancels are defense, not offense), why spreads widen around scheduled news, and why toxic-flow detection is a real quant problem (see the imbalance discussion in the LOB lesson).
+You're making markets in a mid-cap biotech, quoting \$20.00 × \$20.02, 500 up. A hedge fund's NLP pipeline parses an FDA press release 300 µs before your feed handler flags it: trial failed. They hit your \$20.00 bid for 500 shares. Two seconds later the stock trades \$18.50. You "earned" a two-cent spread and lost \$750 on inventory — you were **adversely selected**: filled precisely *because* your quote was stale. This is why makers pay for speed (fast cancels are defense, not offense), why spreads widen around scheduled news, and why toxic-flow detection is a real quant problem (see the imbalance discussion in the LOB lesson).
 
 ## Price-time priority
 
@@ -37,9 +37,9 @@ The standard continuous-market matching rule: better prices fill first; among or
 
 ## Maker-taker fees and tick sizes
 
-Most US equity venues charge takers ~$0.0030/share and rebate makers ~$0.0020–0.0025. This changes the *effective* economics: capture a 1-cent spread and the rebate adds ~half a cent to the round trip. Inverted venues (taker rebate, maker fee) exist and attract distinct flow — routing logic must be fee-aware.
+Most US equity venues charge takers ~\$0.0030/share and rebate makers ~\$0.0020–0.0025. This changes the *effective* economics: capture a 1-cent spread and the rebate adds ~half a cent to the round trip. Inverted venues (taker rebate, maker fee) exist and attract distinct flow — routing logic must be fee-aware.
 
-The **tick size** — minimum price increment, $0.01 for US stocks above $1 — sets spread economics. A "tick-constrained" stock (fair spread < 1 tick) has spreads pinned at the minimum and enormous queues at the touch: the game becomes queue position. A wide-tick or high-priced stock has multi-tick spreads and the game becomes price discovery within the spread.
+The **tick size** — minimum price increment, \$0.01 for US stocks above \$1 — sets spread economics. A "tick-constrained" stock (fair spread < 1 tick) has spreads pinned at the minimum and enormous queues at the touch: the game becomes queue position. A wide-tick or high-priced stock has multi-tick spreads and the game becomes price discovery within the spread.
 
 ## Auctions vs continuous trading
 
@@ -47,8 +47,8 @@ The open (9:30) and close (16:00) are **call auctions**: orders accumulate, the 
 
 ## Quoted vs effective spread
 
-- **Quoted spread**: ask minus bid at a moment, e.g., $50.10 − $50.08 = 2¢.
-- **Effective spread**: $2 \times |P_{\text{exec}} - m|$ where $m$ is the midpoint at order arrival. It measures what you actually paid: price improvement inside the spread shrinks it; walking the book past the touch grows it.
+- **Quoted spread**: ask minus bid at a moment, e.g., \$50.10 − $50.08 = 2¢.
+- **Effective spread**: $2 \times |P_{\text{exec}} - m|$ where $m\$ is the midpoint at order arrival. It measures what you actually paid: price improvement inside the spread shrinks it; walking the book past the touch grows it.
 
 Effective < quoted on average means the market delivers price improvement; execution-quality reports (SEC Rule 605) are built on this statistic.
 

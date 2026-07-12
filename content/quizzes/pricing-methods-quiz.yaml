@@ -34,7 +34,7 @@ questions:
       Deep ITM, a put's upside is capped at $K$ (stock at zero) — collecting $K - S$ now
       and earning interest beats waiting. At each tree node you compare intrinsic vs
       continuation; the early-exercise boundary is the output.
-  - prompt: "Your Monte Carlo price has standard error $0.04. To get it to $0.01 you need roughly:"
+  - prompt: "Your Monte Carlo price has standard error \\$0.04. To get it to \\$0.01 you need roughly:"
     choices:
       - "4× the paths"
       - "16× the paths"

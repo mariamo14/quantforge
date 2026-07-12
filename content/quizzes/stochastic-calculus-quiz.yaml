@@ -14,7 +14,7 @@ questions:
       "annualize by $\sqrt{252}$" works.
   - prompt: "What is the quadratic variation of Brownian motion over $[0, t]$?"
     choices:
-      - "$0$ — smooth functions have zero quadratic variation"
+      - "\\$0\\$ — smooth functions have zero quadratic variation"
       - "$t$, deterministically"
       - "$W_t^2$"
       - "A random variable with mean $t$ and variance $2t$"

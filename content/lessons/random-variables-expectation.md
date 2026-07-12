@@ -18,7 +18,7 @@ Nothing fancy: a table of "what you get" and "how likely."
 
 ## Expected value: the long-run average — and the fair price
 
-What is this die game *worth*? Play it 600 times: you'd expect about 100 ones, 100 twos, ... , 100 sixes, collecting roughly $100(1+2+3+4+5+6) = \$2100$, or **$3.50 per play**. That per-play average is the **expected value** (EV), written $E[X]$:
+What is this die game *worth*? Play it 600 times: you'd expect about 100 ones, 100 twos, ... , 100 sixes, collecting roughly $100(1+2+3+4+5+6) = $2100\$, or **\$3.50 per play**. That per-play average is the **expected value** (EV), written $E[X]$:
 
 $$E[X] = \sum_i x_i \, p_i$$
 
@@ -28,8 +28,8 @@ $$E[X] = 1\cdot\tfrac{1}{6} + 2\cdot\tfrac{1}{6} + 3\cdot\tfrac{1}{6} + 4\cdot\t
 
 Two readings, matching our two views of probability:
 
-1. **Long-run average:** play many times, average $3.50 per play.
-2. **Fair price:** $3.50 is exactly what you should pay to play. Pay $3 and you profit 50 cents per play on average; pay $4 and you bleed. Notice EV can be a value no single play ever produces — no die shows 3.5.
+1. **Long-run average:** play many times, average \$3.50 per play.
+2. **Fair price:** \$3.50 is exactly what you should pay to play. Pay \$3 and you profit 50 cents per play on average; pay \$4 and you bleed. Notice EV can be a value no single play ever produces — no die shows 3.5.
 
 ## Linearity: expected values add — always
 
@@ -49,26 +49,26 @@ $$\mathrm{Var}(X) = E\left[(X - E[X])^2\right]$$
 
 We square so that misses above and below both count as positive (otherwise they'd cancel to zero). Squaring leaves units of "dollars squared," which is awkward — so we take the square root to get back to dollars: the **standard deviation**, $\sigma = \sqrt{\mathrm{Var}(X)}$.
 
-Full computation. A bet pays **$0 or $10, each with probability 1/2**.
+Full computation. A bet pays **\$0 or \$10, each with probability 1/2**.
 
 - Mean: $E[X] = 0 \cdot \tfrac12 + 10 \cdot \tfrac12 = 5$.
-- Distances from the mean: $0 - 5 = -5$ and $10 - 5 = +5$.
-- Squared distances: $25$ and $25$.
+- Distances from the mean: \$0 - 5 = -5\$ and \$10 - 5 = +5\$.
+- Squared distances: \$25\$ and \$25\$.
 - Variance: $25 \cdot \tfrac12 + 25 \cdot \tfrac12 = 25$ (dollars squared).
-- Standard deviation: $\sqrt{25} = \$5$.
+- Standard deviation: $\sqrt{25} = $5\$.
 
-So a typical outcome sits about $5 away from the $5 mean — which here is exactly right: every outcome is exactly $5 away.
+So a typical outcome sits about \$5 away from the \$5 mean — which here is exactly right: every outcome is exactly \$5 away.
 
 ## Variance is what finance calls risk
 
-Compare two investments of $100, each with the same expected profit of $5:
+Compare two investments of \$100, each with the same expected profit of \$5:
 
-- **Investment A:** always pays exactly $5. Mean $5, standard deviation $0.
-- **Investment B:** pays **+$105 or −$95**, each with probability 1/2. Mean: $105 \cdot \tfrac12 + (-95)\cdot\tfrac12 = 52.5 - 47.5 = \$5$. Distances from the mean: $\pm 100$; squared: $10{,}000$; variance $= 10{,}000$; standard deviation $= \$100$.
+- **Investment A:** always pays exactly \$5. Mean \$5, standard deviation \$0.
+- **Investment B:** pays **+\$105 or −\$95**, each with probability 1/2. Mean: $105 \cdot \tfrac12 + (-95)\cdot\tfrac12 = 52.5 - 47.5 = $5\$. Distances from the mean: $\pm 100$; squared: $10{,}000$; variance $= 10{,}000$; standard deviation $= $100\$.
 
-Same expected value; utterly different investments. A would suit anyone; B can nearly wipe out your $100 stake half the time. **Risk, in its most basic quantitative form, is standard deviation** — and this example shows why average return alone never describes an investment.
+Same expected value; utterly different investments. A would suit anyone; B can nearly wipe out your \$100 stake half the time. **Risk, in its most basic quantitative form, is standard deviation** — and this example shows why average return alone never describes an investment.
 
-The same lesson in pure form: a **fair game** is one with EV = 0. Flipping a coin for $1 (win $1 on heads, lose $1 on tails) is fair: EV = 0, σ = $1. Flipping a coin for your house is *also* fair — EV = 0 — but its standard deviation is the value of your house. Nobody sane treats those two games as equivalent. Expected value tells you the fair price; variance tells you whether you can survive the ride.
+The same lesson in pure form: a **fair game** is one with EV = 0. Flipping a coin for \$1 (win \$1 on heads, lose \$1 on tails) is fair: EV = 0, σ = \$1. Flipping a coin for your house is *also* fair — EV = 0 — but its standard deviation is the value of your house. Nobody sane treats those two games as equivalent. Expected value tells you the fair price; variance tells you whether you can survive the ride.
 
 ## The bridge to everything that follows
 
@@ -80,5 +80,5 @@ Here is where the whole course is headed, in one paragraph. Last lesson's big id
 - Expected value $E[X] = \sum x_i p_i$ is both the long-run average and the fair price of the bet; a fair die pays $E[X] = 3.5$.
 - Linearity: $E[X+Y] = E[X] + E[Y]$ holds even for dependent variables — two dice sum to an expected 7 no matter how they interact.
 - Variance is the expected squared distance from the mean; standard deviation is its square root, back in original units.
-- Same EV can hide wildly different risk: +$105/−$95 coin flip has the same $5 mean as a sure $5 but a $100 standard deviation.
+- Same EV can hide wildly different risk: +\$105/−\$95 coin flip has the same \$5 mean as a sure \$5 but a \$100 standard deviation.
 - Master formula ahead: price = discounted expected value of future payoffs, under the right probabilities.

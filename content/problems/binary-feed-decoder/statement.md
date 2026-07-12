@@ -6,7 +6,7 @@ Every message begins with a 1-byte type, then a big-endian `u32` sequence number
 
 | Type byte | Message | Layout after the seq field |
 |---|---|---|
-| `0x41` (`A`) | ADD | `u64` orderId, `u8` side (`B`/`S`), 6 bytes symbol (ASCII, space-padded right), `u32` price (ticks of $0.01), `u32` qty |
+| `0x41` (`A`) | ADD | `u64` orderId, `u8` side (`B`/`S`), 6 bytes symbol (ASCII, space-padded right), `u32` price (ticks of \$0.01), `u32` qty |
 | `0x45` (`E`) | EXEC | `u64` orderId, `u32` executed qty |
 | `0x58` (`X`) | CANCEL | `u64` orderId |
 

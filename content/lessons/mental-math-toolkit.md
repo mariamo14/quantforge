@@ -44,7 +44,7 @@ So $5/7 \approx 5 \times 0.1429 \approx 0.714$, and $7/12 \approx 7 \times 0.083
 The conversions you must do without thinking:
 
 - $1\% = 100\,\text{bp}$; $1\,\text{bp} = 0.01\% = 10^{-4}$.
-- **1 bp of \$10M = \$1,000.** Anchor on this: 1 bp of \$1M is \$100, of \$100M is \$10,000. Then 3 bp of \$250M = $3 \times 25 \times \$1{,}000$... careful — do it as $250\text{M} \times 3 \times 10^{-4} = \$75{,}000$.
+- **1 bp of $10M = $1,000.** Anchor on this: 1 bp of \$1M is \$100, of \$100M is \$10,000. Then 3 bp of $250M = $3 \times 25 \times $1{,}000$... careful — do it as $250\text{M} \times 3 \times 10^{-4} = $75{,}000\$.
 - **Per-annum ↔ per-day: divide by ~252** trading days. A 1% annual fee is $0.01/252 \approx 4 \times 10^{-5} \approx 0.4$ bp per day.
 - **Volatility scales with $\sqrt{t}$**, so annual → daily vol divides by $\sqrt{252} \approx 15.87 \approx 16$. The classic: 16% annualized vol $\approx$ 1% daily move. Interviewers use this one as a shibboleth.
 
@@ -68,7 +68,7 @@ Examples: $\sqrt{17} \approx 4 + \tfrac{1}{8} = 4.125$ (exact 4.123); $\sqrt{60}
 
 ## Expected value at speed
 
-Brainteaser EVs should be retrieval, not derivation: one die averages $3.5$; expected rolls to see a six is $6$ (geometric, $1/p$); max of two dice is $\frac{\sum_k k(2k-1)}{36} = \frac{161}{36} \approx 4.47$ — know that $P(\max = k) = \frac{2k-1}{36}$ and the sum pattern generalizes. In market-making games, quote around the EV with a spread that covers your uncertainty, and *say the EV out loud* as you quote.
+Brainteaser EVs should be retrieval, not derivation: one die averages \$3.5\$; expected rolls to see a six is \$6$ (geometric, $1/p\$); max of two dice is $\frac{\sum_k k(2k-1)}{36} = \frac{161}{36} \approx 4.47$ — know that $P(\max = k) = \frac{2k-1}{36}$ and the sum pattern generalizes. In market-making games, quote around the EV with a spread that covers your uncertainty, and *say the EV out loud* as you quote.
 
 ## Practice protocol
 
@@ -83,24 +83,24 @@ Cover the right column. Target: under 15 seconds each.
 
 | # | Question | Answer |
 |---|---|---|
-| 1 | $47 \times 83$ | $3901$ |
+| 1 | $47 \times 83$ | \$3901$ |
 | 2 | $68^2$ | $4624$ |
 | 3 | $97 \times 103$ | $9991$ |
 | 4 | $39 \times 41$ | $1599$ |
 | 5 | $5/7$ as a decimal | $\approx 0.714$ |
-| 6 | 1.5 bp of \$40M | \$6,000 |
+| 6 | 1.5 bp of $40M | $6,000 |
 | 7 | 16% annual vol → daily vol | $\approx 1.0\%$ |
 | 8 | Doubling time at 6% (rule of 72) | $\approx 12$ years |
 | 9 | $\sqrt{17}$ | $\approx 4.12$ |
-| 10 | $E[\max]$ of two fair dice | $161/36 \approx 4.47$ |
+| 10 | $E[\max]\$ of two fair dice | $161/36 \approx 4.47$ |
 
-Checks: #2 is $(70-2)^2 = 4900 - 280 + 4$; #3 is $10000 - 9$; #6 is $40\text{M} \times 1.5 \times 10^{-4}$; #7 divides by $\sqrt{252} \approx 15.87$.
+Checks: #2 is $(70-2)^2 = 4900 - 280 + 4$; #3 is \$10000 - 9\$; #6 is $40\text{M} \times 1.5 \times 10^{-4}$; #7 divides by $\sqrt{252} \approx 15.87$.
 
 ## Interview checkpoints
 
 - Scan for structure before grinding: difference of squares and near-50/near-100 squares turn multiplies into subtractions.
 - Divide by multiplying: reciprocals of 6, 7, 8, 12 memorized to four decimals.
-- Own the floor units: 1 bp of \$10M = \$1,000; annual → daily divides by 252 for rates, by $\sqrt{252} \approx 16$ for vol.
+- Own the floor units: 1 bp of $10M = $1,000; annual → daily divides by 252 for rates, by $\sqrt{252} \approx 16$ for vol.
 - Rule of 72 comes from $\ln 2 \approx 0.693$; use $(1+x)^n \approx 1 + nx + \binom{n}{2}x^2$ when 72 isn't enough.
 - $\sqrt{a^2+b} \approx a + b/2a$, and it slightly overshoots — shade down.
 - Verbalize the decomposition and lead with 2 sig figs fast; refine only if asked.

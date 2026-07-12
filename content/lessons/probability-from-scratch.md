@@ -8,7 +8,7 @@ minutes: 12
 What does it mean that a coin has a 50% chance of landing heads? Two everyday answers, both correct:
 
 1. **Long-run frequency.** Flip the coin 10,000 times and you'll see close to 5,000 heads. Probability is the fraction of times something happens if you repeat the experiment over and over.
-2. **Fair betting odds.** A bet that pays $1 if the coin lands heads is worth 50 cents. If someone offered you that bet for 30 cents, you'd take it all day; at 70 cents you'd refuse. The fair price *is* the probability.
+2. **Fair betting odds.** A bet that pays \$1 if the coin lands heads is worth 50 cents. If someone offered you that bet for 30 cents, you'd take it all day; at 70 cents you'd refuse. The fair price *is* the probability.
 
 Keep both views in your pocket. The frequency view builds intuition; the betting view is how traders actually use probability — every price they quote is an implicit bet.
 
@@ -80,11 +80,11 @@ The information moved your estimate from 30% to 71%. That's all conditioning is:
 
 ## Why traders live in probabilities
 
-A trader quoting a price is stating odds. If a market maker bids $99.98 for a stock, she's betting it's worth more than that; every fill is a wager. When news breaks — an earnings report, a central-bank announcement — every professional in the market is doing the umbrella-table move: *given this new information, recount the possibilities and update the price.* Markets are, quite literally, machines for aggregating conditional probabilities into a single number. Learning to think this way is not optional in this field; it's the native language.
+A trader quoting a price is stating odds. If a market maker bids \$99.98 for a stock, she's betting it's worth more than that; every fill is a wager. When news breaks — an earnings report, a central-bank announcement — every professional in the market is doing the umbrella-table move: *given this new information, recount the possibilities and update the price.* Markets are, quite literally, machines for aggregating conditional probabilities into a single number. Learning to think this way is not optional in this field; it's the native language.
 
 ## Interview checkpoints
 
-- Probability is both a long-run frequency and a fair betting price — a $1 bet on a 50% event is worth 50 cents.
+- Probability is both a long-run frequency and a fair betting price — a \$1 bet on a 50% event is worth 50 cents.
 - All probabilities live between 0 and 1, everything together sums to 1, and non-overlapping events add.
 - "At least one" problems: compute 1 − P(none). At least one six in 4 rolls = $1 - (5/6)^4 \approx 0.518$.
 - Independent events multiply (coins have no memory); dependent events don't (card draws without replacement change the deck).

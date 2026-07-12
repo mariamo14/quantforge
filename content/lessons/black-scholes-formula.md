@@ -41,9 +41,9 @@ $$d_1 = \frac{\ln(100/100) + (0.05 + \tfrac{1}{2}(0.20)^2) \cdot 1}{0.20\sqrt{1}
 
 From normal tables, $N(0.35) \approx 0.6368$ and $N(0.15) \approx 0.5596$. The discount factor is $e^{-0.05} \approx 0.9512$, so $Ke^{-rT} \approx 95.12$. Then
 
-$$C = 100 \times 0.6368 - 95.12 \times 0.5596 \approx 63.68 - 53.23 \approx \$10.45.$$
+$$C = 100 \times 0.6368 - 95.12 \times 0.5596 \approx 63.68 - 53.23 \approx $10.45.$$
 
-Read the pieces back: the option is about 56% likely (risk-neutrally) to finish in the money; its delta is about 0.64 — an at-the-money-ish call hedges with roughly 64 shares per 100 options, more than 50 because the forward sits above the strike. The put by parity: $P = 10.45 - 100 + 95.12 \approx \$5.57$. Memorize the shape of this example — "ATM, 20 vol, one year, 5% rate $\Rightarrow$ call $\approx$ \$10.45" is a standard mental benchmark.
+Read the pieces back: the option is about 56% likely (risk-neutrally) to finish in the money; its delta is about 0.64 — an at-the-money-ish call hedges with roughly 64 shares per 100 options, more than 50 because the forward sits above the strike. The put by parity: $P = 10.45 - 100 + 95.12 \approx $5.57\$. Memorize the shape of this example — "ATM, 20 vol, one year, 5% rate $\Rightarrow$ call $\approx$ \$10.45" is a standard mental benchmark.
 
 ## Sanity limits
 
@@ -65,6 +65,6 @@ If Black-Scholes were right, implied vol would be one flat number across all str
 
 - Write the call formula and read each piece: $N(d_2)$ = risk-neutral ITM probability; $S N(d_1)$ = expected-stock-given-exercise leg; $N(d_1)$ = delta — and know that $N(d_1) \ne N(d_2)$.
 - Get the put from parity, $C - P = S - Ke^{-rT}$, and remember parity is model-free.
-- Reproduce the benchmark: $S = K = 100$, $r = 5\%$, $\sigma = 20\%$, $T = 1$ $\Rightarrow$ $d_1 = 0.35$, $d_2 = 0.15$, $C \approx \$10.45$.
+- Reproduce the benchmark: $S = K = 100$, $r = 5\%$, $\sigma = 20\%$, $T = 1$ $\Rightarrow$ $d_1 = 0.35$, $d_2 = 0.15$, $C \approx $10.45\$.
 - Check limits without recomputing: $\sigma \to 0$ gives discounted intrinsic on the forward; deep ITM $\to$ forward (delta 1); deep OTM $\to 0$.
 - Explain implied vol as the inverse problem (Newton on a monotone, smooth-vega function) and the smile/skew as evidence against constant $\sigma$ and lognormality.

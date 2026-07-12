@@ -32,12 +32,12 @@ Now check every possible future. At expiry there are only two cases:
 
 | At expiry | Case $S_T > K$ | Case $S_T \le K$ |
 |---|---:|---:|
-| **A:** call | $S_T - K$ | $0$ |
+| **A:** call | $S_T - K$ | \$0$ |
 | **A:** cash | $K$ | $K$ |
 | **A total** | $S_T$ | $K$ |
 | **B:** put | $0$ | $K - S_T$ |
 | **B:** stock | $S_T$ | $S_T$ |
-| **B total** | $S_T$ | $K$ |
+| **B total** | $S_T$ | $K\$ |
 
 Walk through it. If the stock ends high ($S_T > K$): the call pays $S_T - K$, add the matured cash $K$, total $S_T$. Meanwhile the put expires worthless and the stock is worth $S_T$. Identical. If the stock ends low ($S_T \le K$): the call dies worthless, leaving just the cash $K$; the put pays $K - S_T$, which tops the stock up from $S_T$ to exactly $K$. Identical again.
 
@@ -53,11 +53,11 @@ This is **put–call parity**.
 
 ## A numeric check
 
-Stock at $S_0 = 100$, strike $K = 100$, $T = 1$ year, $r = 5\%$. The present value of the strike is $100 / 1.05 = 95.24$. Parity says
+Stock at $S_0 = 100$, strike $K = 100$, $T = 1$ year, $r = 5\%$. The present value of the strike is \$100 / 1.05 = 95.24\$. Parity says
 
 $$C - P = 100 - 95.24 = 4.76.$$
 
-So if the one-year at-the-money call trades at $C = 10$, the put *must* trade at $P = 10 - 4.76 = 5.24$. Suppose instead someone offers the put at 7 — too expensive by 1.76. Then sell the put and the stock, buy the call and the bond (portfolio A costs $10 + 95.24 = 105.24$; selling B brings in $7 + 100 = 107$): pocket \$1.76 today, and at expiry the two sides cancel *exactly* in every scenario. Free money — so quotes like that get arbitraged away within moments.
+So if the one-year at-the-money call trades at $C = 10$, the put *must* trade at $P = 10 - 4.76 = 5.24$. Suppose instead someone offers the put at 7 — too expensive by 1.76. Then sell the put and the stock, buy the call and the bond (portfolio A costs \$10 + 95.24 = 105.24\$; selling B brings in \$7 + 100 = 107\$): pocket \$1.76 today, and at expiry the two sides cancel *exactly* in every scenario. Free money — so quotes like that get arbitraged away within moments.
 
 ## What parity buys you
 

@@ -4,20 +4,20 @@ xpPerCorrect: 10
 questions:
   - prompt: "You roll a fair die once and are paid its face value in dollars. Fair price to play?"
     choices:
-      - "$3.00"
-      - "$3.50"
-      - "$4.00"
-      - "$2.50"
+      - "\\$3.00"
+      - "\\$3.50"
+      - "\\$4.00"
+      - "\\$2.50"
     answer: 1
     explanation: >
       $E = (1+2+\cdots+6)/6 = 3.5$. The warm-up — the follow-ups build on it, so nail it
       instantly.
   - prompt: "Same die game, but after the first roll you may either keep it or roll exactly once more (you must keep the second). Fair price now?"
     choices:
-      - "$3.50"
-      - "$4.00"
-      - "$4.25"
-      - "$4.50"
+      - "\\$3.50"
+      - "\\$4.00"
+      - "\\$4.25"
+      - "\\$4.50"
     answer: 2
     explanation: >
       Optimal strategy: keep 4, 5, 6; reroll 1, 2, 3 (worth 3.5 in expectation).
@@ -34,11 +34,11 @@ questions:
       $\sigma = \sqrt{npq} = \sqrt{100 \times 0.25} = 5$. Quoting roughly 45–55 covers
       ±1σ (~68%). Knowing $\sqrt{npq}$ cold and quoting sensible confidence bands is
       exactly what "make me a market" questions test.
-  - prompt: "You draw cards one at a time from a shuffled deck of 26 red and 26 black. You win $1 per red card drawn and may stop at any time. A good first observation about this game's value is:"
+  - prompt: "You draw cards one at a time from a shuffled deck of 26 red and 26 black. You win \\$1 per red card drawn and may stop at any time. A good first observation about this game's value is:"
     choices:
-      - "It's worth exactly $13 — half the cards are red"
-      - "It's worth more than $13 — you hold an option to stop when ahead, and optionality on a symmetric walk has positive value"
-      - "It's worth less than $13 because black cards punish you"
+      - "It's worth exactly \\$13 — half the cards are red"
+      - "It's worth more than \\$13 — you hold an option to stop when ahead, and optionality on a symmetric walk has positive value"
+      - "It's worth less than \\$13 because black cards punish you"
       - "The stopping rule doesn't matter"
     answer: 1
     explanation: >

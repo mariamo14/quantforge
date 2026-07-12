@@ -10,7 +10,7 @@ questions:
       - "3891"
     answer: 0
     explanation: >
-      Split the 83: $47 \times 80 = 3760$, plus $47 \times 3 = 141$, total $3901$.
+      Split the 83: $47 \times 80 = 3760$, plus $47 \times 3 = 141$, total \$3901\$.
       Always split the factor with the easier decomposition.
   - prompt: "52 × 48 ="
     choices:
@@ -22,16 +22,16 @@ questions:
     explanation: >
       Difference of squares around 50: $(50+2)(50-2) = 2500 - 4 = 2496$. Any pair
       straddling a round number this way is a one-second computation.
-  - prompt: "A move of 1.5 basis points on a $20M notional is:"
+  - prompt: "A move of 1.5 basis points on a \\$20M notional is:"
     choices:
-      - "$300"
-      - "$3,000"
-      - "$30,000"
-      - "$1,500"
+      - "\\$300"
+      - "\\$3,000"
+      - "\\$30,000"
+      - "\\$1,500"
     answer: 1
     explanation: >
-      1bp of \$20M is \$2{,}000 (bp = $10^{-4}$), so 1.5bp = \$3{,}000. The anchor to
-      memorize: 1bp of \$1M = \$100.
+      1bp of \$20M is $2{,}000 (bp = $10^{-4}$), so 1.5bp = $3{,}000. The anchor to
+      memorize: 1bp of $1M = $100.
   - prompt: "At 9% annual growth, money doubles in about:"
     choices:
       - "6 years"
@@ -40,7 +40,7 @@ questions:
       - "9 years"
     answer: 1
     explanation: >
-      Rule of 72: $72 / 9 = 8$ years. (It works because $\ln 2 \approx 0.693$ and the
+      Rule of 72: \$72 / 9 = 8\$ years. (It works because $\ln 2 \approx 0.693$ and the
       rate corrections nudge 69.3 to ~72 for single-digit percentages.)
   - prompt: "√26 ≈"
     choices:
@@ -50,8 +50,8 @@ questions:
       - "5.60"
     answer: 1
     explanation: >
-      $\sqrt{a^2 + b} \approx a + \frac{b}{2a}$: with $a = 5, b = 1$, that's
-      $5 + 1/10 = 5.10$ (true value 5.099). The linear correction is accurate whenever
+      $\sqrt{a^2 + b} \approx a + \frac{b}{2a}$: with \$a = 5, b = 1\$, that's
+      \$5 + 1/10 = 5.10\$ (true value 5.099). The linear correction is accurate whenever
       $b \ll a^2$.
   - prompt: "Annualized volatility is 16%. Daily volatility is roughly:"
     choices:
@@ -65,10 +65,10 @@ questions:
       "16% annual ↔ 1% daily" pair is the most useful vol conversion to keep cached.
   - prompt: "You roll two dice; you're paid the maximum of the two. Fair price ≈"
     choices:
-      - "$3.50"
-      - "$4.47"
-      - "$4.00"
-      - "$5.00"
+      - "\\$3.50"
+      - "\\$4.47"
+      - "\\$4.00"
+      - "\\$5.00"
     answer: 1
     explanation: >
       $P(\max \le k) = (k/6)^2$, so $E[\max] = \sum_{k=1}^{6} k\left[(k/6)^2 -
