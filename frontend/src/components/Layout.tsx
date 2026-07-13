@@ -65,6 +65,28 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             <span aria-hidden>🔥</span>
             <span>{me.streakDays > 0 ? `${me.streakDays}-day streak` : 'Start a streak today'}</span>
           </div>
+
+          {(() => {
+            const done = me.tracks.reduce((s, t) => s + t.done, 0)
+            const total = me.tracks.reduce((s, t) => s + t.total, 0)
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0
+            return (
+              <div className="mt-3 border-t border-line pt-2">
+                <div className="flex items-center justify-between text-xs text-ink-muted">
+                  <span>Overall</span>
+                  <span>
+                    {done}/{total} · {pct}%
+                  </span>
+                </div>
+                <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-3">
+                  <div
+                    className="h-full rounded-full bg-good transition-[width] duration-700"
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+              </div>
+            )
+          })()}
         </div>
       )}
 

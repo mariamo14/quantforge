@@ -60,6 +60,51 @@ export function Dashboard() {
         )}
       </div>
 
+      {(() => {
+        const done = me.tracks.reduce((s, t) => s + t.done, 0)
+        const total = me.tracks.reduce((s, t) => s + t.total, 0)
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0
+        return (
+          <Card className="mt-6 p-5">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <p className="text-sm font-semibold">Overall progress</p>
+              <p className="text-sm text-ink-muted">
+                <span className="font-semibold text-ink">{done}</span> of {total} steps ·{' '}
+                <span className="font-semibold text-ink">{pct}%</span>
+                {pct === 100 && ' 🏆'}
+              </p>
+            </div>
+            {/* one segment per track, width proportional to its size, filled by its own completion */}
+            <div className="mt-3 flex h-2.5 gap-0.5 overflow-hidden rounded-full">
+              {me.tracks.map((t) => (
+                <div
+                  key={t.slug}
+                  className="h-full bg-surface-3"
+                  style={{ flexGrow: t.total }}
+                  title={`${t.title}: ${t.done}/${t.total}`}
+                >
+                  <div
+                    className="h-full transition-[width] duration-700"
+                    style={{
+                      width: `${t.total ? (t.done / t.total) * 100 : 0}%`,
+                      backgroundColor: t.accent,
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+              {me.tracks.map((t) => (
+                <span key={t.slug} className="flex items-center gap-1.5 text-[11px] text-ink-faint">
+                  <span className="size-2 rounded-full" style={{ backgroundColor: t.accent }} />
+                  {t.icon} {t.done}/{t.total}
+                </span>
+              ))}
+            </div>
+          </Card>
+        )
+      })()}
+
       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard icon="🔥" label="Streak" value={`${me.streakDays} day${me.streakDays === 1 ? '' : 's'}`} />
         <StatCard icon="⚡" label={`Level ${me.level}`} value={`${me.xp} XP`} />
