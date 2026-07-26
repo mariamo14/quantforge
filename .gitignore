@@ -17,3 +17,6 @@ backend/data/
 *.iml
 .idea/
 .vscode/
+
+# Editor/agent tooling
+.claude/
