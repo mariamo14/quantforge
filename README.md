@@ -42,6 +42,14 @@ No prior finance or systems knowledge is assumed. Concepts unlock one at a time,
 **Prerequisites:** JDK 17+, Node 20+, and a C++ compiler (`clang++` — bundled with Xcode command-line tools on macOS).
 
 ```bash
+./run.sh
+```
+
+Starts the backend and frontend together, installs frontend dependencies on first run, and stops both on Ctrl+C. Pass `--backend` or `--frontend` to run just one side.
+
+Or run them separately in two terminals:
+
+```bash
 cd backend && ./mvnw spring-boot:run
 ```
 
