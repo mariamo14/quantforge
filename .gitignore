@@ -18,5 +18,3 @@ backend/data/
 .idea/
 .vscode/
 
-# Editor/agent tooling
-.claude/
